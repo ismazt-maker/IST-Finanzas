@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f5f7">
+<meta name="theme-color" content="#f3f4f6">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.2.5</title>
+<title>I$T V2.2</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -33,6 +33,41 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{padding:14px;background:#fafafa;border:1px solid var(--line);border-radius:13px}.kpi strong{display:block;font-size:18px;margin-top:3px}
 .category-tree{display:grid;gap:8px}.cat{border:1px solid var(--line);border-radius:13px;padding:12px}.cat-head{display:flex;justify-content:space-between;align-items:center}.subcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.subcat{background:#f1f3f5;padding:6px 8px;border-radius:8px;font-size:12px}
 
+/* ---------- Mobile reports UX V2.2.6 ---------- */
+.report-mobile-empty{padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fafbfc;color:var(--muted)}
+.report-mobile-empty strong{display:block;color:#273444;font-size:16px;margin-bottom:5px}
+.report-builder .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.report-builder .field{min-width:0}
+.report-builder select,.report-builder input{min-width:0;box-sizing:border-box}
+@media(max-width:850px){
+ .report-builder{padding:14px}
+ .report-builder-head{gap:10px}
+ .report-builder-head .btn{width:100%}
+ .report-builder .form-grid{grid-template-columns:1fr;gap:10px}
+ .report-builder .field.full{grid-column:auto}
+ .report-builder .actions{display:block}
+ .report-builder #generateReport{width:100%;min-height:48px;font-size:15px}
+ .report-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;overflow:visible}
+ .report-tabs .tab{width:100%;min-height:44px;font-size:13px}
+ .report-builder .muted{line-height:1.45}
+ #reportOutput{width:100%;min-width:0}
+ #reportOutput .grid{display:grid;grid-template-columns:1fr;gap:12px}
+ #reportOutput .card{grid-column:1!important;min-width:0;overflow:hidden}
+ #reportOutput .report-result-head{display:flex;flex-direction:column;gap:10px}
+ #reportOutput .report-result-head .btn{width:100%}
+ #reportOutput .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+ #reportOutput .kpi{min-width:0;padding:11px}
+ #reportOutput .kpi strong{font-size:16px;overflow-wrap:anywhere}
+ #reportOutput .table-wrap{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ #reportOutput .donut-wrap{flex-direction:column;align-items:center}
+}
+@media(max-width:520px){
+ .report-tabs{grid-template-columns:1fr}
+ .report-builder .field label{font-size:13px}
+ .report-builder .field input,.report-builder .field select{font-size:16px;min-height:46px;padding:10px 12px}
+ #reportOutput .kpi-grid{grid-template-columns:1fr 1fr}
+ #reportOutput .table{min-width:680px}
+}
 .report-builder{border:1px solid #dfe4e8;background:linear-gradient(180deg,#fff,#fafbfc)}
 .report-builder-head,.report-result-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
 .report-tabs{margin-top:4px}.report-tabs .tab{font-weight:700}
@@ -41,30 +76,6 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 @media(max-width:850px){.report-builder-head,.report-result-head{flex-direction:column}.donut-wrap{align-items:flex-start}}
 @media(max-width:850px){.grid{grid-template-columns:1fr}.span-3,.span-4,.span-6,.span-8,.span-12{grid-column:1}.form-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page{padding:20px 13px 48px}.topbar{padding:0 12px}}
 @media(max-width:520px){h1{font-size:25px}.card{padding:14px}.kpi-grid{grid-template-columns:1fr 1fr}.toolbar .field{min-width:140px;flex:1}.metric{font-size:23px}}
-
-/* ---------- I$T V2.2.5 visual system ---------- */
-:root{
- --bg:#f4f5f7;--card:#ffffff;--card2:#fafbfc;--text:#111827;--muted:#697386;--line:#e4e7ec;
- --accent:#6654f6;--accent2:#8b5cf6;--accent-soft:#eeeaff;--green:#18a66a;--red:#df4f58;--blue:#4b6bff;
- --gold:#e8a92b;--shadow:0 10px 30px rgba(15,23,42,.055);--shadow-hover:0 16px 38px rgba(15,23,42,.09);--radius:16px
-}
-body{letter-spacing:-.01em}.topbar{height:72px;padding:0 22px;background:rgba(248,249,251,.86);border-bottom:1px solid rgba(228,231,236,.9);box-shadow:0 1px 0 rgba(15,23,42,.02)}
-.menu-btn{width:40px;height:40px;background:var(--card);border:1px solid var(--line);border-radius:12px;color:#3f4652;box-shadow:0 2px 8px rgba(15,23,42,.04);transition:.18s}.menu-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
-.brand{font-size:24px;letter-spacing:-1.6px}.brand-mark{font-family:Georgia,serif;color:#4f3ed8;font-weight:700}.page{max-width:1320px;padding:30px 22px 70px}.drawer{top:72px;width:276px;background:rgba(250,251,253,.97);backdrop-filter:blur(18px);border-right:1px solid var(--line);box-shadow:18px 0 45px rgba(15,23,42,.06);padding:18px 14px}.drawer-backdrop{top:72px;background:rgba(15,23,42,.18)}
-.nav{gap:5px}.nav button{padding:12px 13px;border-radius:11px;color:#4b5563;font-size:13px;transition:.18s}.nav button:hover{background:#f0efff;color:#4f3ed8;transform:translateX(2px)}.nav button.active{background:linear-gradient(90deg,#eeeaff,#f6f4ff);color:#4f3ed8;font-weight:800;box-shadow:inset 3px 0 0 #6654f6}.nav .emoji{width:27px;filter:saturate(.8)}
-h1{font-size:32px;font-weight:800;letter-spacing:-1.2px}h2{font-size:17px;font-weight:800;letter-spacing:-.25px}.subtitle{font-size:13px}.grid{gap:16px}.card{border:1px solid rgba(224,228,234,.95);border-radius:18px;box-shadow:var(--shadow);padding:20px;transition:box-shadow .18s,transform .18s}.card:hover{box-shadow:var(--shadow-hover)}
-.kpi-grid{gap:10px}.kpi{background:linear-gradient(180deg,#fff,#fbfbfc);border:1px solid var(--line);border-radius:14px;padding:15px}.kpi strong{font-size:19px;letter-spacing:-.5px}.muted{font-size:12px;color:#788293}.field label{font-size:11px;letter-spacing:.03em;text-transform:uppercase;color:#70798a}.field input,.field select,.field textarea{border:1px solid #dfe3e8;border-radius:10px;padding:10px 11px;background:#fff;transition:.16s}.field input:focus,.field select:focus,.field textarea:focus{border-color:#8b7df5;box-shadow:0 0 0 3px rgba(102,84,246,.12)}
-.btn{border-color:#dfe3e8;border-radius:10px;padding:9px 12px;background:#fff;transition:.16s}.btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(15,23,42,.06)}.btn.primary{background:linear-gradient(135deg,#6654f6,#765ff7);border-color:#6654f6;box-shadow:0 7px 18px rgba(102,84,246,.18)}
-.chart{border-bottom-color:var(--line)}.bar{background:linear-gradient(180deg,#7969fa,#5845e7);box-shadow:0 5px 12px rgba(102,84,246,.12)}.bar.expense{background:linear-gradient(180deg,#f07a83,#d84c58)}.badge{background:#f3f4f7;border:1px solid #e8eaf0}.merchant-icon{border:1px solid #e4e7ec;background:#f7f8fa}.tabs{gap:4px;border-bottom:1px solid var(--line)}.tab{border:0;background:transparent;border-radius:8px 8px 0 0;color:#6b7280}.tab.active{background:var(--accent-soft);color:#5845e7}
-.report-builder{border:1px solid var(--line);background:linear-gradient(180deg,#fff,#fbfbfd);box-shadow:none}.notice{background:#f8f9fb;border-color:var(--line)}.modal{background:rgba(10,15,25,.48);backdrop-filter:blur(3px)}.modal-card{border:1px solid rgba(255,255,255,.5);box-shadow:0 30px 80px rgba(15,23,42,.22)}
-.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:16px}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.12em;color:#6654f6;margin-bottom:5px}.category-compact{display:grid;gap:8px}.cat-compact{border:1px solid var(--line);border-radius:13px;background:linear-gradient(180deg,#fff,#fbfbfc);overflow:hidden}.cat-compact summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}.cat-compact summary::-webkit-details-marker{display:none}.cat-title{display:flex;align-items:center;gap:9px;min-width:0}.cat-title strong{font-size:13px}.cat-dot{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#f0efff;color:#5845e7;font-size:14px;flex:0 0 auto}.cat-count{font-size:11px;color:var(--muted);padding-left:3px}.cat-summary-actions{display:flex;align-items:center;gap:7px}.chevron{font-size:20px;color:#8a93a2;transition:.18s}.cat-compact[open] .chevron{transform:rotate(90deg)}.cat-body{padding:0 14px 14px;border-top:1px solid #eef0f3}.subcat-grid{display:flex;flex-wrap:wrap;gap:6px;padding-top:12px}.subcat-pill{display:inline-flex;align-items:center;gap:4px;background:#f4f5f7;border:1px solid #e7e9ed;border-radius:8px;padding:6px 8px;font-size:11px;color:#4b5563}.subcat-pill button{border:0;background:transparent;color:#98a0ad;padding:0 0 0 3px;cursor:pointer}.cat-actions{display:flex;gap:7px;margin-top:12px}.settings-categories .card{box-shadow:none}
-/* Automatic premium dark mode: follows iPhone/desktop system appearance. */
-@media (prefers-color-scheme:dark){
- :root{--bg:#0b1015;--card:#111820;--card2:#0e151c;--text:#f3f5f7;--muted:#929daa;--line:#26313b;--accent:#8b78ff;--accent2:#a48fff;--accent-soft:#241f49;--green:#39c982;--red:#ff6872;--blue:#6f8cff;--gold:#f3b83f;--shadow:0 12px 34px rgba(0,0,0,.22);--shadow-hover:0 18px 42px rgba(0,0,0,.32)}
- body{background:var(--bg);color:var(--text)}.topbar{background:rgba(12,17,23,.88);border-bottom-color:#202a33}.menu-btn,.field input,.field select,.field textarea,.btn{background:#141c24;color:var(--text);border-color:#2b3742}.drawer{background:rgba(12,18,24,.97);border-right-color:#25313b}.nav button{color:#aeb7c3}.nav button:hover{background:#211e3d;color:#b5aaff}.nav button.active{background:linear-gradient(90deg,#211e3d,#171c27);color:#b5aaff;box-shadow:inset 3px 0 0 #8b78ff}.brand-mark{color:#f0bd4d}.card,.kpi,.cat-compact,.report-builder{background:linear-gradient(180deg,#121a22,#10171e);border-color:#26313b}.kpi{background:#111920}.notice,.insight{background:#141c24;border-color:#28343e}.table th{background:#151d25;color:#aab4c0}.table-wrap,.table td,.table th{border-color:#26313b}.badge,.merchant-icon,.subcat-pill{background:#18212a;border-color:#2a3641;color:#c3cad2}.cat-dot{background:#241f49;color:#b5aaff}.cat-body{border-top-color:#25313b}.progress{background:#202a33}.tabs{border-bottom-color:#26313b}.tab{color:#9ca7b4}.tab.active{background:#241f49;color:#b5aaff}.modal-card{background:#111820;border-color:#2a3540}.eyebrow{color:#a397ff}
- .positive{color:var(--green)}.negative{color:var(--red)}
-}
-@media(max-width:720px){.topbar{height:64px;padding:0 14px}.drawer{top:64px}.drawer-backdrop{top:64px}.page{padding:22px 13px 80px}.section-head{flex-direction:column}.section-head .btn{width:100%}.cat-title{flex-wrap:wrap}.cat-count{width:100%;padding-left:37px;margin-top:-4px}.card{padding:15px;border-radius:15px}.kpi-grid{gap:8px}.kpi{padding:12px}.kpi strong{font-size:17px}}
 </style>
 </head>
 <body>
@@ -509,15 +520,15 @@ function renderReports(){
  const compareOpts=selectOptions([{value:"category",label:"Categoría"},{value:"subcategory",label:"Subcategoría"},{value:"concept",label:"Concepto / comercio"},{value:"account",label:"Cuenta"}],r.compareBy,"Comparar por");
  content.innerHTML=`
  <h1>Informes</h1>
- <div class="subtitle">Construye análisis a medida, agrupa operaciones y descubre dónde, cuándo y con qué frecuencia se va tu dinero.</div>
+ <div class="subtitle">Configura el análisis y pulsa <strong>Generar informe</strong>. El resultado solo se calcula cuando tú lo solicitas.</div>
  <div class="tabs report-tabs">
   <button class="tab ${r.mode==="analysis"?"active":""}" data-report-mode="analysis">🔎 Analizar</button>
   <button class="tab ${r.mode==="compare"?"active":""}" data-report-mode="compare">⚖️ Comparar meses</button>
-  <button class="tab ${r.mode==="frequency"?"active":""}" data-report-mode="frequency">🔁 Frecuencia de conceptos</button>
+  <button class="tab ${r.mode==="frequency"?"active":""}" data-report-mode="frequency">🔁 Frecuencia</button>
   <button class="tab ${r.mode==="net"?"active":""}" data-report-mode="net">💰 Resultado neto</button>
  </div>
  <section class="card report-builder">
-  <div class="report-builder-head"><div><h2>Constructor de informe</h2><div class="muted">Selecciona los criterios y pulsa <strong>Generar informe</strong>. Puedes analizar todo el histórico o acotarlo.</div></div><button class="btn" id="clearReport">Restablecer</button></div>
+  <div class="report-builder-head"><div><h2>Filtros del informe</h2><div class="muted">Los filtros se guardan para tu próxima consulta, pero ningún informe se genera hasta que pulses el botón.</div></div><button class="btn" id="clearReport">Restablecer</button></div>
   ${r.mode==="compare"?`
    <div class="form-grid" style="margin-top:15px">
     <div class="field"><label>Mes A</label><select id="compareA">${monthOptions(r.compareA)}</select></div>
@@ -544,7 +555,7 @@ function renderReports(){
    <div id="dateFields" class="form-grid" style="margin-top:12px"></div>`}
   <div class="actions" style="margin-top:15px"><button class="btn primary" id="generateReport">⚡ Generar informe</button></div>
  </section>
- <section id="reportOutput" style="margin-top:14px"></section>`;
+ <section id="reportOutput" style="margin-top:14px"><div class="report-mobile-empty"><strong>📊 Informe preparado</strong>Configura los filtros y pulsa <strong>Generar informe</strong> para ver los resultados.</div></section>`;
 
  const dateFields=document.getElementById("dateFields");
  if(dateFields){
@@ -560,10 +571,9 @@ function renderReports(){
  const endMonth=document.getElementById("endMonth");if(endMonth)endMonth.onchange=e=>{r.endMonth=e.target.value;save()};
  const startDate=document.getElementById("startDate");if(startDate)startDate.onchange=e=>{r.startDate=e.target.value;save()};
  const endDate=document.getElementById("endDate");if(endDate)endDate.onchange=e=>{r.endDate=e.target.value;save()};
- document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="frequency"){r.groupBy="concept";r.type="expense";}if(r.mode==="net"){r.type="both";}save();renderReports()});
+ document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="frequency"){r.groupBy="concept";r.type="expense"}if(r.mode==="net"){r.type="both"}save();renderReports()});
  document.getElementById("clearReport").onclick=()=>{state.ui.report={mode:"analysis",dateMode:"all",startMonth:monthsBack(36)[11],endMonth:monthsBack(36)[0],startDate:"",endDate:"",type:"expense",account:"",category:"",subcategory:"",concept:"",groupBy:"concept",sortBy:"amount",limit:"25",compareA:monthsBack(36)[0],compareB:monthsBack(36)[1],compareBy:"category"};save();renderReports()};
- document.getElementById("generateReport").onclick=()=>{save();generateReport(r);};
- generateReport(r);
+ document.getElementById("generateReport").onclick=()=>{save();generateReport(r)};
 }
 function reportFilteredMovements(r, override={}){
  let arr=state.movements.filter(m=>m.type!=="transfer");
@@ -700,7 +710,7 @@ function renderSettings(){
  <div class="grid">
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
  <section class="card span-6"><h2>Copias de seguridad</h2><div class="notice" style="margin-bottom:12px">V2.1 migra automáticamente los datos de V2.0 y crea una copia de seguridad local antes de hacerlo.</div><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
- <section class="card span-12 settings-categories"><div class="section-head"><div><div class="eyebrow">BIBLIOTECA FINANCIERA</div><h2 style="margin-bottom:4px">Categorías y subcategorías</h2><p class="muted" style="margin:0">${state.categories.length} categorías · ${state.categories.reduce((n,c)=>n+(c.subcategories?.length||0),0)} subcategorías. Organizadas para que la configuración no ocupe toda la pantalla.</p></div><button class="btn primary" id="addCat">+ Categoría</button></div><div class="category-compact">${state.categories.map((c,i)=>`<details class="cat-compact" ${i<2?'open':''}><summary><span class="cat-title"><span class="cat-dot">${esc(merchantVisual(c.name))}</span><strong>${esc(c.name)}</strong><span class="cat-count">${c.subcategories?.length||0} subcategorías</span></span><span class="cat-summary-actions"><button type="button" class="btn small" data-edit-cat="${c.id}">Editar</button><span class="chevron">›</span></span></summary><div class="cat-body"><div class="subcat-grid">${c.subcategories.map(s=>`<span class="subcat-pill">${esc(s.name)} <button type="button" data-del-sub="${c.id}|${s.id}" aria-label="Eliminar ${esc(s.name)}">×</button></span>`).join("")}</div><div class="cat-actions"><button class="btn small" data-add-sub="${c.id}">+ Subcategoría</button><button class="btn small danger" data-del-cat="${c.id}">Eliminar categoría</button></div></div></details>`).join("")}</div></section>
+ <section class="card span-12"><h2>Categorías y subcategorías</h2><p class="muted">La biblioteca viene precargada. Puedes usarla directamente al crear movimientos. También puedes añadir categorías y subcategorías propias.</p><div class="actions" style="margin-bottom:12px"><button class="btn primary" id="addCat">+ Categoría</button></div><div class="category-tree">${state.categories.map(c=>`<div class="cat"><div class="cat-head"><strong>${esc(c.name)}</strong><div class="actions"><button class="btn small" data-edit-cat="${c.id}">Editar</button><button class="btn small danger" data-del-cat="${c.id}">Eliminar</button><button class="btn small" data-add-sub="${c.id}">+ Subcategoría</button></div></div><div class="subcats">${c.subcategories.map(s=>`<span class="subcat">${esc(s.name)} <button style="border:0;background:none;padding:0 0 0 5px" data-del-sub="${c.id}|${s.id}">×</button></span>`).join("")}</div></div>`).join("")}</div></section>
  <section class="card span-6"><h2>Presupuestos mensuales</h2><p class="muted">Puedes fijar un límite por categoría. El resumen lo comparará automáticamente con el gasto real del mes.</p>
  <div class="form-grid"><div class="field"><label>Mes</label><select id="budgetMonth">${monthOptions(monthsBack(36)[0])}</select></div><div class="field"><label>Categoría</label><select id="budgetCategory">${categoryOptions("")}</select></div><div class="field"><label>Límite mensual (€)</label><input id="budgetAmount" type="number" step="0.01" min="0"></div></div>
  <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveBudget">Guardar presupuesto</button></div>

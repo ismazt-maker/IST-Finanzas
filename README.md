@@ -16,5 +16,5 @@ Aplicación PWA de finanzas personales, sin datos iniciales de usuario.
 Los datos se guardan localmente en el dispositivo.
 
 
-## I$T V2.2.5
+## I$T V2.2
 Migración automática desde V2.1/V2.0, resumen financiero ampliado, presupuestos, objetivos, patrimonio, disponible, tasa de ahorro e insights.
