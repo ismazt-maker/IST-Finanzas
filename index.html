@@ -64,7 +64,9 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 "use strict";
 
 /* ---------- Data model ---------- */
-const STORAGE_KEY = "ist_finanzas_v20";
+const STORAGE_KEY = "ist_finanzas_v21";
+const LEGACY_STORAGE_KEY = "ist_finanzas_v20";
+const DATA_VERSION = 21;
 const VERSION = 20;
 
 const defaultCategories = [
@@ -118,16 +120,15 @@ function monthKey(d){const x=typeof d==="string"?new Date(d+"T12:00:00"):new Dat
 function monthLabel(k){const [y,m]=k.split("-").map(Number);return new Intl.DateTimeFormat("es-ES",{month:"long",year:"numeric"}).format(new Date(y,m-1,1)).replace(/^./,c=>c.toUpperCase());}
 function monthsBack(n=36){const now=new Date();now.setDate(1);return Array.from({length:n},(_,i)=>{const d=new Date(now);d.setMonth(d.getMonth()-i);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`});}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function normalizeV21State(x){
+ if(!x||typeof x!=="object")return null;
+ x.settings ||= {currency:"EUR",defaultInterestRate:2.02,lastInterestRun:{}};
+ x.settings.lastInterestRun ||= {}; x.categories ||= []; x.accounts ||= []; x.movements ||= []; x.recurrings ||= []; x.investments ||= []; x.version=DATA_VERSION; return x;
+}
+function backupBeforeMigration(raw){try{localStorage.setItem("ist_backup_v20_before_v21",JSON.stringify(raw));}catch(e){}}
 function loadState(){
- try{
-  const x=JSON.parse(localStorage.getItem(STORAGE_KEY));
-  if(x && x.version){ 
-    x.categories = Array.isArray(x.categories)&&x.categories.length ? x.categories : emptyState().categories;
-    x.settings ||= {currency:"EUR",defaultInterestRate:2.02,lastInterestRun:{}};
-    x.settings.lastInterestRun ||= {};
-    return x;
-  }
- }catch(e){}
+ try{const current=localStorage.getItem(STORAGE_KEY);if(current){const x=normalizeV21State(JSON.parse(current));if(x)return x;}}catch(e){}
+ try{const legacy=localStorage.getItem(LEGACY_STORAGE_KEY);if(legacy){const raw=JSON.parse(legacy);backupBeforeMigration(raw);const migrated=normalizeV21State(raw);localStorage.setItem(STORAGE_KEY,JSON.stringify(migrated));return migrated;}}catch(e){}
  return emptyState();
 }
 function byId(arr,id){return arr.find(x=>x.id===id);}
@@ -421,6 +422,7 @@ function renderReports(){
   <button class="tab ${r.mode==="analysis"?"active":""}" data-report-mode="analysis">🔎 Analizar</button>
   <button class="tab ${r.mode==="compare"?"active":""}" data-report-mode="compare">⚖️ Comparar meses</button>
   <button class="tab ${r.mode==="frequency"?"active":""}" data-report-mode="frequency">🔁 Frecuencia de conceptos</button>
+  <button class="tab ${r.mode==="net"?"active":""}" data-report-mode="net">💰 Resultado neto</button>
  </div>
  <section class="card report-builder">
   <div class="report-builder-head"><div><h2>Constructor de informe</h2><div class="muted">Selecciona los criterios y pulsa <strong>Generar informe</strong>. Puedes analizar todo el histórico o acotarlo.</div></div><button class="btn" id="clearReport">Restablecer</button></div>
@@ -436,7 +438,7 @@ function renderReports(){
     <div class="field"><label>Concepto contiene</label><input id="compareConcept" value="${esc(r.concept||"")}" placeholder="Ej. gasolina, Netflix…"></div>
    </div>`:`
    <div class="form-grid" style="margin-top:15px">
-    <div class="field"><label>Tipo de informe</label><select id="reportType"><option value="expense" ${r.mode==="frequency"?"selected":""}>Gastos / operaciones</option></select></div>
+    <div class="field"><label>Tipo de informe</label><select id="reportType"><option value="expense" ${r.mode!=="net"?"selected":""}>Gastos / operaciones</option><option value="both" ${r.mode==="net"?"selected":""}>Ingresos + gastos</option></select></div>
     <div class="field"><label>Tipo de movimiento</label><select id="reportMovementType">${typeOpts}</select></div>
     <div class="field"><label>Filtro de fecha</label><select id="dateMode"><option value="all" ${r.dateMode==="all"?"selected":""}>Todo el histórico</option><option value="months" ${r.dateMode==="months"?"selected":""}>Entre meses</option><option value="dates" ${r.dateMode==="dates"?"selected":""}>Entre fechas exactas</option></select></div>
     <div class="field"><label>Cuenta</label><select id="reportAccount">${accountOpts}</select></div>
@@ -459,14 +461,14 @@ function renderReports(){
  }
  function bind(id,key,rerender=false){const el=document.getElementById(id);if(!el)return;el.onchange=e=>{r[key]=e.target.value;save();if(rerender)renderReports()};el.oninput=e=>{r[key]=e.target.value;save()};}
  [
-  ["reportMovementType","type"],["dateMode","dateMode",true],["reportAccount","account"],["reportCategory","category",true],["reportSubcategory","subcategory"],["reportConcept","concept"],["groupBy","groupBy"],["sortBy","sortBy"],["limit","limit"],
+  ["reportMovementType","type"],["reportType","type"],["dateMode","dateMode",true],["reportAccount","account"],["reportCategory","category",true],["reportSubcategory","subcategory"],["reportConcept","concept"],["groupBy","groupBy"],["sortBy","sortBy"],["limit","limit"],
   ["compareA","compareA"],["compareB","compareB"],["compareBy","compareBy"],["compareType","type"],["compareAccount","account"],["compareCategory","category",true],["compareSubcategory","subcategory"],["compareConcept","concept"]
  ].forEach(x=>bind(...x));
  const startMonth=document.getElementById("startMonth");if(startMonth)startMonth.onchange=e=>{r.startMonth=e.target.value;save()};
  const endMonth=document.getElementById("endMonth");if(endMonth)endMonth.onchange=e=>{r.endMonth=e.target.value;save()};
  const startDate=document.getElementById("startDate");if(startDate)startDate.onchange=e=>{r.startDate=e.target.value;save()};
  const endDate=document.getElementById("endDate");if(endDate)endDate.onchange=e=>{r.endDate=e.target.value;save()};
- document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="frequency"){r.groupBy="concept";r.type="expense";}save();renderReports()});
+ document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="frequency"){r.groupBy="concept";r.type="expense";}if(r.mode==="net"){r.type="both";}save();renderReports()});
  document.getElementById("clearReport").onclick=()=>{state.ui.report={mode:"analysis",dateMode:"all",startMonth:monthsBack(36)[11],endMonth:monthsBack(36)[0],startDate:"",endDate:"",type:"expense",account:"",category:"",subcategory:"",concept:"",groupBy:"concept",sortBy:"amount",limit:"25",compareA:monthsBack(36)[0],compareB:monthsBack(36)[1],compareBy:"category"};save();renderReports()};
  document.getElementById("generateReport").onclick=()=>{save();generateReport(r);};
  generateReport(r);
@@ -506,6 +508,7 @@ function sortReportGroups(groups,sortBy){return groups.sort((a,b)=>sortBy==="cou
 function generateReport(r){
  const out=document.getElementById("reportOutput");if(!out)return;
  if(r.mode==="compare"){renderReportComparison(out,r);return;}
+ if(r.mode==="net"){renderNetReport(out,r);return;}
  const arr=reportFilteredMovements(r);
  const groups=sortReportGroups(groupReportMovements(arr,r.groupBy),r.sortBy);
  const shown=r.limit==="all"?groups:groups.slice(0,Number(r.limit));
@@ -523,6 +526,17 @@ function generateReport(r){
  </div>`;
  document.getElementById("exportReport").onclick=()=>exportReportCSV(groups,r);
  out.querySelectorAll("[data-drill-group]").forEach(b=>b.onclick=()=>showReportDrill(arr,decodeURIComponent(b.dataset.drillGroup),r.groupBy));
+}
+function renderNetReport(out,r){
+ const arr=reportFilteredMovements(r);
+ const income=arr.filter(m=>m.type==="income").reduce((s,m)=>s+movementAmount(m),0);
+ const expense=arr.filter(m=>m.type==="expense").reduce((s,m)=>s+movementAmount(m),0);
+ const net=income-expense;
+ const groups=groupReportMovements(arr,r.groupBy);
+ const shown=r.limit==="all"?groups.slice():groups.slice(0,Number(r.limit));
+ out.innerHTML=`<div class="grid"><section class="card span-12"><div class="report-result-head"><div><h2>Resultado neto</h2><div class="muted">Ingresos − gastos · ${arr.length} operaciones · ${reportFilterSummary(r)}</div></div><button class="btn" id="exportNet">Exportar resultado</button></div><div class="kpi-grid" style="margin-top:14px"><div class="kpi"><div class="muted">Ingresos</div><strong class="positive">${euro(income)}</strong></div><div class="kpi"><div class="muted">Gastos</div><strong class="negative">${euro(expense)}</strong></div><div class="kpi"><div class="muted">Resultado neto</div><strong class="${net>=0?"positive":"negative"}">${net>=0?"+":""}${euro(net)}</strong></div><div class="kpi"><div class="muted">Operaciones</div><strong>${arr.length}</strong></div></div></section><section class="card span-12"><h2>Neto agrupado por ${esc(r.groupBy==="concept"?"concepto / comercio":r.groupBy)}</h2><div class="table-wrap"><table class="table"><thead><tr><th>Grupo</th><th>Ingresos</th><th>Gastos</th><th>Neto</th><th>Operaciones</th><th>Media neta*</th><th></th></tr></thead><tbody>${shown.map(g=>{const inc=g.movements.filter(m=>m.type==="income").reduce((x,m)=>x+movementAmount(m),0),exp=g.movements.filter(m=>m.type==="expense").reduce((x,m)=>x+movementAmount(m),0),n=inc-exp;return `<tr><td><span class="merchant-icon">${merchantVisual(g.label)}</span>${esc(g.label)}</td><td class="positive">${euro(inc)}</td><td class="negative">${euro(exp)}</td><td class="${n>=0?"positive":"negative"}"><strong>${n>=0?"+":""}${euro(n)}</strong></td><td>${g.count}</td><td>${euro(n/g.count)}</td><td><button class="btn small" data-net-drill="${encodeURIComponent(g.key)}">Ver movimientos</button></td></tr>`}).join("")||`<tr><td colspan="7" class="empty">No hay datos con estos filtros.</td></tr>`}</tbody></table></div><div class="muted" style="margin-top:8px">* Resultado neto dividido entre el número total de operaciones del grupo.</div></section></div>`;
+ document.getElementById("exportNet").onclick=()=>{const lines=[["Grupo","Ingresos","Gastos","Neto","Operaciones"],...shown.map(g=>{const inc=g.movements.filter(m=>m.type==="income").reduce((x,m)=>x+movementAmount(m),0),exp=g.movements.filter(m=>m.type==="expense").reduce((x,m)=>x+movementAmount(m),0);return[g.label,inc.toFixed(2),exp.toFixed(2),(inc-exp).toFixed(2),g.count]})];downloadCSV(lines,`IST-neto-${dateISO()}.csv`)};
+ out.querySelectorAll("[data-net-drill]").forEach(b=>b.onclick=()=>showReportDrill(arr,decodeURIComponent(b.dataset.netDrill),r.groupBy));
 }
 function reportFilterSummary(r){
  const bits=[];if(r.type!=="both")bits.push(r.type==="income"?"ingresos":"gastos");else bits.push("ingresos + gastos");
@@ -593,7 +607,7 @@ function renderSettings(){
  content.innerHTML=`<h1>Configuración</h1><div class="subtitle">Categorías, subcategorías, datos y parámetros generales.</div>
  <div class="grid">
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
- <section class="card span-6"><h2>Copias de seguridad</h2><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
+ <section class="card span-6"><h2>Copias de seguridad</h2><div class="notice" style="margin-bottom:12px">V2.1 migra automáticamente los datos de V2.0 y crea una copia de seguridad local antes de hacerlo.</div><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
  <section class="card span-12"><h2>Categorías y subcategorías</h2><p class="muted">La biblioteca viene precargada. Puedes usarla directamente al crear movimientos. También puedes añadir categorías y subcategorías propias.</p><div class="actions" style="margin-bottom:12px"><button class="btn primary" id="addCat">+ Categoría</button></div><div class="category-tree">${state.categories.map(c=>`<div class="cat"><div class="cat-head"><strong>${esc(c.name)}</strong><div class="actions"><button class="btn small" data-edit-cat="${c.id}">Editar</button><button class="btn small danger" data-del-cat="${c.id}">Eliminar</button><button class="btn small" data-add-sub="${c.id}">+ Subcategoría</button></div></div><div class="subcats">${c.subcategories.map(s=>`<span class="subcat">${esc(s.name)} <button style="border:0;background:none;padding:0 0 0 5px" data-del-sub="${c.id}|${s.id}">×</button></span>`).join("")}</div></div>`).join("")}</div></section>
  </div>`;
  document.getElementById("saveSettings").onclick=()=>{state.settings.defaultInterestRate=Number(document.getElementById("defaultRate").value)||0;save();toast("Configuración guardada.");};
