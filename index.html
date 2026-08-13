@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.2</title>
+<title>I$T V2.2.7</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -33,7 +33,7 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{padding:14px;background:#fafafa;border:1px solid var(--line);border-radius:13px}.kpi strong{display:block;font-size:18px;margin-top:3px}
 .category-tree{display:grid;gap:8px}.cat{border:1px solid var(--line);border-radius:13px;padding:12px}.cat-head{display:flex;justify-content:space-between;align-items:center}.subcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.subcat{background:#f1f3f5;padding:6px 8px;border-radius:8px;font-size:12px}
 
-/* ---------- Mobile reports UX V2.2.6 ---------- */
+/* ---------- Mobile reports UX V2.2.7 ---------- */
 .report-mobile-empty{padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fafbfc;color:var(--muted)}
 .report-mobile-empty strong{display:block;color:#273444;font-size:16px;margin-bottom:5px}
 .report-builder .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -76,6 +76,26 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 @media(max-width:850px){.report-builder-head,.report-result-head{flex-direction:column}.donut-wrap{align-items:flex-start}}
 @media(max-width:850px){.grid{grid-template-columns:1fr}.span-3,.span-4,.span-6,.span-8,.span-12{grid-column:1}.form-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.page{padding:20px 13px 48px}.topbar{padding:0 12px}}
 @media(max-width:520px){h1{font-size:25px}.card{padding:14px}.kpi-grid{grid-template-columns:1fr 1fr}.toolbar .field{min-width:140px;flex:1}.metric{font-size:23px}}
+
+/* ---------- I$T V2.2.7 iPhone-first design system ---------- */
+:root{--bg:#f4f5f8;--card:#fff;--text:#171923;--muted:#707585;--line:#e5e7ee;--accent:#6246ea;--accent-2:#8b5cf6;--accent-soft:#f0edff;--green:#159b62;--red:#d84b4b;--blue:#4f72d8;--gold:#d99a24;--shadow:0 10px 30px rgba(28,30,48,.06);--radius:18px}
+body{background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}button,select,input,textarea{-webkit-tap-highlight-color:transparent}button{touch-action:manipulation}
+.topbar{height:64px;background:rgba(255,255,255,.9);border-bottom:1px solid rgba(229,231,238,.9);padding:0 max(14px,env(safe-area-inset-left)) 0 max(14px,env(safe-area-inset-right));box-shadow:0 1px 0 rgba(20,20,30,.02)}
+.menu-btn{width:40px;height:40px;border-radius:13px;background:#f0eff7;color:#332d52;font-size:21px}.brand{font-size:24px;letter-spacing:-1.4px;color:#4e39cf}.page{padding:20px 16px calc(92px + env(safe-area-inset-bottom));max-width:1180px}.card{border-radius:18px;box-shadow:var(--shadow);border-color:#e9e9f0;padding:17px}.btn{min-height:42px;border-radius:12px}.btn.primary{background:linear-gradient(135deg,#6246ea,#7a55f5);border-color:transparent;box-shadow:0 7px 18px rgba(98,70,234,.18)}.field input,.field select,.field textarea{min-height:46px;border-radius:13px;font-size:16px;background:#fff}.field label{font-size:12px;letter-spacing:.01em}.tabs{gap:7px}.tab{min-height:42px;border-radius:12px}.tab.active{background:var(--accent-soft);color:#4d39c9;border-color:#ddd6fe}.kpi{border-radius:15px;background:linear-gradient(180deg,#fff,#fbfbfd)}
+.mobile-nav{display:none}
+@media(max-width:700px){
+ body{overflow-x:hidden}.topbar{position:sticky;height:60px}.topbar #headerDate{display:none}.drawer{inset:60px auto 0 0;width:min(310px,86vw);padding:12px}.drawer-backdrop{inset:60px 0 0}.page{padding:17px 13px calc(88px + env(safe-area-inset-bottom))}.page>h1{font-size:27px;letter-spacing:-.9px}.subtitle{font-size:13px;margin-bottom:16px}.grid{gap:11px}.card{padding:15px;border-radius:17px}.form-grid{gap:10px}.toolbar{display:grid;grid-template-columns:1fr;gap:10px}.toolbar .field{min-width:0}.actions{gap:7px}.actions .btn{flex:1 1 140px}.list-row{min-height:48px}.table-wrap{border-radius:13px}.table{min-width:660px}.modal{padding:0;align-items:flex-end}.modal-card{width:100%;max-height:88vh;border-radius:22px 22px 0 0;padding:18px 15px calc(20px + env(safe-area-inset-bottom))}.mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;z-index:55;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);backdrop-filter:blur(18px);border-top:1px solid rgba(220,222,230,.9);box-shadow:0 -8px 30px rgba(25,27,40,.08)}.mobile-nav button{border:0;background:transparent;color:#777b88;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:48px;border-radius:13px;font-size:10px;font-weight:700}.mobile-nav button .micon{font-size:18px;line-height:1}.mobile-nav button.active{color:var(--accent);background:#f2efff}.mobile-nav button.add{background:linear-gradient(135deg,#6246ea,#7d57f6);color:#fff;border-radius:50%;width:50px;height:50px;min-height:50px;justify-self:center;align-self:center;font-size:23px;box-shadow:0 8px 20px rgba(98,70,234,.28)}
+ /* Reports: one task per screen, never a desktop grid squeezed into iPhone */
+ .report-tabs{display:grid!important;grid-template-columns:1fr 1fr!important;gap:7px!important;overflow:visible!important}.report-tabs .tab{min-height:44px;padding:9px 8px;font-size:12px}.report-builder{padding:14px!important;border-radius:18px;background:#fff}.report-builder-head{gap:8px!important}.report-builder-head h2{font-size:17px}.report-builder-head .btn{width:100%;min-height:42px}.report-builder .form-grid{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}.report-builder .field{grid-column:auto!important}.report-builder .field label{font-size:12px}.report-builder .field input,.report-builder .field select{width:100%;min-height:48px;font-size:16px}.report-builder #generateReport{width:100%;height:50px;font-size:15px}.report-mobile-empty{padding:25px 15px;margin-top:10px}.report-result-head{display:flex!important;flex-direction:column!important;gap:10px!important}.report-result-head .btn{width:100%}.report-result-head h2{font-size:19px}.report-result-head+.kpi-grid,.report-result-head~.kpi-grid{grid-template-columns:1fr 1fr!important}.report-bars{gap:10px}.report-bar-label{font-size:12px}.donut-wrap{flex-direction:column!important;align-items:center!important}.donut{width:145px;height:145px}.report-result-head~.grid,.report-result-head~div.grid{grid-template-columns:1fr!important}.report-result-head~div .card{grid-column:1!important}.report-result-head~div .table-wrap{overflow-x:auto;max-width:100%}.report-result-head~div .table{min-width:660px}.report-result-head~div .kpi{padding:11px}.report-result-head~div .kpi strong{font-size:16px;overflow-wrap:anywhere}
+ /* Movement rows become compact financial cards */
+ .movement-row{padding:12px 0}.merchant-icon{width:34px;height:34px;border-radius:10px}.category-tree .cat{padding:11px}.category-tree .cat-head{gap:8px;align-items:flex-start}.category-tree .cat-head .actions{justify-content:flex-end}.category-tree .subcats{gap:5px}.category-tree .subcat{padding:7px 9px}
+}
+@media(max-width:390px){.page{padding-left:11px;padding-right:11px}.card{padding:13px}.kpi-grid{gap:7px}.kpi{padding:11px}.kpi strong{font-size:16px}.report-tabs{grid-template-columns:1fr!important}.mobile-nav button{font-size:9px}.mobile-nav button.add{width:47px;height:47px;min-height:47px}}
+/* Dark mode: premium, not inverted */
+@media(prefers-color-scheme:dark){
+ :root{--bg:#090a0f;--card:#11131a;--text:#f4f4f7;--muted:#969baa;--line:#242733;--accent:#a78bfa;--accent-2:#c084fc;--accent-soft:#201b36;--green:#4ade80;--red:#fb7185;--blue:#7aa2ff;--gold:#f4b942;--shadow:0 12px 32px rgba(0,0,0,.28)}
+ body{background:var(--bg)}.topbar{background:rgba(10,11,16,.88);border-color:#242733}.menu-btn{background:#171922;color:#ddd}.brand{color:#f4b942}.drawer{background:#101218;border-color:#252832}.nav button{color:#d3d5dc}.nav button:hover,.nav button.active{background:#1c1a2a;color:#c4b5fd}.card,.report-builder{background:var(--card);border-color:#252832}.field input,.field select,.field textarea{background:#0f1117;color:var(--text);border-color:#2a2e39}.table th{background:#171922;color:#aeb2bf}.table td{border-color:#242733}.kpi{background:#151720;border-color:#262a35}.notice,.report-mobile-empty,.insight{background:#151720;border-color:#282c37}.tab{background:#11131a;color:#d3d5dc;border-color:#292d38}.tab.active{background:#211b3b;color:#c4b5fd;border-color:#433878}.subcat,.badge{background:#1b1e27}.mobile-nav{background:rgba(14,15,21,.95);border-color:#252832}.mobile-nav button.active{background:#211b3b;color:#c4b5fd}.progress{background:#252833}.donut:before{background:#11131a}.donut small{color:#9ca1ad}
+}
 </style>
 </head>
 <body>
@@ -91,6 +111,7 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 </aside>
 <div class="drawer-backdrop" id="backdrop"></div>
 <main class="page" id="appContent"></main>
+<nav class="mobile-nav" id="mobileNav" aria-label="Navegación principal"></nav>
 </div>
 
 <div class="modal" id="modal"><div class="modal-card" id="modalCard"></div></div>
@@ -269,11 +290,15 @@ const routes=[
 let currentRoute=localStorage.getItem("ist_route")||"summary";
 const nav=document.getElementById("nav"), content=document.getElementById("appContent");
 function renderNav(){nav.innerHTML=routes.map(r=>`<button data-route="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="emoji">${r[1]}</span>${r[2]}</button>`).join("");}
+function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=[routes[0],routes[1],routes[2],routes[4]];el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
+
 function openMenu(){document.getElementById("drawer").classList.add("open");document.getElementById("backdrop").classList.add("open");}
 function closeMenu(){document.getElementById("drawer").classList.remove("open");document.getElementById("backdrop").classList.remove("open");}
 document.getElementById("menuBtn").onclick=openMenu;
 document.getElementById("backdrop").onclick=closeMenu;
-nav.addEventListener("click",e=>{const b=e.target.closest("[data-route]");if(!b)return;currentRoute=b.dataset.route;localStorage.setItem("ist_route",currentRoute);renderNav();closeMenu();render();});
+nav.addEventListener("click",e=>{const b=e.target.closest("[data-route]");if(!b)return;currentRoute=b.dataset.route;localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();closeMenu();render();});
+document.getElementById("mobileNav").addEventListener("click",e=>{const b=e.target.closest("[data-mroute],[data-addmovement]");if(!b)return;if(b.dataset.addmovement){currentRoute="movements";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();setTimeout(()=>{const add=document.getElementById("addMovement");if(add)add.click();},40);return;}currentRoute=b.dataset.mroute;localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();});
+
 document.getElementById("headerDate").textContent=new Intl.DateTimeFormat("es-ES",{dateStyle:"medium"}).format(new Date());
 
 function selectOptions(items,value="",placeholder="Selecciona…"){return `<option value="">${esc(placeholder)}</option>`+items.map(x=>`<option value="${esc(x.value)}" ${x.value===value?"selected":""}>${esc(x.label)}</option>`).join("");}
@@ -763,6 +788,7 @@ function render(){
  accrueInterest();
  applyRecurrings();
  renderNav();
+ renderMobileNav();
  if(currentRoute==="summary")renderSummary();
  else if(currentRoute==="movements")renderMovements();
  else if(currentRoute==="accounts")renderAccounts();

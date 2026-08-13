@@ -18,3 +18,7 @@ Los datos se guardan localmente en el dispositivo.
 
 ## I$T V2.2
 Migración automática desde V2.1/V2.0, resumen financiero ampliado, presupuestos, objetivos, patrimonio, disponible, tasa de ahorro e insights.
+
+
+## I$T V2.2.7
+Mobile-first visual redesign for iPhone: touch-friendly controls, compact cards, responsive reports, bottom navigation, light/dark premium theme. Data model remains compatible with V2.2.
