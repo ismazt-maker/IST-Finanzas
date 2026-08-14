@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.2.7</title>
+<title>I$T V2.2.8</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -31,7 +31,7 @@ h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0
 .notice{background:#f7f8fa;border:1px solid var(--line);border-radius:12px;padding:11px 13px;color:#55606d;font-size:13px}.hidden{display:none!important}.danger-text{color:var(--red)}
 .modal{position:fixed;inset:0;background:rgba(15,23,42,.38);z-index:60;display:none;align-items:center;justify-content:center;padding:18px}.modal.open{display:flex}.modal-card{width:min(680px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:20px;padding:20px;box-shadow:0 25px 60px rgba(0,0,0,.2)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.close{border:0;background:#eef0f2;border-radius:10px;width:36px;height:36px}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.kpi{padding:14px;background:#fafafa;border:1px solid var(--line);border-radius:13px}.kpi strong{display:block;font-size:18px;margin-top:3px}
-.category-tree{display:grid;gap:8px}.cat{border:1px solid var(--line);border-radius:13px;padding:12px}.cat-head{display:flex;justify-content:space-between;align-items:center}.subcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.subcat{background:#f1f3f5;padding:6px 8px;border-radius:8px;font-size:12px}
+.settings-link-row{display:flex;justify-content:space-between;align-items:center;gap:16px}.category-list{display:grid;gap:0}.category-list-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.cat-row-main{display:flex;align-items:center;gap:10px;min-width:0}.cat-toggle{border:0;background:#f1efff;color:#4d39c9;width:34px;height:34px;border-radius:10px;font-size:20px;flex:none}.subcat-panel{padding:0 0 12px 44px}.subcat-list{display:grid;gap:6px}.subcat-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:10px;background:#fafbfc}.movement-filters .toolbar{margin-bottom:10px}.movement-filters .field{flex:1;min-width:170px}.page-head-back{margin-bottom:12px}.page-head-back .btn{min-height:38px}.category-tree{display:grid;gap:8px}.cat{border:1px solid var(--line);border-radius:13px;padding:12px}.cat-head{display:flex;justify-content:space-between;align-items:center}.subcats{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.subcat{background:#f1f3f5;padding:6px 8px;border-radius:8px;font-size:12px}
 
 /* ---------- Mobile reports UX V2.2.7 ---------- */
 .report-mobile-empty{padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:14px;background:#fafbfc;color:var(--muted)}
@@ -91,6 +91,31 @@ body{background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:opti
  .movement-row{padding:12px 0}.merchant-icon{width:34px;height:34px;border-radius:10px}.category-tree .cat{padding:11px}.category-tree .cat-head{gap:8px;align-items:flex-start}.category-tree .cat-head .actions{justify-content:flex-end}.category-tree .subcats{gap:5px}.category-tree .subcat{padding:7px 9px}
 }
 @media(max-width:390px){.page{padding-left:11px;padding-right:11px}.card{padding:13px}.kpi-grid{gap:7px}.kpi{padding:11px}.kpi strong{font-size:16px}.report-tabs{grid-template-columns:1fr!important}.mobile-nav button{font-size:9px}.mobile-nav button.add{width:47px;height:47px;min-height:47px}}
+@media(max-width:850px){
+ .page{width:100%;max-width:100%;overflow-x:hidden}
+ .grid>.span-3,.grid>.span-4,.grid>.span-6,.grid>.span-7,.grid>.span-8,.grid>.span-12{grid-column:1/-1!important}
+ .summary-toolbar{display:grid;grid-template-columns:1fr auto;align-items:end;gap:8px}
+ .summary-toolbar .field{min-width:0}
+ .summary-toolbar .summary-nav{padding-bottom:0}
+ .summary-chart-card .chart{height:210px;gap:4px;padding-left:0;padding-right:0}
+ .summary-chart-card .bar{max-width:22px}
+ .summary-chart-card .bar-label{font-size:9px;transform:none}
+ .summary-kpis{grid-template-columns:1fr 1fr!important}
+ .summary-card{min-width:0;overflow:hidden}
+ .category-manager-card{padding:14px}
+ .category-list-row{padding:14px 4px}
+ .category-list-row .cat-meta{font-size:11px}
+ .concept-search input{font-size:16px}
+ .settings-link-row{align-items:center}
+ .settings-link-row .btn{flex:none}
+ .movement-filters .toolbar{display:grid;grid-template-columns:1fr;gap:9px}
+ .movement-filters .field{min-width:0}
+ .category-list-row{align-items:flex-start}
+ .category-list-row>.actions{flex-wrap:nowrap}
+ .category-list-row>.actions .btn{min-height:36px;padding:6px 8px}
+ .subcat-panel{padding-left:44px}
+}
+
 /* Dark mode: premium, not inverted */
 @media(prefers-color-scheme:dark){
  :root{--bg:#090a0f;--card:#11131a;--text:#f4f4f7;--muted:#969baa;--line:#242733;--accent:#a78bfa;--accent-2:#c084fc;--accent-soft:#201b36;--green:#4ade80;--red:#fb7185;--blue:#7aa2ff;--gold:#f4b942;--shadow:0 12px 32px rgba(0,0,0,.28)}
@@ -285,12 +310,12 @@ function accrueInterest(){
 /* ---------- UI shell ---------- */
 const routes=[
  ["summary","🏠","Resumen"],["movements","↔️","Movimientos"],["accounts","🏦","Cuentas"],["recurrings","🔄","Recurrentes"],
- ["reports","📊","Informes"],["investments","📈","Inversiones"],["settings","⚙️","Configuración"]
+ ["reports","📊","Informes"],["categories","🏷️","Categorías"],["investments","📈","Inversiones"],["settings","⚙️","Configuración"]
 ];
 let currentRoute=localStorage.getItem("ist_route")||"summary";
 const nav=document.getElementById("nav"), content=document.getElementById("appContent");
 function renderNav(){nav.innerHTML=routes.map(r=>`<button data-route="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="emoji">${r[1]}</span>${r[2]}</button>`).join("");}
-function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=[routes[0],routes[1],routes[2],routes[4]];el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
+function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=[routes.find(r=>r[0]==="summary"),routes.find(r=>r[0]==="movements"),routes.find(r=>r[0]==="accounts"),routes.find(r=>r[0]==="reports")];el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
 
 function openMenu(){document.getElementById("drawer").classList.add("open");document.getElementById("backdrop").classList.add("open");}
 function closeMenu(){document.getElementById("drawer").classList.remove("open");document.getElementById("backdrop").classList.remove("open");}
@@ -352,8 +377,8 @@ function renderSummary(){
  const subs=state.movements.filter(m=>monthKey(m.date)===selected&&m.type==="expense"&&categoryById(m.categoryId)?.name==="Suscripciones").reduce((s,m)=>s+movementAmount(m),0);
  content.innerHTML=`
  <h1>Resumen</h1><div class="subtitle">Centro de mando financiero · ${esc(monthLabel(selected))}</div>
- <div class="toolbar"><div class="field"><label>Mes del resumen</label><select id="summaryMonth">${monthOptions(selected)}</select></div><div class="summary-nav"><button class="btn small" id="prevSummary">‹</button><button class="btn small" id="nextSummary">›</button></div></div>
- <div class="kpi-grid">
+ <div class="toolbar summary-toolbar"><div class="field"><label>Mes del resumen</label><select id="summaryMonth">${monthOptions(selected)}</select></div><div class="summary-nav"><button class="btn small" id="prevSummary">‹</button><button class="btn small" id="nextSummary">›</button></div></div>
+ <div class="kpi-grid summary-kpis">
   <div class="kpi"><div class="muted">Patrimonio total</div><strong>${euro(patrimony)}</strong></div>
   <div class="kpi"><div class="muted">Disponible</div><strong>${euro(available)}</strong></div>
   <div class="kpi"><div class="muted">Ingresos</div><strong class="positive">${euro(st.income)}</strong></div>
@@ -362,10 +387,10 @@ function renderSummary(){
   <div class="kpi"><div class="muted">Tasa de ahorro</div><strong class="${st.rate>=0?"positive":"negative"}">${st.rate.toFixed(1)}%</strong></div>
  </div>
  <div class="grid" style="margin-top:14px">
-  <section class="card span-8"><h2>Evolución del patrimonio</h2>${renderMonthlyChart(months.slice(0,12).reverse(),true)}</section>
-  <section class="card span-4"><h2>Últimos movimientos</h2><div class="list">${st.ms.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7).map(m=>movementRow(m)).join("")||`<div class="empty">Sin movimientos.</div>`}</div></section>
-  <section class="card span-7"><h2>Gasto por categoría</h2>${top.length?`<div class="report-bars">${top.map(([n,v])=>`<div class="report-bar-row"><div class="report-bar-label"><span>${esc(n)}</span><strong>${euro(v)}</strong></div><div class="report-track"><div class="report-fill" style="width:${Math.max(2,v/(top[0][1]||1)*100)}%"></div></div></div>`).join("")}`:`<div class="empty">No hay gastos en este mes.</div>`}</section>
-  <section class="card span-5"><h2>Situación</h2><div class="list">
+  <section class="card span-8 summary-card summary-chart-card"><h2>Evolución del patrimonio</h2>${renderMonthlyChart(months.slice(0,12).reverse(),true)}</section>
+  <section class="card span-4 summary-card"><h2>Últimos movimientos</h2><div class="list">${st.ms.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7).map(m=>movementRow(m)).join("")||`<div class="empty">Sin movimientos.</div>`}</div></section>
+  <section class="card span-7 summary-card"><h2>Gasto por categoría</h2>${top.length?`<div class="report-bars">${top.map(([n,v])=>`<div class="report-bar-row"><div class="report-bar-label"><span>${esc(n)}</span><strong>${euro(v)}</strong></div><div class="report-track"><div class="report-fill" style="width:${Math.max(2,v/(top[0][1]||1)*100)}%"></div></div></div>`).join("")}`:`<div class="empty">No hay gastos en este mes.</div>`}</section>
+  <section class="card span-5 summary-card"><h2>Situación</h2><div class="list">
    <div class="list-row"><span>En cuentas</span><strong>${euro(totalBalance())}</strong></div>
    <div class="list-row"><span>Ahorro</span><strong>${euro(savings)}</strong></div>
    <div class="list-row"><span>Inversiones</span><strong>${euro(investmentTotal())}</strong></div>
@@ -391,13 +416,17 @@ function movementRow(m){
 
 /* ---------- Movements ---------- */
 function renderMovements(){
- state.ui ||= {}; const months=monthsBack(36); const selected=state.ui.movMonth||months[0]; const selectedCat=state.ui.movCat||"";
- const mov=state.movements.filter(m=>(!selected||monthKey(m.date)===selected)&&(!selectedCat||m.categoryId===selectedCat)).sort((a,b)=>b.date.localeCompare(a.date));
- content.innerHTML=`<h1>Movimientos</h1><div class="subtitle">Registra cada euro y clasifícalo con categoría y subcategoría.</div>
- <div class="toolbar"><div class="field"><label>Mes</label><select id="movMonth">${monthOptions(selected)}</select></div><div class="field"><label>Categoría</label><select id="movCat">${categoryOptions(selectedCat)}</select></div><button class="btn primary" id="newMovement">+ Nuevo movimiento</button><button class="btn" id="newTransfer">⇄ Traspaso</button></div>
+ state.ui ||= {}; const months=monthsBack(36); const selected=state.ui.movMonth||months[0]; const selectedCat=state.ui.movCat||""; const concept=(state.ui.movConcept||"").trim().toLowerCase();
+ const mov=state.movements.filter(m=>(!selected||monthKey(m.date)===selected)&&(!selectedCat||m.categoryId===selectedCat)&&(!concept||String(m.merchant||"").toLowerCase().includes(concept)||String(m.note||"").toLowerCase().includes(concept))).sort((a,b)=>b.date.localeCompare(a.date));
+ content.innerHTML=`<h1>Movimientos</h1><div class="subtitle">Registra, busca y clasifica cada movimiento.</div>
+ <div class="card movement-filters"><div class="toolbar"><div class="field"><label>Mes</label><select id="movMonth">${monthOptions(selected)}</select></div><div class="field"><label>Categoría</label><select id="movCat">${categoryOptions(selectedCat)}</select></div><div class="field concept-search"><label>Buscar por concepto</label><input id="movConcept" type="search" value="${esc(state.ui.movConcept||"")}" placeholder="Ej. Netflix, Mercadona…" autocomplete="off"></div></div>
+ <div class="actions"><button class="btn primary" id="newMovement">+ Nuevo movimiento</button><button class="btn" id="newTransfer">⇄ Traspaso</button><button class="btn" id="clearMovFilters">Limpiar filtros</button></div></div>
+ <div class="notice" style="margin:10px 0 12px">${mov.length} movimiento${mov.length===1?"":"s"} encontrado${mov.length===1?"":"s"}${concept?` para «${esc(state.ui.movConcept)}»`:""}.</div>
  <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Tipo</th><th>Categoría</th><th>Subcategoría</th><th>Cuenta</th><th>Importe</th><th></th></tr></thead><tbody>${mov.map(m=>movementTableRow(m)).join("")||`<tr><td colspan="8" class="empty">No hay movimientos para el filtro seleccionado.</td></tr>`}</tbody></table></div></div>`;
  document.getElementById("movMonth").onchange=e=>{state.ui.movMonth=e.target.value;save();renderMovements()};
  document.getElementById("movCat").onchange=e=>{state.ui.movCat=e.target.value;save();renderMovements()};
+ document.getElementById("movConcept").oninput=e=>{state.ui.movConcept=e.target.value;renderMovements();setTimeout(()=>{const el=document.getElementById("movConcept");if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}},0)};
+ document.getElementById("clearMovFilters").onclick=()=>{state.ui.movMonth=months[0];state.ui.movCat="";state.ui.movConcept="";save();renderMovements()};
  document.getElementById("newMovement").onclick=()=>movementModal();
  document.getElementById("newTransfer").onclick=()=>transferModal();
  content.querySelectorAll("[data-edit-m]").forEach(b=>b.onclick=()=>movementModal(b.dataset.editM));
@@ -735,7 +764,7 @@ function renderSettings(){
  <div class="grid">
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
  <section class="card span-6"><h2>Copias de seguridad</h2><div class="notice" style="margin-bottom:12px">V2.1 migra automáticamente los datos de V2.0 y crea una copia de seguridad local antes de hacerlo.</div><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
- <section class="card span-12"><h2>Categorías y subcategorías</h2><p class="muted">La biblioteca viene precargada. Puedes usarla directamente al crear movimientos. También puedes añadir categorías y subcategorías propias.</p><div class="actions" style="margin-bottom:12px"><button class="btn primary" id="addCat">+ Categoría</button></div><div class="category-tree">${state.categories.map(c=>`<div class="cat"><div class="cat-head"><strong>${esc(c.name)}</strong><div class="actions"><button class="btn small" data-edit-cat="${c.id}">Editar</button><button class="btn small danger" data-del-cat="${c.id}">Eliminar</button><button class="btn small" data-add-sub="${c.id}">+ Subcategoría</button></div></div><div class="subcats">${c.subcategories.map(s=>`<span class="subcat">${esc(s.name)} <button style="border:0;background:none;padding:0 0 0 5px" data-del-sub="${c.id}|${s.id}">×</button></span>`).join("")}</div></div>`).join("")}</div></section>
+ <section class="card span-12 category-settings-card"><div class="settings-link-row"><div><h2 style="margin-bottom:4px">🏷️ Categorías y subcategorías</h2><div class="muted">${state.categories.length} categorías · ${state.categories.reduce((n,c)=>n+(c.subcategories?.length||0),0)} subcategorías</div></div><button class="btn primary" id="manageCategories">Gestionar →</button></div></section>
  <section class="card span-6"><h2>Presupuestos mensuales</h2><p class="muted">Puedes fijar un límite por categoría. El resumen lo comparará automáticamente con el gasto real del mes.</p>
  <div class="form-grid"><div class="field"><label>Mes</label><select id="budgetMonth">${monthOptions(monthsBack(36)[0])}</select></div><div class="field"><label>Categoría</label><select id="budgetCategory">${categoryOptions("")}</select></div><div class="field"><label>Límite mensual (€)</label><input id="budgetAmount" type="number" step="0.01" min="0"></div></div>
  <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveBudget">Guardar presupuesto</button></div>
@@ -760,7 +789,16 @@ function renderSettings(){
  content.querySelectorAll("[data-del-budget]").forEach(b=>b.onclick=()=>{delete state.budgets[b.dataset.delBudget];save();renderSettings();});
  document.getElementById("goalForm").onsubmit=e=>{e.preventDefault();const name=document.getElementById("goalName").value.trim(),target=Number(document.getElementById("goalTarget").value),current=Number(document.getElementById("goalCurrent").value)||0;if(!name||target<=0)return;state.goals.push({id:uid(),name,target,current});save();renderSettings();toast("Objetivo añadido.");};
  content.querySelectorAll("[data-del-goal]").forEach(b=>b.onclick=()=>{state.goals=state.goals.filter(g=>g.id!==b.dataset.delGoal);save();renderSettings();});
+ document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
+}
+function renderCategories(){
+ state.ui ||= {}; state.ui.openCategories ||= {};
+ content.innerHTML=`<div class="page-head-back"><button class="btn" id="backSettings">← Configuración</button></div><h1>🏷️ Categorías</h1><div class="subtitle">Gestiona categorías y subcategorías sin saturar la pantalla.</div>
+ <div class="actions" style="margin-bottom:12px"><button class="btn primary" id="addCat">+ Nueva categoría</button></div>
+ <div class="card category-manager-card"><div class="category-list">${state.categories.map(c=>{const open=!!state.ui.openCategories[c.id];return `<div class="category-list-row"><div class="cat-row-main"><button class="cat-toggle" data-toggle-cat="${c.id}" aria-label="${open?'Cerrar':'Abrir'} ${esc(c.name)}">${open?'⌄':'›'}</button><div><strong>${esc(c.name)}</strong><div class="muted cat-meta">${c.subcategories?.length||0} subcategorías</div></div></div><div class="actions"><button class="btn small" data-edit-cat="${c.id}">Editar</button><button class="btn small danger" data-del-cat="${c.id}">Eliminar</button></div></div>${open?`<div class="subcat-panel"><div class="subcat-list">${(c.subcategories||[]).map(sub=>`<div class="subcat-row"><span>${esc(sub.name)}</span><button class="btn small danger" data-del-sub="${c.id}|${sub.id}">Eliminar</button></div>`).join("")||`<div class="empty">Sin subcategorías.</div>`}</div><button class="btn small" data-add-sub="${c.id}" style="margin-top:9px">+ Subcategoría</button></div>`:""}`}).join("")||`<div class="empty">No hay categorías.</div>`}</div></div>`;
+ document.getElementById("backSettings").onclick=()=>{currentRoute="settings";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render()};
  document.getElementById("addCat").onclick=()=>categoryModal();
+ content.querySelectorAll("[data-toggle-cat]").forEach(b=>b.onclick=()=>{state.ui.openCategories[b.dataset.toggleCat]=!state.ui.openCategories[b.dataset.toggleCat];save();renderCategories()});
  content.querySelectorAll("[data-edit-cat]").forEach(b=>b.onclick=()=>categoryModal(b.dataset.editCat));
  content.querySelectorAll("[data-del-cat]").forEach(b=>b.onclick=()=>deleteCategory(b.dataset.delCat));
  content.querySelectorAll("[data-add-sub]").forEach(b=>b.onclick=()=>subcategoryModal(b.dataset.addSub));
@@ -794,6 +832,7 @@ function render(){
  else if(currentRoute==="accounts")renderAccounts();
  else if(currentRoute==="recurrings")renderRecurrings();
  else if(currentRoute==="reports")renderReports();
+ else if(currentRoute==="categories")renderCategories();
  else if(currentRoute==="investments")renderInvestments();
  else if(currentRoute==="settings")renderSettings();
 }
