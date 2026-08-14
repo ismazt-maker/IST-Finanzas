@@ -74,3 +74,7 @@ Identidad visual definitiva, sistema único de apariencia (Claro/Oscuro/Automát
 
 ## I$T V2.10.2
 Corrección del error de inicialización que dejaba el contenido en blanco: el refresco de controles de apariencia queda definido antes del render inicial y se elimina la llamada global prematura.
+
+
+## I$T V2.10.3
+Corrección del handler de apariencia y del diseño de subcategorías en Dark Mode.

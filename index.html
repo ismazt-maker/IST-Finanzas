@@ -255,6 +255,33 @@ html[data-v210-mode="dark"] .v25-budget-hero{background:var(--card)!important;co
 .v210-theme-btn strong{display:block;font-size:13px}.v210-theme-btn span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
 @media(max-width:700px){.v210-mode-grid{grid-template-columns:1fr 1fr 1fr}.v210-theme-grid{grid-template-columns:1fr 1fr}}
 </style>
+
+<style id="v2103-category-dark">
+html[data-v210-mode="dark"] .category-settings-card,
+html[data-v210-mode="dark"] .category-list-row,
+html[data-v210-mode="dark"] .subcat-panel{color:var(--text)}
+html[data-v210-mode="dark"] .cat-toggle{
+ background:var(--v210-accent-soft)!important;color:var(--text)!important;
+}
+html[data-v210-mode="dark"] .subcat-row{
+ background:#171a21!important;border-color:var(--line)!important;color:var(--text)!important;
+}
+html[data-v210-mode="dark"] .subcat-row span{color:var(--text)!important}
+html[data-v210-mode="dark"] .subcat{
+ background:#171a21!important;color:#dfe3ea!important;border:1px solid var(--line);
+}
+html[data-v210-mode="dark"] .category-tree .cat,
+html[data-v210-mode="dark"] .category-list-row{background:transparent}
+</style>
+
+<style id="v2103-appearance-polish">
+.v210-mode-btn.selected strong,.v210-theme-btn.selected strong{color:var(--v210-accent)}
+.v210-mode-btn.selected,.v210-theme-btn.selected{transform:translateY(-1px)}
+@media(max-width:430px){
+ .v210-mode-btn{padding:10px 7px;font-size:13px}
+ .v210-theme-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body data-ist-version="2.10.1">
 <div class="app">
@@ -1239,6 +1266,7 @@ function renderSettings(){
  content.querySelectorAll("[data-del-goal]").forEach(b=>b.onclick=()=>{state.goals=state.goals.filter(g=>g.id!==b.dataset.delGoal);save();renderSettings();});
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
  if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
+ v210ApplyAppearance(); v210RefreshAppearanceControls();
 }
 
 
@@ -1340,5 +1368,6 @@ document.addEventListener("click",function(e){
                     accent ? accent.dataset.v210AccentChoice : null);
   v210RefreshAppearanceControls();
 });
+</script>
 </body>
 </html>
