@@ -38,3 +38,7 @@ Transferencias internas separadas de ingresos/gastos y base para presupuestos pe
 
 ## I$T V2.5
 Presupuestos como pestaña propia, presupuestos permanentes con rollover/previsión, cabecera móvil fija y perfil con bienvenida personalizada.
+
+
+## I$T V2.5.1
+Correcciones: pestaña Presupuestos real, navegación móvil, CTA del Resumen y guardado del nombre; se elimina el bloque antiguo de presupuestos de Configuración.

@@ -159,7 +159,7 @@ main,.main,.app-main,#app{min-width:0}
   .v25-budget-number{font-size:31px}
 }
 </style>
-</head>
+<style id="v251-nav-fix">@media(max-width:700px){#mobileNav button span:last-child{font-size:10px;line-height:1.1}#mobileNav .add{font-size:26px}}</style></head>
 <body>
 <div class="app">
 <header class="topbar">
@@ -379,7 +379,7 @@ function accrueInterest(){
 /* ---------- UI shell ---------- */
 const routes=[
  ["summary","🏠","Resumen"],["movements","↔️","Movimientos"],["accounts","🏦","Cuentas"],["recurrings","🔄","Recurrentes"],
- ["reports","📊","Informes"],["categories","🏷️","Categorías"],["investments","📈","Inversiones"],["settings","⚙️","Configuración"]
+ ["budgets","💰","Presupuestos"],["reports","📊","Informes"],["categories","🏷️","Categorías"],["investments","📈","Inversiones"],["settings","⚙️","Configuración"]
 ];
 let currentRoute=localStorage.getItem("ist_route")||"summary";
 const nav=document.getElementById("nav"), content=document.getElementById("appContent");
@@ -397,7 +397,7 @@ function setupTransferFields(){
 }
 
 function renderNav(){nav.innerHTML=routes.map(r=>`<button data-route="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="emoji">${r[1]}</span>${r[2]}</button>`).join("");}
-function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=[routes.find(r=>r[0]==="summary"),routes.find(r=>r[0]==="movements"),routes.find(r=>r[0]==="accounts"),routes.find(r=>r[0]==="reports")];el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
+function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=["summary","movements","budgets","reports"].map(k=>routes.find(r=>r[0]===k)).filter(Boolean);el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
 
 function openMenu(){document.getElementById("drawer").classList.add("open");document.getElementById("backdrop").classList.add("open");}
 function closeMenu(){document.getElementById("drawer").classList.remove("open");document.getElementById("backdrop").classList.remove("open");}
@@ -653,7 +653,7 @@ function renderSummary(){
  document.getElementById("prevSummary").onclick=()=>{const i=months.indexOf(selected);if(i<months.length-1){state.ui.summaryMonth=months[i+1];save();renderSummary()}};
  document.getElementById("nextSummary").onclick=()=>{const i=months.indexOf(selected);if(i>0){state.ui.summaryMonth=months[i-1];save();renderSummary()}};
 }
-if(document.getElementById("goBudgets")) document.getElementById("goBudgets").onclick=()=>{switchTab("budgets")};
+if(document.getElementById("goBudgets")) document.getElementById("goBudgets").onclick=()=>{currentRoute="budgets";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
 function renderMonthlyChart(ms){
  const vals=ms.map(k=>{const inc=state.movements.filter(m=>m.type==="income"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);const exp=state.movements.filter(m=>m.type==="expense"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);return {k,inc,exp}});
  const max=Math.max(1,...vals.flatMap(v=>[v.inc,v.exp]));
@@ -1029,11 +1029,6 @@ function renderSettings(){
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
  <section class="card span-6"><h2>Copias de seguridad</h2><div class="notice" style="margin-bottom:12px">V2.1 migra automáticamente los datos de V2.0 y crea una copia de seguridad local antes de hacerlo.</div><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
  <section class="card span-12 category-settings-card"><div class="settings-link-row"><div><h2 style="margin-bottom:4px">🏷️ Categorías y subcategorías</h2><div class="muted">${state.categories.length} categorías · ${state.categories.reduce((n,c)=>n+(c.subcategories?.length||0),0)} subcategorías</div></div><button class="btn primary" id="manageCategories">Gestionar →</button></div></section>
- <section class="card span-6"><h2>Presupuestos mensuales</h2><p class="muted">Puedes fijar un límite por categoría. El resumen lo comparará automáticamente con el gasto real del mes.</p>
- <div class="form-grid"><div class="field"><label>Mes</label><select id="budgetMonth">${monthOptions(monthsBack(36)[0])}</select></div><div class="field"><label>Categoría</label><select id="budgetCategory">${categoryOptions("")}</select></div><div class="field"><label>Límite mensual (€)</label><input id="budgetAmount" type="number" step="0.01" min="0"></div></div>
- <div class="actions" style="margin-top:12px"><button class="btn primary" id="saveBudget">Guardar presupuesto</button></div>
- <div class="list" id="budgetList" style="margin-top:12px">${Object.entries(state.budgets||{}).map(([k,v])=>{const [mo,cid]=k.split("|");return `<div class="list-row"><span>${esc(monthLabel(mo))} · ${esc(categoryById(cid)?.name||"Categoría")}</span><strong>${euro(v)} <button class="btn small danger" data-del-budget="${esc(k)}">Eliminar</button></strong></div>`}).join("")||`<div class="empty">Sin presupuestos.</div>`}</div>
- </section>
  <section class="card span-6"><h2>Objetivos</h2><p class="muted">Objetivos sencillos para seguir el progreso desde el Resumen.</p>
  <form id="goalForm"><div class="form-grid"><div class="field"><label>Nombre</label><input id="goalName" required></div><div class="field"><label>Objetivo (€)</label><input id="goalTarget" type="number" step="0.01" min="0" required></div><div class="field"><label>Actual (€)</label><input id="goalCurrent" type="number" step="0.01" min="0" value="0"></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" type="submit">Añadir objetivo</button></div></form>
  <div class="list" style="margin-top:12px">${(state.goals||[]).map(g=>{const q=goalProgress(g);return `<div class="list-row"><span>${esc(g.name)} · ${Math.round(q.pct)}%</span><strong>${euro(q.current)} / ${euro(q.target)} <button class="btn small danger" data-del-goal="${g.id}">Eliminar</button></strong></div>`}).join("")||`<div class="empty">Sin objetivos.</div>`}</div>
@@ -1045,16 +1040,11 @@ function renderSettings(){
  document.getElementById("importData").onclick=()=>document.getElementById("fileImport").click();
  document.getElementById("fileImport").onchange=e=>importData(e.target.files[0]);
  document.getElementById("resetData").onclick=resetData;
- document.getElementById("saveBudget").onclick=()=>{
-   const mo=document.getElementById("budgetMonth").value,cid=document.getElementById("budgetCategory").value,amt=Number(document.getElementById("budgetAmount").value);
-   if(!cid||!amt||amt<0){toast("Introduce categoría e importe.");return;}
-   state.budgets ||= {}; state.budgets[`${mo}|${cid}`]=amt; save(); renderSettings(); toast("Presupuesto guardado.");
- };
- content.querySelectorAll("[data-del-budget]").forEach(b=>b.onclick=()=>{delete state.budgets[b.dataset.delBudget];save();renderSettings();});
  document.getElementById("goalForm").onsubmit=e=>{e.preventDefault();const name=document.getElementById("goalName").value.trim(),target=Number(document.getElementById("goalTarget").value),current=Number(document.getElementById("goalCurrent").value)||0;if(!name||target<=0)return;state.goals.push({id:uid(),name,target,current});save();renderSettings();toast("Objetivo añadido.");};
  content.querySelectorAll("[data-del-goal]").forEach(b=>b.onclick=()=>{state.goals=state.goals.filter(g=>g.id!==b.dataset.delGoal);save();renderSettings();});
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
-}if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
+ if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
+}
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
  content.innerHTML=`<div class="page-head-back"><button class="btn" id="backSettings">← Configuración</button></div><h1>🏷️ Categorías</h1><div class="subtitle">Gestiona categorías y subcategorías sin saturar la pantalla.</div>
@@ -1095,6 +1085,7 @@ function render(){
  else if(currentRoute==="movements")renderMovements();
  else if(currentRoute==="accounts")renderAccounts();
  else if(currentRoute==="recurrings")renderRecurrings();
+ else if(currentRoute==="budgets")renderBudgets();
  else if(currentRoute==="reports")renderReports();
  else if(currentRoute==="categories")renderCategories();
  else if(currentRoute==="investments")renderInvestments();
