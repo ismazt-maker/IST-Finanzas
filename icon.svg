@@ -1,10 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="112" fill="#243b53"/>
-<g font-family="Arial,Helvetica,sans-serif" font-weight="800" font-size="190">
- <text x="72" y="350" fill="#fff">I</text>
- <g transform="translate(255 0) scale(-1 1)">
-   <text x="0" y="350" fill="#c9d3dc">$</text>
- </g>
- <text x="312" y="350" fill="#fff">T</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<rect width="1024" height="1024" rx="210" fill="#06182b"/>
+<!-- optical center guide is not rendered -->
+<g fill="#f8f6ef" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="405">
+  <text x="153" y="665">I</text>
+  <text x="554" y="665">T</text>
 </g>
+<!-- integrated monetary pillar -->
+<g fill="#d6a84a" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="430">
+  <text x="360" y="680">$</text>
+</g>
+<!-- refined lower detail -->
+<path d="M250 790H774" stroke="#d6a84a" stroke-width="8" stroke-linecap="round"/>
+<rect x="502" y="774" width="28" height="28" transform="rotate(45 516 788)" fill="#d6a84a"/>
 </svg>

@@ -66,3 +66,7 @@ Sistema de apariencia: Automático/Claro/Oscuro y cinco temas visuales (Graphite
 
 ## I$T V2.9.1
 Controles de apariencia funcionales, modos claro/oscuro/automático con persistencia y iconos iOS/PWA rediseñados con el logotipo ampliado.
+
+
+## I$T V2.10
+Identidad visual definitiva, sistema único de apariencia (Claro/Oscuro/Automático), cinco temas coherentes, controles persistentes y activos, y assets iOS/PWA del nuevo monograma.

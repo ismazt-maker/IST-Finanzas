@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.9.1</title>
+<title>I$T V2.10</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -184,78 +184,79 @@ main,.main,.app-main,#app{min-width:0}
 .v25-budget-hero .v25-budget-number{color:var(--text,#111)}
 .v25-pill{background:var(--card,#fff);color:var(--text,#111)}
 </style>
-<style id="v29-theme-system">
+
+
+
+
+<style id="v210-theme-engine">
 :root{
- --v29-accent:#1f2937;--v29-accent-soft:#eef1f4;--v29-accent-strong:#111827;
- --v29-radius:16px;
+  --v210-accent:#243b53;
+  --v210-accent-strong:#172a3d;
+  --v210-accent-soft:#e9eef3;
 }
-html[data-v29-theme="dark"]{color-scheme:dark}
-html[data-v29-theme="light"]{color-scheme:light}
-html[data-v29-accent="graphite"]{--v29-accent:#263238;--v29-accent-soft:#eceff1;--v29-accent-strong:#111827}
-html[data-v29-accent="navy"]{--v29-accent:#18324a;--v29-accent-soft:#e7eef4;--v29-accent-strong:#102538}
-html[data-v29-accent="forest"]{--v29-accent:#245846;--v29-accent-soft:#e7f1ed;--v29-accent-strong:#163d31}
-html[data-v29-accent="burgundy"]{--v29-accent:#6d2932;--v29-accent-soft:#f4e9eb;--v29-accent-strong:#4d1c23}
-html[data-v29-accent="slate"]{--v29-accent:#4b5563;--v29-accent-soft:#eef0f3;--v29-accent-strong:#374151}
+html[data-v210-mode="light"]{
+  color-scheme:light;
+  --bg:#f4f5f7;--card:#ffffff;--text:#18212b;--muted:#6b7280;--line:#e1e5ea;
+  --green:#16805b;--red:#c7463d;--blue:#356cb5;
+}
+html[data-v210-mode="dark"]{
+  color-scheme:dark;
+  --bg:#0a0c10;--card:#12151b;--text:#f3f5f7;--muted:#9ba2ad;--line:#282d36;
+  --green:#4ade80;--red:#fb7185;--blue:#7ea6ff;
+}
+html[data-v210-accent="graphite"]{--v210-accent:#263238;--v210-accent-strong:#111827;--v210-accent-soft:#eceff1}
+html[data-v210-accent="navy"]{--v210-accent:#243b53;--v210-accent-strong:#172a3d;--v210-accent-soft:#e8eef3}
+html[data-v210-accent="forest"]{--v210-accent:#245846;--v210-accent-strong:#163d31;--v210-accent-soft:#e7f1ed}
+html[data-v210-accent="burgundy"]{--v210-accent:#6d2932;--v210-accent-strong:#4d1c23;--v210-accent-soft:#f4e9eb}
+html[data-v210-accent="slate"]{--v210-accent:#4b5563;--v210-accent-strong:#374151;--v210-accent-soft:#eef0f3}
 
-body{accent-color:var(--v29-accent)}
-button.primary,.btn.primary{background:var(--v29-accent)!important;border-color:var(--v29-accent)!important}
-button.primary:hover,.btn.primary:hover{background:var(--v29-accent-strong)!important}
-.nav-item.active,.nav-item[aria-current="page"]{color:var(--v29-accent)!important}
-.nav-item.active:before,.nav-item[aria-current="page"]:before{background:var(--v29-accent)!important}
-.kpi .value,.positive{color:var(--green)!important}
-.v29-theme-preview{display:flex;gap:10px;flex-wrap:wrap}
-.v29-theme-option{position:relative;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:14px;padding:11px;min-width:135px;cursor:pointer;text-align:left}
-.v29-theme-option.selected{outline:2px solid var(--v29-accent);outline-offset:1px}
-.v29-swatch{width:100%;height:34px;border-radius:9px;margin-bottom:8px}
-.v29-theme-option strong{display:block;font-size:13px}.v29-theme-option span{font-size:11px;color:var(--muted)}
-.v29-mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.v29-mode-btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:10px;cursor:pointer}
-.v29-mode-btn.selected{border-color:var(--v29-accent);box-shadow:0 0 0 1px var(--v29-accent)}
-@media(max-width:700px){.v29-theme-option{min-width:calc(50% - 5px)}}
-</style>
-
-<style id="v291-theme-overrides">
-html[data-v29-theme="light"]{
- --bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;
- --accent:var(--v29-accent);--accent-soft:var(--v29-accent-soft);
- --green:#167c52;--red:#c2413b;--blue:#3267b1;
+body{background:var(--bg);color:var(--text);accent-color:var(--v210-accent)}
+body,button,input,select,textarea{font-family:inherit}
+.btn.primary,button.primary{background:var(--v210-accent)!important;border-color:var(--v210-accent)!important;color:#fff!important}
+.btn.primary:hover,button.primary:hover{background:var(--v210-accent-strong)!important}
+.nav button.active,.nav-item.active{color:var(--v210-accent)!important}
+.nav button.active:before,.nav-item.active:before{background:var(--v210-accent)!important}
+.modal-card{background:var(--card);color:var(--text);border-color:var(--line)}
+.modal-card input,.modal-card select,.modal-card textarea,
+.field input,.field select,.field textarea{
+  background:var(--card);color:var(--text);border-color:var(--line);
 }
-html[data-v29-theme="dark"]{
- --bg:#090a0f;--card:#11131a;--text:#f4f4f7;--muted:#969baa;--line:#242733;
- --accent:var(--v29-accent);--accent-soft:#201b36;--green:#4ade80;--red:#fb7185;--blue:#7aa2ff;
- --shadow:0 12px 32px rgba(0,0,0,.28);
+html[data-v210-mode="dark"] .topbar{background:rgba(10,12,16,.94);border-color:var(--line)}
+html[data-v210-mode="dark"] .drawer{background:#101319;border-color:var(--line)}
+html[data-v210-mode="dark"] .menu-btn,
+html[data-v210-mode="dark"] .btn{background:#171a21;color:var(--text);border-color:var(--line)}
+html[data-v210-mode="dark"] .table th{background:#191c23;color:#c3c8d1}
+html[data-v210-mode="dark"] .table td{border-color:var(--line)}
+html[data-v210-mode="dark"] .kpi,
+html[data-v210-mode="dark"] .card,
+html[data-v210-mode="dark"] .report-builder{background:var(--card);border-color:var(--line)}
+html[data-v210-mode="dark"] .mobile-nav{background:rgba(15,17,23,.97);border-color:var(--line)}
+html[data-v210-mode="dark"] .tab{background:#12151b;color:#d7dbe2;border-color:var(--line)}
+html[data-v210-mode="dark"] .tab.active{background:var(--v210-accent-soft);color:var(--text);border-color:var(--v210-accent)}
+html[data-v210-mode="dark"] .notice,
+html[data-v210-mode="dark"] .insight,
+html[data-v210-mode="dark"] .report-mobile-empty{background:#171a21;color:#d8dce3;border-color:var(--line)}
+html[data-v210-mode="dark"] .progress{background:#252a32}
+html[data-v210-mode="dark"] .v25-budget-card,
+html[data-v210-mode="dark"] .v25-budget-hero{background:var(--card)!important;color:var(--text)!important;border-color:var(--line)!important}
+.v210-appearance-grid{display:grid;gap:18px}
+.v210-mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v210-mode-btn,.v210-theme-btn{
+  appearance:none;border:1px solid var(--line);background:var(--card);color:var(--text);
+  border-radius:13px;padding:12px;cursor:pointer;text-align:left;min-height:48px;
 }
-html[data-v29-theme="light"] body{background:var(--bg);color:var(--text)}
-html[data-v29-theme="light"] .topbar{background:rgba(255,255,255,.94);border-color:var(--line)}
-html[data-v29-theme="dark"] body{background:var(--bg);color:var(--text)}
-html[data-v29-theme="dark"] .topbar{background:rgba(10,11,16,.92);border-color:var(--line)}
-html[data-v29-theme="dark"] .menu-btn{background:#171922;color:#ddd}
-html[data-v29-theme="dark"] .brand{color:#f4f4f7}
-html[data-v29-theme="dark"] .drawer{background:#101218;border-color:var(--line)}
-html[data-v29-theme="dark"] .nav button{color:#d3d5dc}
-html[data-v29-theme="dark"] .nav button:hover,html[data-v29-theme="dark"] .nav button.active{background:#1c1a2a;color:#c4b5fd}
-html[data-v29-theme="dark"] .card,html[data-v29-theme="dark"] .report-builder{background:var(--card);border-color:var(--line)}
-html[data-v29-theme="dark"] .field input,html[data-v29-theme="dark"] .field select,html[data-v29-theme="dark"] .field textarea{background:#0f1117;color:var(--text);border-color:#2a2e39}
-html[data-v29-theme="dark"] .field label{color:#b9bdc8}
-html[data-v29-theme="dark"] .btn{background:#151720;color:var(--text);border-color:#2a2e39}
-html[data-v29-theme="dark"] .btn.primary{background:var(--accent)!important;color:#fff;border-color:var(--accent)!important}
-html[data-v29-theme="dark"] .table th{background:#171922;color:#aeb2bf}
-html[data-v29-theme="dark"] .table td{border-color:var(--line)}
-html[data-v29-theme="dark"] .kpi{background:#151720;border-color:#262a35}
-html[data-v29-theme="dark"] .notice,html[data-v29-theme="dark"] .report-mobile-empty,html[data-v29-theme="dark"] .insight{background:#151720;border-color:#282c37;color:#c9ccd5}
-html[data-v29-theme="dark"] .tab{background:#11131a;color:#d3d5dc;border-color:#292d38}
-html[data-v29-theme="dark"] .tab.active{background:#211b3b;color:#c4b5fd;border-color:#433878}
-html[data-v29-theme="dark"] .subcat,html[data-v29-theme="dark"] .badge{background:#1b1e27;color:#d3d5dc}
-html[data-v29-theme="dark"] .mobile-nav{background:rgba(14,15,21,.96);border-color:#252832}
-html[data-v29-theme="dark"] .mobile-nav button.active{background:#211b3b;color:#c4b5fd}
-html[data-v29-theme="dark"] .modal-card{background:var(--card);color:var(--text)}
-html[data-v29-theme="dark"] .close{background:#1b1e27;color:var(--text)}
-html[data-v29-theme="dark"] .progress{background:#252833}
-html[data-v29-theme="dark"] .v25-budget-card,html[data-v29-theme="dark"] .v25-budget-hero{background:var(--card)!important;color:var(--text)!important}
-html[data-v29-theme="dark"] .v29-theme-option,html[data-v29-theme="dark"] .v29-mode-btn{background:#151720;color:var(--text);border-color:#2a2e39}
+.v210-mode-btn.selected,.v210-theme-btn.selected{
+  border-color:var(--v210-accent);box-shadow:0 0 0 1px var(--v210-accent);
+  background:var(--v210-accent-soft);
+}
+.v210-theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.v210-theme-btn{display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:center}
+.v210-swatch{width:38px;height:38px;border-radius:10px}
+.v210-theme-btn strong{display:block;font-size:13px}.v210-theme-btn span{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+@media(max-width:700px){.v210-mode-grid{grid-template-columns:1fr 1fr 1fr}.v210-theme-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-<body>
+<body data-ist-version="2.10">
 <div class="app">
 <header class="topbar">
 <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
@@ -365,21 +366,29 @@ function greetingForName(name){
 }
 
 
-function v29ThemeState(){
- state.settings ||= {};
- state.settings.appearance ||= {};
- state.settings.appearance.mode ||= "auto";
- state.settings.appearance.accent ||= "graphite";
- return state.settings.appearance;
+
+
+
+function v210Appearance(){
+  state.settings ||= {};
+  state.settings.appearance ||= {};
+  if(!["auto","light","dark"].includes(state.settings.appearance.mode)) state.settings.appearance.mode="auto";
+  if(!["graphite","navy","forest","burgundy","slate"].includes(state.settings.appearance.accent)) state.settings.appearance.accent="navy";
+  return state.settings.appearance;
 }
-function applyV29Theme(){
- const a=v29ThemeState();
- const root=document.documentElement;
- root.dataset.v29Theme=a.mode;
- root.dataset.v29Accent=a.accent;
- if(a.mode==="dark") root.style.colorScheme="dark";
- else if(a.mode==="light") root.style.colorScheme="light";
- else root.style.colorScheme="light dark";
+function v210ApplyAppearance(){
+  const a=v210Appearance();
+  const root=document.documentElement;
+  root.dataset.v210Accent=a.accent;
+  const effective=a.mode==="auto" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light") : a.mode;
+  root.dataset.v210Mode=effective;
+}
+function v210SetAppearance(mode,accent){
+  const a=v210Appearance();
+  if(mode)a.mode=mode;
+  if(accent)a.accent=accent;
+  v210ApplyAppearance();
+  save();
 }
 
 function loadState(){
@@ -1177,26 +1186,33 @@ async function refreshPrices(){
 
 /* ---------- Settings ---------- */
 function renderSettings(){
- content.innerHTML=`<section class="card span-12" id="v29Appearance">
- <h2>🎨 Apariencia</h2>
- <div class="muted" style="margin-bottom:12px">Elige cómo quieres ver I$T. La preferencia se guarda en tu dispositivo.</div>
- <div class="field"><label>Modo</label>
-  <div class="v29-mode-row">
-   <button type="button" class="v29-mode-btn" data-v29-mode="auto">📱 Automático</button>
-   <button type="button" class="v29-mode-btn" data-v29-mode="light">☀️ Claro</button>
-   <button type="button" class="v29-mode-btn" data-v29-mode="dark">🌙 Oscuro</button>
+ content.innerHTML=`
+<section class="card span-12" id="v210Appearance">
+  <div class="section-head">
+    <div><div class="v25-eyebrow">APARIENCIA</div><h2>Personaliza I$T</h2></div>
   </div>
- </div>
- <div class="field" style="margin-top:14px"><label>Tema visual</label>
-  <div class="v29-theme-preview">
-   <button type="button" class="v29-theme-option" data-v29-accent-choice="graphite"><div class="v29-swatch" style="background:#263238"></div><strong>Graphite</strong><span>Clásico y sobrio</span></button>
-   <button type="button" class="v29-theme-option" data-v29-accent-choice="navy"><div class="v29-swatch" style="background:#18324a"></div><strong>Navy</strong><span>Financiero y elegante</span></button>
-   <button type="button" class="v29-theme-option" data-v29-accent-choice="forest"><div class="v29-swatch" style="background:#245846"></div><strong>Forest</strong><span>Natural y premium</span></button>
-   <button type="button" class="v29-theme-option" data-v29-accent-choice="burgundy"><div class="v29-swatch" style="background:#6d2932"></div><strong>Burgundy</strong><span>Clásico y distintivo</span></button>
-   <button type="button" class="v29-theme-option" data-v29-accent-choice="slate"><div class="v29-swatch" style="background:#4b5563"></div><strong>Slate</strong><span>Minimalista moderno</span></button>
+  <div class="v210-appearance-grid">
+    <div class="field">
+      <label>Modo de pantalla</label>
+      <div class="v210-mode-grid">
+        <button type="button" class="v210-mode-btn" data-v210-mode-choice="light">☀️<br><strong>Claro</strong></button>
+        <button type="button" class="v210-mode-btn" data-v210-mode-choice="dark">🌙<br><strong>Oscuro</strong></button>
+        <button type="button" class="v210-mode-btn" data-v210-mode-choice="auto">📱<br><strong>Automático</strong></button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Tema visual</label>
+      <div class="v210-theme-grid">
+        <button type="button" class="v210-theme-btn" data-v210-accent-choice="graphite"><i class="v210-swatch" style="background:#263238"></i><span><strong>Graphite</strong>Clásico y sobrio</span></button>
+        <button type="button" class="v210-theme-btn" data-v210-accent-choice="navy"><i class="v210-swatch" style="background:#243b53"></i><span><strong>Navy</strong>Financiero y elegante</span></button>
+        <button type="button" class="v210-theme-btn" data-v210-accent-choice="forest"><i class="v210-swatch" style="background:#245846"></i><span><strong>Forest</strong>Patrimonio y calma</span></button>
+        <button type="button" class="v210-theme-btn" data-v210-accent-choice="burgundy"><i class="v210-swatch" style="background:#6d2932"></i><span><strong>Burgundy</strong>Clásico con carácter</span></button>
+        <button type="button" class="v210-theme-btn" data-v210-accent-choice="slate"><i class="v210-swatch" style="background:#4b5563"></i><span><strong>Slate</strong>Minimalista moderno</span></button>
+      </div>
+    </div>
   </div>
- </div>
 </section>
+
 <section class="card span-12" id="v25Profile"><h2>👤 Tu perfil</h2><div class="form-grid"><div class="field"><label>Nombre en I$T</label><input id="v25Name" maxlength="40" placeholder="¿Cómo quieres que te llamemos?" value="${esc(state.settings?.profile?.name||"")}"></div></div><div class="muted" style="margin-top:8px">Se utilizará para personalizar el mensaje de bienvenida.</div><div class="actions" style="margin-top:10px"><button class="btn primary" id="saveV25Profile">Guardar nombre</button></div></section>
 <h1>Configuración</h1><div class="subtitle">Categorías, subcategorías, datos y parámetros generales.</div>
  <div class="grid">
@@ -1219,6 +1235,8 @@ function renderSettings(){
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
  if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
 }
+
+ v210ApplyAppearance(); v210RefreshAppearanceControls();
 
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
@@ -1298,18 +1316,30 @@ document.addEventListener("click",function(e){
  render();
 });
 </script>
-<script id="v291-theme-handlers">
-document.addEventListener("click",function(e){
- const mode=e.target.closest && e.target.closest("[data-v29-mode]");
- const accent=e.target.closest && e.target.closest("[data-v29-accent-choice]");
- if(!mode && !accent)return;
- const a=v29ThemeState();
- if(mode)a.mode=mode.dataset.v29Mode;
- if(accent)a.accent=accent.dataset.v29AccentChoice;
- applyV29Theme();
- save();
- renderSettings();
-});
+
+
+<script id="v210-auto-theme-listener">
+if(window.matchMedia){
+ const v210mq=window.matchMedia("(prefers-color-scheme: dark)");
+ const v210ThemeChange=()=>{if(v210Appearance().mode==="auto")v210ApplyAppearance()};
+ if(v210mq.addEventListener)v210mq.addEventListener("change",v210ThemeChange);
+ else if(v210mq.addListener)v210mq.addListener(v210ThemeChange);
+}
 </script>
+
+<script id="v210-appearance-handler">
+document.addEventListener("click",function(e){
+  const mode=e.target.closest && e.target.closest("[data-v210-mode-choice]");
+  const accent=e.target.closest && e.target.closest("[data-v210-accent-choice]");
+  if(!mode && !accent)return;
+  v210SetAppearance(mode ? mode.dataset.v210ModeChoice : null,
+                    accent ? accent.dataset.v210AccentChoice : null);
+  v210RefreshAppearanceControls();
+});
+function v210RefreshAppearanceControls(){
+  const a=v210Appearance();
+  document.querySelectorAll("[data-v210-mode-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210ModeChoice===a.mode));
+  document.querySelectorAll("[data-v210-accent-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210AccentChoice===a.accent));
+}
 </body>
 </html>
