@@ -256,7 +256,7 @@ html[data-v210-mode="dark"] .v25-budget-hero{background:var(--card)!important;co
 @media(max-width:700px){.v210-mode-grid{grid-template-columns:1fr 1fr 1fr}.v210-theme-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-<body data-ist-version="2.10">
+<body data-ist-version="2.10.1">
 <div class="app">
 <header class="topbar">
 <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
@@ -327,7 +327,7 @@ function emptyState(){
  };
 }
 let state = loadState();
-applyV29Theme();
+v210ApplyAppearance();
 
 function uid(){ return Math.random().toString(36).slice(2,10)+"-"+Date.now().toString(36); }
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
