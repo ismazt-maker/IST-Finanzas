@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.4</title>
+<title>I$T V2.5</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -128,6 +128,37 @@ html, body { max-width:100%; overflow-x:hidden; }
 *, *::before, *::after { box-sizing:border-box; }
 img, svg, canvas, iframe { max-width:100%; }
 </style>
+
+<style id="v25-iphone-shell">
+:root{--v25-header-h:58px}
+body{padding-top:calc(var(--v25-header-h) + env(safe-area-inset-top))}
+#app-header,.app-header,.topbar,.header-bar{position:fixed;top:0;left:0;right:0;z-index:1000;padding-top:env(safe-area-inset-top);min-height:calc(var(--v25-header-h) + env(safe-area-inset-top));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+main,.main,.app-main,#app{min-width:0}
+@media(max-width:700px){
+  body{overflow-x:hidden}
+  .container,.content,.page,.main-content{max-width:100%;width:100%;min-width:0}
+  .card,.kpi,.field,.form-grid,.grid{min-width:0}
+}
+.v25-welcome{font-size:13px;color:var(--muted);margin-top:2px}
+.v25-budget-hero{display:grid;gap:10px}
+.v25-budget-number{font-size:34px;font-weight:850;letter-spacing:-.04em}
+.v25-budget-meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.v25-budget-track{height:11px;background:var(--line);border-radius:999px;overflow:hidden}
+.v25-budget-track>div{height:100%;border-radius:999px;background:var(--green);transition:width .25s ease}
+.v25-budget-track>div.warn{background:#b7791f}.v25-budget-track>div.over{background:var(--red)}
+.v25-budget-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v25-budget-card{padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--surface,#fff)}
+.v25-budget-card .row{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.v25-budget-card .name{font-weight:750}.v25-budget-card .amount{font-weight:800}
+.v25-budget-card .smallbar{height:7px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}.v25-budget-card .smallbar>div{height:100%;border-radius:99px;background:var(--green)}.v25-budget-card .smallbar>div.warn{background:#b7791f}.v25-budget-card .smallbar>div.over{background:var(--red)}
+.v25-budget-actions{display:flex;gap:8px;flex-wrap:wrap}
+.v25-pill{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:12px}
+.v25-budget-detail{display:none}.v25-budget-detail.open{display:block}
+@media(max-width:700px){
+  .v25-budget-grid{grid-template-columns:1fr}
+  .v25-budget-number{font-size:31px}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -221,6 +252,22 @@ function normalizeV22State(x){
 function backupState(raw,label){
  try{localStorage.setItem(`ist_backup_${label}_${Date.now()}`,JSON.stringify(raw));}catch(e){}
 }
+
+function ensureV25State(){
+  state.settings ||= {};
+  state.settings.profile ||= {};
+  state.settings.profile.name ||= "";
+  state.settings.profile.welcomeSeen ||= false;
+  state.settings.budgetsV25 ||= {};
+  state.settings.budgetAlerts ||= 80;
+  return state;
+}
+function greetingForName(name){
+  const h=new Date().getHours();
+  const g=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
+  return name ? `${g}, ${name} 👋` : `${g} 👋`;
+}
+
 function loadState(){
  try{
   const current=localStorage.getItem(STORAGE_KEY);
@@ -444,6 +491,123 @@ function budgetForMonth(cid,k){
  return {amount,base:Number(cfg.amount)||0,rollover:!!cfg.rollover};
 }
 
+
+function budgetV25Key(cid){ return String(cid); }
+function getBudgetV25(cid){
+  return (state.settings?.budgetsV25||{})[budgetV25Key(cid)] || null;
+}
+function activeBudgetV25(cid, monthKeyValue){
+  const b=getBudgetV25(cid);
+  if(!b || !b.amount) return null;
+  const start=b.startMonth||"0000-00", end=b.endMonth||"9999-99";
+  if(monthKeyValue<start || monthKeyValue>end) return null;
+  let amount=Number(b.amount)||0;
+  if(b.rollover){
+    const startDate=new Date(start+"-01T12:00:00");
+    const target=new Date(monthKeyValue+"-01T12:00:00");
+    let cur=new Date(startDate);
+    while(cur<target){
+      const mk=monthKey(cur);
+      const spent=categoryMonthlyAmount(mk,cid);
+      const carry=Math.max(0,amount-spent);
+      amount=(Number(b.amount)||0)+Math.min(carry, Number(b.rolloverCap||Infinity));
+      cur.setMonth(cur.getMonth()+1);
+    }
+  }
+  return {...b, effectiveAmount:amount};
+}
+function allBudgetRowsForMonth(k){
+  const rows=[];
+  Object.keys(state.settings?.budgetsV25||{}).forEach(cid=>{
+    const b=activeBudgetV25(cid,k);
+    if(!b) return;
+    const spent=categoryMonthlyAmount(k,cid);
+    const budget=Number(b.effectiveAmount||b.amount||0);
+    rows.push({cid,name:categoryById(cid)?.name||"Categoría",spent,budget,pct:budget?spent/budget*100:0,b});
+  });
+  return rows;
+}
+function budgetStatus(pct){
+  return pct>100?"over":pct>=Number(state.settings?.budgetAlerts||80)?"warn":"ok";
+}
+
+
+function renderBudgets(){
+ const months=monthsBack(36), selected=state.ui?.budgetMonth||months[0];
+ state.ui||={}; state.ui.budgetMonth=selected;
+ const rows=allBudgetRowsForMonth(selected);
+ const totalBudget=rows.reduce((s,x)=>s+x.budget,0), totalSpent=rows.reduce((s,x)=>s+x.spent,0);
+ const remaining=totalBudget-totalSpent, pct=totalBudget?totalSpent/totalBudget*100:0;
+ const over=rows.filter(x=>x.pct>100).length, warn=rows.filter(x=>x.pct>=Number(state.settings?.budgetAlerts||80)&&x.pct<=100).length;
+ const projected=rows.reduce((s,x)=>{
+   const d=new Date(); const days=new Date(d.getFullYear(),d.getMonth()+1,0).getDate();
+   const day=selected===monthKey(d)?d.getDate():days;
+   const proj=selected===monthKey(d)&&day>0 ? x.spent/days*days : x.spent;
+   return s+proj;
+ },0);
+ content.innerHTML=`
+ <h1>Presupuestos</h1>
+ <div class="subtitle">Controla tus límites, ritmo de gasto y previsión mensual.</div>
+ <div class="toolbar">
+   <div class="field"><label>Mes</label><select id="budgetMonthV25">${monthOptions(selected)}</select></div>
+   <button class="btn primary" id="newBudgetV25">＋ Nuevo presupuesto</button>
+ </div>
+ <div class="grid" style="margin-top:14px">
+  <section class="card span-12 v25-budget-hero">
+   <div class="muted">Presupuesto total del mes</div>
+   <div class="v25-budget-number">${euro(totalBudget)}</div>
+   <div class="v25-budget-meta"><span>Gastado <strong>${euro(totalSpent)}</strong></span><span class="${remaining>=0?"positive":"negative"}">${remaining>=0?"Disponible":"Exceso"} <strong>${euro(Math.abs(remaining))}</strong></span><span>${pct.toFixed(1)}% utilizado</span></div>
+   <div class="v25-budget-track"><div class="${budgetStatus(pct)}" style="width:${Math.min(100,pct)}%"></div></div>
+   <div class="v25-budget-actions">
+    <span class="v25-pill">🟢 ${rows.length-over-warn} dentro</span><span class="v25-pill">🟠 ${warn} cerca</span><span class="v25-pill">🔴 ${over} superados</span>
+   </div>
+  </section>
+  <section class="card span-12"><div class="section-head"><div><h2>Mis presupuestos</h2><div class="muted">${rows.length} activos en ${esc(monthLabel(selected))}</div></div></div>
+   ${rows.length?`<div class="v25-budget-grid">${rows.map(x=>`<article class="v25-budget-card" data-budget-card="${x.cid}">
+    <div class="row"><div><div class="name">${esc(x.name)}</div><div class="muted">${x.b.rollover?"↪️ Rollover activado":"Mensual"} · ${x.b.endMonth?"Hasta "+esc(monthLabel(x.b.endMonth)):"Sin fecha final"}</div></div><div class="amount ${x.pct>100?"negative":x.pct>=80?"warn":"positive"}">${euro(x.spent)} / ${euro(x.budget)}</div></div>
+    <div class="smallbar"><div class="${budgetStatus(x.pct)}" style="width:${Math.min(100,x.pct)}%"></div></div>
+    <div class="v25-budget-meta" style="margin-top:8px"><span>${x.pct.toFixed(0)}%</span><button class="btn small" data-edit-budget="${x.cid}">Editar</button></div>
+   </article>`).join("")}</div>`:`<div class="empty">Todavía no tienes presupuestos. Crea el primero para empezar a controlar tus gastos.</div>`}
+  </section>
+  <section class="card span-6"><h2>🔮 Previsión</h2><div class="muted">Estimación basada en el ritmo actual del mes.</div><div style="font-size:28px;font-weight:800;margin-top:8px">${euro(projected)}</div><div class="muted">gasto proyectado</div></section>
+  <section class="card span-6"><h2>⚙️ Ajustes</h2><div class="form-grid"><div class="field"><label>Umbral de aviso</label><select id="budgetAlertV25"><option value="70">70%</option><option value="80">80%</option><option value="90">90%</option></select></div></div><div class="actions" style="margin-top:10px"><button class="btn" id="saveBudgetAlert">Guardar umbral</button></div></section>
+ </div>
+ <div id="budgetModalV25"></div>`;
+ document.getElementById("budgetMonthV25").onchange=e=>{state.ui.budgetMonth=e.target.value;save();renderBudgets()};
+ document.getElementById("budgetAlertV25").value=String(state.settings?.budgetAlerts||80);
+ document.getElementById("saveBudgetAlert").onclick=()=>{state.settings.budgetAlerts=Number(document.getElementById("budgetAlertV25").value);save();renderBudgets();toast("Umbral actualizado.")};
+ document.getElementById("newBudgetV25").onclick=()=>budgetModalV25();
+ content.querySelectorAll("[data-edit-budget]").forEach(b=>b.onclick=()=>budgetModalV25(b.dataset.editBudget));
+}
+function budgetModalV25(cid=""){
+ const existing=cid?getBudgetV25(cid):null;
+ const cats=state.categories||[];
+ const htmlModal=`<div class="modal-backdrop" id="budgetBackdropV25"><div class="modal-card">
+  <div class="section-head"><div><h2>${cid?"Editar":"Nuevo"} presupuesto</h2><div class="muted">Se aplicará automáticamente a los meses activos.</div></div><button class="btn small" id="closeBudgetModal">Cerrar</button></div>
+  <div class="form-grid" style="margin-top:14px">
+   <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${categoryOptions(cid)}</select></div>
+   <div class="field"><label>Importe mensual (€)</label><input id="budgetAmtV25" type="number" step="0.01" min="0" value="${existing?.amount||""}"></div>
+   <div class="field"><label>Desde</label><select id="budgetStartV25">${monthOptions(existing?.startMonth||monthsBack(36)[0])}</select></div>
+   <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${monthOptions(existing?.endMonth||"")}</select></div>
+   <div class="field"><label>Rollover</label><select id="budgetRollV25"><option value="no">No acumular sobrante</option><option value="yes">Acumular sobrante</option></select></div>
+   <div class="field"><label>Máximo acumulable (€)</label><input id="budgetCapV25" type="number" step="0.01" min="0" placeholder="Sin límite" value="${existing?.rolloverCap||""}"></div>
+  </div>
+  <div class="actions" style="margin-top:14px"><button class="btn primary" id="saveBudgetV25">Guardar presupuesto</button>${cid?`<button class="btn danger" id="deleteBudgetV25">Eliminar</button>`:""}</div>
+ </div></div>`;
+ const holder=document.getElementById("budgetModalV25"); holder.innerHTML=htmlModal;
+ document.getElementById("budgetRollV25").value=existing?.rollover?"yes":"no";
+ document.getElementById("closeBudgetModal").onclick=()=>holder.innerHTML="";
+ document.getElementById("saveBudgetV25").onclick=()=>{
+   const id=document.getElementById("budgetCatV25").value, amount=Number(document.getElementById("budgetAmtV25").value);
+   const start=document.getElementById("budgetStartV25").value,end=document.getElementById("budgetEndV25").value;
+   if(!id||amount<=0){toast("Introduce categoría e importe.");return}
+   state.settings.budgetsV25 ||= {};
+   state.settings.budgetsV25[id]={amount,startMonth:start,endMonth:end,rollover:document.getElementById("budgetRollV25").value==="yes",rolloverCap:Number(document.getElementById("budgetCapV25").value)||null};
+   save(); holder.innerHTML=""; renderBudgets(); toast("Presupuesto guardado.");
+ };
+ if(cid) document.getElementById("deleteBudgetV25").onclick=()=>{delete state.settings.budgetsV25[cid];save();holder.innerHTML="";renderBudgets();toast("Presupuesto eliminado.")};
+}
+
 function renderSummary(){
  const months=monthsBack(36); const selected=state.ui?.summaryMonth||months[0]; state.ui||={}; state.ui.summaryMonth=selected;
  const st=monthlyStats(selected), patrimony=totalBalance()+investmentTotal(), available=availableBalance(), savings=savingsBalance();
@@ -456,7 +620,7 @@ function renderSummary(){
  const budgetRows=budgetEntries.map(([key,val])=>{const cid=key.split("|")[1],spent=categoryMonthlyAmount(selected,cid),budget=Number(val)||0;return {name:categoryById(cid)?.name||"Categoría",spent,budget,pct:budget?spent/budget*100:0}});
  const subs=state.movements.filter(m=>monthKey(m.date)===selected&&m.type==="expense"&&categoryById(m.categoryId)?.name==="Suscripciones").reduce((s,m)=>s+movementAmount(m),0);
  content.innerHTML=`
- <h1>Resumen</h1><div class="subtitle">Centro de mando financiero · ${esc(monthLabel(selected))}</div>
+ <h1>${greetingForName(state.settings?.profile?.name)}</h1><div class="subtitle">Centro de mando financiero · ${esc(monthLabel(selected))}</div>
  <div class="toolbar summary-toolbar"><div class="field"><label>Mes del resumen</label><select id="summaryMonth">${monthOptions(selected)}</select></div><div class="summary-nav"><button class="btn small" id="prevSummary">‹</button><button class="btn small" id="nextSummary">›</button></div></div>
  <div class="kpi-grid summary-kpis">
   <div class="kpi"><div class="muted">Patrimonio total</div><strong>${euro(patrimony)}</strong></div>
@@ -481,7 +645,7 @@ function renderSummary(){
     return `<div class="recurring-summary-total"><strong>${euro(monthly)}</strong><span class="muted">estimados en ${esc(monthLabel(selected))}</span></div>
       <div class="list" style="margin-top:10px">${info.items.slice(0,4).map(x=>`<div class="list-row"><div><strong>${esc(x.r.merchant)}</strong><div class="muted">${esc(x.date)}</div></div><strong class="${x.r.type==="income"?"positive":"negative"}">${x.r.type==="income"?"+":"-"}${euro(x.r.amount)}</strong></div>`).join("")||`<div class="empty">No hay próximos cargos.</div>`}</div>`;
   })()}</section>
-  <section class="card span-6"><h2>Presupuestos</h2>${budgetRows.length?budgetRows.map(x=>`<div class="budget-row"><div class="budget-head"><span>${esc(x.name)}</span><strong class="${x.pct>100?"negative":x.pct>=80?"warn":"positive"}">${euro(x.spent)} / ${euro(x.budget)}</strong></div><div class="progress"><div style="width:${Math.min(100,x.pct)}%" class="${x.pct>100?"over":x.pct>=80?"warn":""}"></div></div></div>`).join(""):`<div class="empty">No hay presupuestos configurados todavía.</div>`}</section>
+  <section class="card span-6 summary-card"><div class="section-head"><div><h2>💰 Presupuestos</h2><div class="muted">Consulta el estado de tus límites y previsiones.</div></div><button class="btn primary" id="goBudgets">Ver presupuestos →</button></div></section>
   <section class="card span-6"><h2>Objetivos</h2>${goals.length?goals.map(g=>{const q=goalProgress(g);return `<div class="budget-row"><div class="budget-head"><span>${esc(g.name)}</span><strong>${euro(q.current)} / ${euro(q.target)}</strong></div><div class="progress"><div style="width:${q.pct}%"></div></div></div>`}).join(""):`<div class="empty">Añade objetivos desde Configuración.</div>`}</section>
   <section class="card span-12"><h2>🧠 Lo que deberías saber</h2><div class="insight-grid">${(insights.length?insights:["🟢 No hay cambios relevantes que señalar este mes."]).map(x=>`<div class="insight">${esc(x)}</div>`).join("")}</div></section>
  </div>`;
@@ -489,6 +653,7 @@ function renderSummary(){
  document.getElementById("prevSummary").onclick=()=>{const i=months.indexOf(selected);if(i<months.length-1){state.ui.summaryMonth=months[i+1];save();renderSummary()}};
  document.getElementById("nextSummary").onclick=()=>{const i=months.indexOf(selected);if(i>0){state.ui.summaryMonth=months[i-1];save();renderSummary()}};
 }
+if(document.getElementById("goBudgets")) document.getElementById("goBudgets").onclick=()=>{switchTab("budgets")};
 function renderMonthlyChart(ms){
  const vals=ms.map(k=>{const inc=state.movements.filter(m=>m.type==="income"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);const exp=state.movements.filter(m=>m.type==="expense"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);return {k,inc,exp}});
  const max=Math.max(1,...vals.flatMap(v=>[v.inc,v.exp]));
@@ -858,7 +1023,8 @@ async function refreshPrices(){
 
 /* ---------- Settings ---------- */
 function renderSettings(){
- content.innerHTML=`<h1>Configuración</h1><div class="subtitle">Categorías, subcategorías, datos y parámetros generales.</div>
+ content.innerHTML=`<section class="card span-12" id="v25Profile"><h2>👤 Tu perfil</h2><div class="form-grid"><div class="field"><label>Nombre en I$T</label><input id="v25Name" maxlength="40" placeholder="¿Cómo quieres que te llamemos?" value="${esc(state.settings?.profile?.name||"")}"></div></div><div class="muted" style="margin-top:8px">Se utilizará para personalizar el mensaje de bienvenida.</div><div class="actions" style="margin-top:10px"><button class="btn primary" id="saveV25Profile">Guardar nombre</button></div></section>
+<h1>Configuración</h1><div class="subtitle">Categorías, subcategorías, datos y parámetros generales.</div>
  <div class="grid">
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
  <section class="card span-6"><h2>Copias de seguridad</h2><div class="notice" style="margin-bottom:12px">V2.1 migra automáticamente los datos de V2.0 y crea una copia de seguridad local antes de hacerlo.</div><div class="actions"><button class="btn primary" id="exportData">Exportar datos</button><button class="btn" id="importData">Importar datos</button><button class="btn danger" id="resetData">Borrar todos los datos</button></div><p class="muted" style="margin-top:12px">La exportación contiene cuentas, movimientos, recurrentes, inversiones, categorías y configuración.</p><input id="fileImport" type="file" accept="application/json" class="hidden"></section>
@@ -888,7 +1054,7 @@ function renderSettings(){
  document.getElementById("goalForm").onsubmit=e=>{e.preventDefault();const name=document.getElementById("goalName").value.trim(),target=Number(document.getElementById("goalTarget").value),current=Number(document.getElementById("goalCurrent").value)||0;if(!name||target<=0)return;state.goals.push({id:uid(),name,target,current});save();renderSettings();toast("Objetivo añadido.");};
  content.querySelectorAll("[data-del-goal]").forEach(b=>b.onclick=()=>{state.goals=state.goals.filter(g=>g.id!==b.dataset.delGoal);save();renderSettings();});
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
-}
+}if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
  content.innerHTML=`<div class="page-head-back"><button class="btn" id="backSettings">← Configuración</button></div><h1>🏷️ Categorías</h1><div class="subtitle">Gestiona categorías y subcategorías sin saturar la pantalla.</div>

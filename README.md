@@ -34,3 +34,7 @@ Resumen optimizado: sin últimos movimientos, evolución limitada a 6 meses y m�
 
 ## I$T V2.4
 Transferencias internas separadas de ingresos/gastos y base para presupuestos persistentes con rollover.
+
+
+## I$T V2.5
+Presupuestos como pestaña propia, presupuestos permanentes con rollover/previsión, cabecera móvil fija y perfil con bienvenida personalizada.
