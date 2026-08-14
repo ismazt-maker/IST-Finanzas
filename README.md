@@ -70,3 +70,7 @@ Controles de apariencia funcionales, modos claro/oscuro/automático con persiste
 
 ## I$T V2.10
 Identidad visual definitiva, sistema único de apariencia (Claro/Oscuro/Automático), cinco temas coherentes, controles persistentes y activos, y assets iOS/PWA del nuevo monograma.
+
+
+## I$T V2.10.2
+Corrección del error de inicialización que dejaba el contenido en blanco: el refresco de controles de apariencia queda definido antes del render inicial y se elimina la llamada global prematura.

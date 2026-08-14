@@ -390,6 +390,11 @@ function v210SetAppearance(mode,accent){
   v210ApplyAppearance();
   save();
 }
+function v210RefreshAppearanceControls(){
+  const a=v210Appearance();
+  document.querySelectorAll("[data-v210-mode-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210ModeChoice===a.mode));
+  document.querySelectorAll("[data-v210-accent-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210AccentChoice===a.accent));
+}
 
 function loadState(){
  try{
@@ -1236,7 +1241,6 @@ function renderSettings(){
  if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
 }
 
- v210ApplyAppearance(); v210RefreshAppearanceControls();
 
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
@@ -1336,10 +1340,5 @@ document.addEventListener("click",function(e){
                     accent ? accent.dataset.v210AccentChoice : null);
   v210RefreshAppearanceControls();
 });
-function v210RefreshAppearanceControls(){
-  const a=v210Appearance();
-  document.querySelectorAll("[data-v210-mode-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210ModeChoice===a.mode));
-  document.querySelectorAll("[data-v210-accent-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v210AccentChoice===a.accent));
-}
 </body>
 </html>
