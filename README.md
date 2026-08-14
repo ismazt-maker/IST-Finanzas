@@ -26,3 +26,11 @@ Mobile-first visual redesign for iPhone: touch-friendly controls, compact cards,
 - Resumen mobile-first corregido: todas las tarjetas se apilan correctamente en iPhone.
 - Categorías movidas a una pantalla propia y compacta.
 - Buscador por concepto/comercio en Movimientos.
+
+
+## I$T V2.3
+Resumen optimizado: sin últimos movimientos, evolución limitada a 6 meses y módulo de gastos recurrentes comprometidos.
+
+
+## I$T V2.4
+Transferencias internas separadas de ingresos/gastos y base para presupuestos persistentes con rollover.

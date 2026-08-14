@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.2.8</title>
+<title>I$T V2.4</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -19,7 +19,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 .page{max-width:1250px;margin:0 auto;padding:24px 18px 60px}.drawer{position:fixed;inset:68px auto 0 0;width:290px;background:#fff;border-right:1px solid var(--line);box-shadow:var(--shadow);z-index:40;transform:translateX(-102%);transition:.22s ease;padding:16px}.drawer.open{transform:translateX(0)}.drawer-backdrop{display:none;position:fixed;inset:68px 0 0;z-index:35;background:rgba(0,0,0,.25)}.drawer-backdrop.open{display:block}
 .nav{display:grid;gap:7px}.nav button{border:0;background:transparent;text-align:left;padding:13px 14px;border-radius:12px;color:#374151}.nav button:hover,.nav button.active{background:#edf1f4;font-weight:700}.nav .emoji{display:inline-block;width:28px}
 h1{font-size:30px;margin:0 0 6px;letter-spacing:-.8px}h2{font-size:19px;margin:0 0 14px}h3{font-size:16px;margin:0 0 10px}.subtitle{color:var(--muted);margin-bottom:22px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-6{grid-column:span 6}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
-.summary-nav{display:flex;gap:6px;align-items:end;padding-bottom:0}.budget-row{margin:10px 0}.budget-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-size:13px}.progress{height:9px;background:#edf0f2;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--green);border-radius:99px}.progress>div.warn{background:#b7791f}.progress>div.over{background:var(--red)}.warn{color:#9a6700}.insight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.insight{padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fafbfc}.kpi-grid{grid-template-columns:repeat(6,minmax(0,1fr))}@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.insight-grid{grid-template-columns:1fr}}.metric{font-size:27px;font-weight:800;margin-top:4px}.muted{color:var(--muted);font-size:13px}.positive{color:var(--green)}.negative{color:var(--red)}
+.summary-nav{display:flex;gap:6px;align-items:end;padding-bottom:0}.section-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.hidden{display:none!important}.transfer-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}@media(max-width:700px){.transfer-fields{grid-template-columns:1fr}.summary-card{min-width:0}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}.recurring-summary-total{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.recurring-summary-total strong{font-size:26px}.budget-row{margin:10px 0}.budget-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:6px;font-size:13px}.progress{height:9px;background:#edf0f2;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--green);border-radius:99px}.progress>div.warn{background:#b7791f}.progress>div.over{background:var(--red)}.warn{color:#9a6700}.insight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.insight{padding:13px 14px;border:1px solid var(--line);border-radius:13px;background:#fafbfc}.kpi-grid{grid-template-columns:repeat(6,minmax(0,1fr))}@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.insight-grid{grid-template-columns:1fr}}.metric{font-size:27px;font-weight:800;margin-top:4px}.muted{color:var(--muted);font-size:13px}.positive{color:var(--green)}.negative{color:var(--red)}
 .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;font-weight:700;color:#4b5563}.field input,.field select,.field textarea{width:100%;border:1px solid #d7dce1;border-radius:11px;padding:11px 12px;background:#fff;outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#8092a6;box-shadow:0 0 0 3px rgba(80,105,130,.12)}
 .actions{display:flex;flex-wrap:wrap;gap:8px}.btn{border:1px solid #d7dce1;background:#fff;color:#273444;border-radius:11px;padding:10px 13px;font-weight:700}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.danger{color:#a72e29}.btn.small{padding:7px 9px;font-size:12px}.btn:disabled{opacity:.5;cursor:not-allowed}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px}.toolbar .field{min-width:160px}
@@ -244,11 +244,27 @@ function availableBalance(){
 function savingsBalance(){
  return state.accounts.filter(a=>/ahorro|remunerad|saving/i.test(String(a.type||"")+" "+String(a.name||""))).reduce((sum,a)=>sum+Number(a.balance||0),0);
 }
+
+function isTransfer(m){
+ return m.type==="transfer" || m.transfer===true || m.kind==="transfer" || !!m.transferId;
+}
+function isFinancialMovement(m){
+ return !isTransfer(m);
+}
+function movementSigned(m){
+ const a=movementAmount(m);
+ return m.type==="income" ? a : m.type==="expense" ? -a : 0;
+}
+function transferAccounts(m){
+ return {from:m.fromAccountId||m.sourceAccountId||m.accountId||"",to:m.toAccountId||m.destinationAccountId||""};
+}
+
 function monthlyStats(k){
  const ms=state.movements.filter(m=>monthKey(m.date)===k);
- const income=ms.filter(m=>m.type==="income").reduce((s,m)=>s+movementAmount(m),0);
- const expense=ms.filter(m=>m.type==="expense").reduce((s,m)=>s+movementAmount(m),0);
- return {ms,income,expense,net:income-expense,rate:income?((income-expense)/income*100):0};
+ const financial=ms.filter(isFinancialMovement);
+ const income=financial.filter(m=>m.type==="income").reduce((s,m)=>s+movementAmount(m),0);
+ const expense=financial.filter(m=>m.type==="expense").reduce((s,m)=>s+movementAmount(m),0);
+ return {ms,financial,income,expense,net:income-expense,rate:income?((income-expense)/income*100):0};
 }
 function categoryMonthlyAmount(k,cid,sid=""){
  return state.movements.filter(m=>monthKey(m.date)===k&&m.type==="expense"&&m.categoryId===cid&&(!sid||m.subcategoryId===sid)).reduce((s,m)=>s+movementAmount(m),0);
@@ -314,6 +330,19 @@ const routes=[
 ];
 let currentRoute=localStorage.getItem("ist_route")||"summary";
 const nav=document.getElementById("nav"), content=document.getElementById("appContent");
+
+function setupTransferFields(){
+ const typeSel=document.querySelector('select[name="type"],#movementType,#type');
+ const box=document.getElementById("transferFields");
+ const from=document.getElementById("transferFrom");
+ const to=document.getElementById("transferTo");
+ if(!typeSel||!box||!from||!to)return;
+ const opts=state.accounts.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join("");
+ from.innerHTML=opts; to.innerHTML=opts;
+ const toggle=()=>box.classList.toggle("hidden",typeSel.value!=="transfer");
+ typeSel.addEventListener("change",toggle); toggle();
+}
+
 function renderNav(){nav.innerHTML=routes.map(r=>`<button data-route="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="emoji">${r[1]}</span>${r[2]}</button>`).join("");}
 function renderMobileNav(){const el=document.getElementById("mobileNav");if(!el)return;const main=[routes.find(r=>r[0]==="summary"),routes.find(r=>r[0]==="movements"),routes.find(r=>r[0]==="accounts"),routes.find(r=>r[0]==="reports")];el.innerHTML=main.slice(0,2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("")+`<button class="add" data-addmovement="1" aria-label="Añadir movimiento">＋</button>`+main.slice(2).map(r=>`<button data-mroute="${r[0]}" class="${currentRoute===r[0]?"active":""}"><span class="micon">${r[1]}</span><span>${r[2]}</span></button>`).join("");}
 
@@ -367,13 +396,58 @@ function applyRecurrings(){
 }
 
 /* ---------- Summary ---------- */
+
+function recurringMonthInfo(k){
+ const [y,m]=k.split("-").map(Number);
+ const lastDay=new Date(y,m,0).getDate();
+ const today=new Date();
+ const isCurrent=k===monthKey(today);
+ const items=state.recurrings.filter(r=>r.active!==false).map(r=>{
+   const start=new Date(r.startDate+"T12:00:00");
+   const startKey=monthKey(start);
+   if(startKey>k) return null;
+   const day=Math.min(start.getDate(),lastDay);
+   const date=`${k}-${String(day).padStart(2,"0")}`;
+   const already=state.movements.some(x=>x.recurringId===r.id && monthKey(x.date)===k);
+   return {r,date,already};
+ }).filter(Boolean).filter(x=>!isCurrent || x.date>=dateISO(today));
+ return {items,isCurrent};
+}
+
+
+function budgetConfigKey(){return "ist_budget_config_v24";}
+function loadBudgetConfig(){
+ try{return JSON.parse(localStorage.getItem(budgetConfigKey())||"{}")}catch(e){return {}}
+}
+function saveBudgetConfig(x){try{localStorage.setItem(budgetConfigKey(),JSON.stringify(x))}catch(e){}}
+function budgetForMonth(cid,k){
+ const cfg=loadBudgetConfig()[cid];
+ if(!cfg||!cfg.amount)return null;
+ const start=cfg.startMonth||"0000-00";
+ const end=cfg.endMonth||"9999-99";
+ if(k<start||k>end)return null;
+ let amount=Number(cfg.amount)||0;
+ if(cfg.rollover){
+  const months=monthsBack(36).filter(x=>x>=start&&x<k).reverse();
+  for(const mo of months){
+   const spent=categoryMonthlyAmount(mo,cid);
+   amount=Math.max(0,amount-spent);
+   amount+=Number(cfg.amount)||0;
+  }
+ }
+ return {amount,base:Number(cfg.amount)||0,rollover:!!cfg.rollover};
+}
+
 function renderSummary(){
  const months=monthsBack(36); const selected=state.ui?.summaryMonth||months[0]; state.ui||={}; state.ui.summaryMonth=selected;
  const st=monthlyStats(selected), patrimony=totalBalance()+investmentTotal(), available=availableBalance(), savings=savingsBalance();
  const cats={}; st.ms.filter(m=>m.type==="expense").forEach(m=>{const c=categoryById(m.categoryId)?.name||"Sin categoría";cats[c]=(cats[c]||0)+movementAmount(m)});
  const top=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7), insights=insightsForMonth(selected);
  const goals=(state.goals||[]).slice(0,4);
- const budgetRows=Object.entries(state.budgets||{}).filter(([key])=>key.startsWith(selected+"|")).map(([key,val])=>{const cid=key.split("|")[1],spent=categoryMonthlyAmount(selected,cid),budget=Number(val)||0;return {name:categoryById(cid)?.name||"Categoría",spent,budget,pct:budget?spent/budget*100:0}});
+ const persistent=Object.keys(loadBudgetConfig()).map(cid=>[`${selected}|${cid}`,budgetForMonth(cid,selected)?.amount]).filter(x=>x[1]!=null);
+ const legacy=Object.entries(state.budgets||{}).filter(([key])=>key.startsWith(selected+"|"));
+ const budgetEntries=[...legacy,...persistent.filter(p=>!legacy.some(l=>l[0]===p[0]))];
+ const budgetRows=budgetEntries.map(([key,val])=>{const cid=key.split("|")[1],spent=categoryMonthlyAmount(selected,cid),budget=Number(val)||0;return {name:categoryById(cid)?.name||"Categoría",spent,budget,pct:budget?spent/budget*100:0}});
  const subs=state.movements.filter(m=>monthKey(m.date)===selected&&m.type==="expense"&&categoryById(m.categoryId)?.name==="Suscripciones").reduce((s,m)=>s+movementAmount(m),0);
  content.innerHTML=`
  <h1>Resumen</h1><div class="subtitle">Centro de mando financiero · ${esc(monthLabel(selected))}</div>
@@ -387,8 +461,7 @@ function renderSummary(){
   <div class="kpi"><div class="muted">Tasa de ahorro</div><strong class="${st.rate>=0?"positive":"negative"}">${st.rate.toFixed(1)}%</strong></div>
  </div>
  <div class="grid" style="margin-top:14px">
-  <section class="card span-8 summary-card summary-chart-card"><h2>Evolución del patrimonio</h2>${renderMonthlyChart(months.slice(0,12).reverse(),true)}</section>
-  <section class="card span-4 summary-card"><h2>Últimos movimientos</h2><div class="list">${st.ms.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7).map(m=>movementRow(m)).join("")||`<div class="empty">Sin movimientos.</div>`}</div></section>
+  <section class="card span-12 summary-card summary-chart-card"><div class="section-head"><div><h2>Evolución del patrimonio</h2><div class="muted">Últimos 6 meses</div></div></div>${renderMonthlyChart(months.slice(0,6).reverse(),true)}</section>
   <section class="card span-7 summary-card"><h2>Gasto por categoría</h2>${top.length?`<div class="report-bars">${top.map(([n,v])=>`<div class="report-bar-row"><div class="report-bar-label"><span>${esc(n)}</span><strong>${euro(v)}</strong></div><div class="report-track"><div class="report-fill" style="width:${Math.max(2,v/(top[0][1]||1)*100)}%"></div></div></div>`).join("")}`:`<div class="empty">No hay gastos en este mes.</div>`}</section>
   <section class="card span-5 summary-card"><h2>Situación</h2><div class="list">
    <div class="list-row"><span>En cuentas</span><strong>${euro(totalBalance())}</strong></div>
@@ -396,6 +469,12 @@ function renderSummary(){
    <div class="list-row"><span>Inversiones</span><strong>${euro(investmentTotal())}</strong></div>
    <div class="list-row"><span>Suscripciones</span><strong>${euro(subs)}</strong></div>
   </div></section>
+  <section class="card span-6 summary-card"><h2>🔄 Comprometido en recurrentes</h2>${(()=>{
+    const info=recurringMonthInfo(selected);
+    const monthly=state.recurrings.filter(r=>r.active!==false).filter(r=>monthKey(r.startDate)<=selected).reduce((s,r)=>s+Number(r.amount||0),0);
+    return `<div class="recurring-summary-total"><strong>${euro(monthly)}</strong><span class="muted">estimados en ${esc(monthLabel(selected))}</span></div>
+      <div class="list" style="margin-top:10px">${info.items.slice(0,4).map(x=>`<div class="list-row"><div><strong>${esc(x.r.merchant)}</strong><div class="muted">${esc(x.date)}</div></div><strong class="${x.r.type==="income"?"positive":"negative"}">${x.r.type==="income"?"+":"-"}${euro(x.r.amount)}</strong></div>`).join("")||`<div class="empty">No hay próximos cargos.</div>`}</div>`;
+  })()}</section>
   <section class="card span-6"><h2>Presupuestos</h2>${budgetRows.length?budgetRows.map(x=>`<div class="budget-row"><div class="budget-head"><span>${esc(x.name)}</span><strong class="${x.pct>100?"negative":x.pct>=80?"warn":"positive"}">${euro(x.spent)} / ${euro(x.budget)}</strong></div><div class="progress"><div style="width:${Math.min(100,x.pct)}%" class="${x.pct>100?"over":x.pct>=80?"warn":""}"></div></div></div>`).join(""):`<div class="empty">No hay presupuestos configurados todavía.</div>`}</section>
   <section class="card span-6"><h2>Objetivos</h2>${goals.length?goals.map(g=>{const q=goalProgress(g);return `<div class="budget-row"><div class="budget-head"><span>${esc(g.name)}</span><strong>${euro(q.current)} / ${euro(q.target)}</strong></div><div class="progress"><div style="width:${q.pct}%"></div></div></div>`}).join(""):`<div class="empty">Añade objetivos desde Configuración.</div>`}</section>
   <section class="card span-12"><h2>🧠 Lo que deberías saber</h2><div class="insight-grid">${(insights.length?insights:["🟢 No hay cambios relevantes que señalar este mes."]).map(x=>`<div class="insight">${esc(x)}</div>`).join("")}</div></section>
@@ -448,7 +527,12 @@ function movementModal(id){
  <div class="field full"><label>Comercio / concepto</label><input id="mMerchant" value="${esc(m?.merchant||"")}" placeholder="Ej. Netflix, Mercadona, nómina…"></div>
  <div class="field full"><label>Nota</label><textarea id="mNote" rows="2">${esc(m?.note||"")}</textarea></div>
  <div class="actions full"><button class="btn primary" type="submit">Guardar</button><button class="btn" type="button" id="cancelM">Cancelar</button></div>
- </form>`);
+ 
+<div class="transfer-fields hidden" id="transferFields">
+ <div class="field"><label>Cuenta origen</label><select id="transferFrom"></select></div>
+ <div class="field"><label>Cuenta destino</label><select id="transferTo"></select></div>
+</div>
+</form>`);
  document.getElementById("cancelM").onclick=modalClose;
  document.getElementById("mCat").onchange=e=>{document.getElementById("mSub").innerHTML=subcatOptions(e.target.value)};
  document.getElementById("movementForm").onsubmit=e=>{
@@ -574,6 +658,14 @@ function renderReports(){
  const compareOpts=selectOptions([{value:"category",label:"Categoría"},{value:"subcategory",label:"Subcategoría"},{value:"concept",label:"Concepto / comercio"},{value:"account",label:"Cuenta"}],r.compareBy,"Comparar por");
  content.innerHTML=`
  <h1>Informes</h1>
+<section class="card span-12" id="transferReportCard" style="margin-top:14px">
+ <div class="section-head"><div><h2>↔️ Transferencias internas</h2><div class="muted">No cuentan como ingresos ni gastos.</div></div></div>
+ <div class="kpi-grid" style="margin-top:10px">
+  <div class="kpi"><div class="muted">Transferencias</div><strong id="transferCount">0</strong></div>
+  <div class="kpi"><div class="muted">Importe movido</div><strong id="transferTotal">0,00 €</strong></div>
+ </div>
+</section>
+
  <div class="subtitle">Configura el análisis y pulsa <strong>Generar informe</strong>. El resultado solo se calcula cuando tú lo solicitas.</div>
  <div class="tabs report-tabs">
   <button class="tab ${r.mode==="analysis"?"active":""}" data-report-mode="analysis">🔎 Analizar</button>
@@ -844,3 +936,11 @@ window.addEventListener("load",()=>{if("serviceWorker" in navigator)navigator.se
 </script>
 </body>
 </html>
+
+function renderTransferSummary(){
+ const c=document.getElementById("transferCount"),t=document.getElementById("transferTotal");
+ if(!c||!t)return;
+ const tx=state.movements.filter(isTransfer);
+ c.textContent=String(tx.length);
+ t.textContent=euro(tx.reduce((s,m)=>s+movementAmount(m),0));
+}
