@@ -159,36 +159,30 @@ main,.main,.app-main,#app{min-width:0}
   .v25-budget-number{font-size:31px}
 }
 </style>
-<style id="v251-nav-fix">@media(max-width:700px){#mobileNav button span:last-child{font-size:10px;line-height:1.1}#mobileNav .add{font-size:26px}}</style><style id="v252-budget-sheet">.v25-budget-sheet{align-items:flex-end!important;padding:0!important}.v25-budget-sheet .movement-sheet-card{width:min(620px,100%);max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom))}.sheet-handle{width:42px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 12px}.sheet-actions{display:flex;flex-direction:column;gap:9px;margin-top:18px}.wide{width:100%}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted)}@media(min-width:701px){.v25-budget-sheet{align-items:center!important;padding:18px!important}.v25-budget-sheet .movement-sheet-card{border-radius:24px}}</style><style id="v253-budget-overlay">
-html.v25-modal-html, body.v25-modal-open{overflow:hidden!important}
-body.v25-modal-open{position:relative}
-.v25-budget-overlay{position:fixed;inset:0;z-index:99999;display:flex;align-items:flex-end;justify-content:center}
-.v25-budget-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.42);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
-.v25-budget-sheet{position:relative;z-index:1;width:min(620px,100%);max-height:92dvh;overflow:auto;background:var(--surface,#fff);color:var(--text,#111);border-radius:24px 24px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.22);padding:10px 18px calc(22px + env(safe-area-inset-bottom));animation:v25SheetIn .22s ease-out}
-.v25-sheet-handle{width:42px;height:5px;border-radius:999px;background:var(--line,#ddd);margin:2px auto 14px}
-.v25-sheet-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.v25-sheet-header h2{margin:2px 0 0}
-.v25-eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted)}
-.v25-sheet-body{display:grid;gap:14px;margin-top:16px}
-.v25-two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.v25-sheet-footer{display:grid;gap:9px;margin-top:18px}
-.v25-full-btn{width:100%;min-height:48px}
-@keyframes v25SheetIn{from{transform:translateY(100%);opacity:.7}to{transform:translateY(0);opacity:1}}
-@media(min-width:701px){
- .v25-budget-overlay{align-items:center;padding:20px}
- .v25-budget-sheet{border-radius:24px;max-height:90vh}
-}
-@media(max-width:700px){
- .v25-two-col{grid-template-columns:1fr}
- .v25-budget-sheet{padding-left:16px;padding-right:16px}
-}
-</style><style id="v254-budget-css">body.v254-lock{overflow:hidden!important}.v254-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:99998}.v254-sheet{position:fixed;z-index:99999;left:0;right:0;bottom:0;background:var(--surface,#fff);color:var(--text,#111);border-radius:24px 24px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.25);animation:v254in .2s ease-out}.v254-handle{width:42px;height:5px;background:var(--line,#ddd);border-radius:999px;margin:0 auto 14px}.v254-form{display:grid;gap:14px;margin-top:14px}.v254-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.v254-actions{display:grid;gap:9px;margin-top:18px}.v254-actions .btn{width:100%;min-height:48px}@keyframes v254in{from{transform:translateY(100%)}to{transform:translateY(0)}}@media(min-width:701px){.v254-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100% - 40px));border-radius:24px}}@media(max-width:700px){.v254-cols{grid-template-columns:1fr}}</style><style id="v26-budget-summary-css">
+<style id="v251-nav-fix">@media(max-width:700px){#mobileNav button span:last-child{font-size:10px;line-height:1.1}#mobileNav .add{font-size:26px}}</style><style id="v26-budget-summary-css">
 .summary-budget-wrap{display:grid;gap:10px}
 .summary-budget-total{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .summary-budget-total>div{display:grid;gap:3px}
 .summary-budget-total strong{font-size:17px}
 .warn{color:#b7791f}
 @media(max-width:700px){.summary-budget-total{grid-template-columns:1fr 1fr 1fr;gap:7px}.summary-budget-total strong{font-size:15px}}
+</style><style id="v27-mobile-modal-polish">
+@media(max-width:700px){
+  .modal-card{background:var(--card);color:var(--text);border:1px solid var(--line);width:100%;max-width:100%;box-sizing:border-box}
+  .modal-card .modal-head h2{color:var(--text)}
+  .modal-card .field input,.modal-card .field select,.modal-card .field textarea{
+    width:100%;min-height:44px;box-sizing:border-box;background:var(--card);color:var(--text);border-color:var(--line);
+  }
+  .modal-card input[type="date"]{height:44px;line-height:44px;padding-top:0;padding-bottom:0;-webkit-appearance:none;appearance:none}
+  .modal-card input[type="date"]::-webkit-date-and-time-value{height:42px;text-align:left}
+  .modal-card .actions.full{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+}
+.v25-budget-card{background:var(--card,#fff)!important;color:var(--text,#111)!important;border-color:var(--line,#ddd)!important}
+.v25-budget-card .name,.v25-budget-card .amount{color:var(--text,#111)}
+.v25-budget-card .muted{color:var(--muted)}
+.v25-budget-hero{background:var(--card,#fff)!important;color:var(--text,#111)!important;border-color:var(--line,#ddd)!important}
+.v25-budget-hero .v25-budget-number{color:var(--text,#111)}
+.v25-pill{background:var(--card,#fff);color:var(--text,#111)}
 </style></head>
 <body>
 <div class="app">
@@ -609,41 +603,39 @@ function renderBudgets(){
  content.querySelectorAll("[data-edit-budget]").forEach(b=>b.onclick=()=>budgetModalV25(b.dataset.editBudget));
 }
 function budgetModalV25(cid=""){
- const existing=cid?getBudgetV25(cid):null, cats=state.categories||[], ms=monthsBack(36);
- const opts=cats.map(c=>`<option value="${c.id}" ${c.id===cid?"selected":""}>${esc(c.name)}</option>`).join("");
- const el=document.createElement("div");
- el.id="budgetOverlayV25";
- el.innerHTML=`<div class="v254-backdrop"></div><section class="v254-sheet" role="dialog" aria-modal="true">
- <div class="v254-handle"></div>
- <div class="section-head"><div><div class="v25-eyebrow">PRESUPUESTO</div><h2>${cid?"Editar presupuesto":"Nuevo presupuesto"}</h2></div><button type="button" class="btn small" id="v254Close">Cerrar</button></div>
- <div class="v254-form">
-  <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${opts}</select></div>
-  <div class="field"><label>Importe mensual</label><input id="budgetAmtV25" type="number" inputmode="decimal" step="0.01" min="0" value="${existing?.amount||""}" placeholder="0,00"></div>
-  <div class="v254-cols"><div class="field"><label>Desde</label><select id="budgetStartV25">${ms.map(m=>`<option value="${m}" ${m===(existing?.startMonth||ms[ms.length-1])?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
-  <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${ms.map(m=>`<option value="${m}" ${m===(existing?.endMonth||"")?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div></div>
-  <div class="v254-cols"><div class="field"><label>Acumular sobrante</label><select id="budgetRollV25"><option value="no">No</option><option value="yes">Sí, rollover</option></select></div>
-  <div class="field"><label>Máximo acumulable</label><input id="budgetCapV25" type="number" inputmode="decimal" step="0.01" min="0" value="${existing?.rolloverCap||""}" placeholder="Sin límite"></div></div>
- </div>
- <div class="v254-actions"><button type="button" class="btn primary" id="v254Save">Guardar presupuesto</button>${cid?`<button type="button" class="btn danger" id="v254Delete">Eliminar presupuesto</button>`:""}</div>
- </section>`;
- document.body.appendChild(el);
- document.body.classList.add("v254-lock");
- const close=()=>{document.body.classList.remove("v254-lock");el.remove()};
- el.querySelector(".v254-backdrop").onclick=close;
- document.getElementById("v254Close").onclick=close;
- if(existing)document.getElementById("budgetRollV25").value=existing.rollover?"yes":"no";
- document.getElementById("v254Save").onclick=()=>{
-  const id=document.getElementById("budgetCatV25").value, amount=Number(document.getElementById("budgetAmtV25").value), start=document.getElementById("budgetStartV25").value, endm=document.getElementById("budgetEndV25").value;
+ const existing=cid?getBudgetV25(cid):null;
+ const ms=monthsBack(36);
+ const cats=state.categories||[];
+ const catOpts=cats.map(c=>`<option value="${c.id}" ${c.id===cid?"selected":""}>${esc(c.name)}</option>`).join("");
+ modalOpen(cid?"Editar presupuesto":"Nuevo presupuesto",`<form id="budgetFormV27" class="form-grid">
+  <div class="field"><label>Categoría</label><select id="budgetCatV27" ${cid?"disabled":""} required>${catOpts}</select></div>
+  <div class="field"><label>Importe mensual (€)</label><input id="budgetAmtV27" type="number" min="0.01" step="0.01" inputmode="decimal" value="${existing?.amount||""}" placeholder="0,00" required></div>
+  <div class="field"><label>Desde</label><select id="budgetStartV27">${ms.map(m=>`<option value="${m}" ${m===(existing?.startMonth||ms[ms.length-1])?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
+  <div class="field"><label>Hasta</label><select id="budgetEndV27"><option value="">Sin fecha final</option>${ms.map(m=>`<option value="${m}" ${m===(existing?.endMonth||"")?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
+  <div class="field"><label>Acumular sobrante</label><select id="budgetRollV27"><option value="no">No</option><option value="yes">Sí, rollover</option></select></div>
+  <div class="field"><label>Máximo acumulable (€)</label><input id="budgetCapV27" type="number" min="0" step="0.01" inputmode="decimal" value="${existing?.rolloverCap||""}" placeholder="Sin límite"></div>
+  <div class="actions full"><button class="btn primary" type="submit">Guardar presupuesto</button><button class="btn" type="button" id="cancelBudgetV27">Cancelar</button></div>
+ </form>`);
+ if(existing)document.getElementById("budgetRollV27").value=existing.rollover?"yes":"no";
+ document.getElementById("cancelBudgetV27").onclick=modalClose;
+ document.getElementById("budgetFormV27").onsubmit=e=>{
+  e.preventDefault();
+  const id=document.getElementById("budgetCatV27").value;
+  const amount=Number(document.getElementById("budgetAmtV27").value);
+  const start=document.getElementById("budgetStartV27").value;
+  const endMonth=document.getElementById("budgetEndV27").value;
   if(!id||amount<=0){toast("Introduce categoría e importe.");return}
-  if(endm&&endm<start){toast("La fecha final no puede ser anterior a la inicial.");return}
-  state.settings ||= {}; state.settings.budgetsV25 ||= {};
-  state.settings.budgetsV25[id]={amount,startMonth:start,endMonth:endm,rollover:document.getElementById("budgetRollV25").value==="yes",rolloverCap:Number(document.getElementById("budgetCapV25").value)||null};
-  save();close();renderBudgets();toast("Presupuesto guardado.");
+  if(endMonth&&endMonth<start){toast("La fecha final no puede ser anterior a la inicial.");return}
+  state.settings ||= {};
+  state.settings.budgetsV25 ||= {};
+  state.settings.budgetsV25[id]={
+   amount,startMonth:start,endMonth,
+   rollover:document.getElementById("budgetRollV27").value==="yes",
+   rolloverCap:Number(document.getElementById("budgetCapV27").value)||null
+  };
+  save();modalClose();renderBudgets();toast("Presupuesto guardado.");
  };
- if(cid)document.getElementById("v254Delete").onclick=()=>{delete state.settings.budgetsV25[cid];save();close();renderBudgets();toast("Presupuesto eliminado.")};
 }
-
-
 function summaryBudgetBlock(k){
  const rows=allBudgetRowsForMonth(k);
  if(!rows.length) return `<div class="empty">No hay presupuestos para ${esc(monthLabel(k))}. <button type="button" class="btn primary" id="summaryCreateBudget">Crear presupuesto</button></div>`;
@@ -1167,20 +1159,20 @@ function renderTransferSummary(){
 
 </script>
 
-<script id="v261-global-budget-nav">
+
+<script id="v27-budget-nav">
 document.addEventListener("click",function(e){
  const btn=e.target.closest && e.target.closest("#goBudgets");
  if(!btn)return;
  e.preventDefault();
  e.stopPropagation();
+ const navBtn=document.querySelector('#nav [data-route="budgets"]');
+ if(navBtn){navBtn.click();return;}
  currentRoute="budgets";
- try{localStorage.setItem("ist_route","budgets")}catch(err){}
- if(typeof renderNav==="function")renderNav();
- if(typeof renderMobileNav==="function")renderMobileNav();
- if(typeof closeMenu==="function")closeMenu();
- if(typeof render==="function")render();
- window.scrollTo(0,0);
+ localStorage.setItem("ist_route","budgets");
+ renderNav();
+ renderMobileNav();
+ render();
 });
-</script>
-</body>
+</script></body>
 </html>

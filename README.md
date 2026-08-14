@@ -50,3 +50,7 @@ Presupuestos integrados con Resumen, navegación real y acceso directo a creaci�
 
 ## I$T V2.6.1
 Corrección de navegación desde Resumen hacia Presupuestos; elimina el handler V2.6 defectuoso y fuerza nueva caché.
+
+
+## I$T V2.7
+Navegación Resumen → Presupuestos mediante el sistema de navegación real; formulario de presupuesto integrado en el mismo modal que Nuevo movimiento; ajustes de modo oscuro y alineación del campo fecha en iPhone.
