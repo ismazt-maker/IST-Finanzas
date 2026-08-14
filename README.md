@@ -62,3 +62,7 @@ Scroll corregido al entrar en Presupuestos desde Resumen y botón Eliminar presu
 
 ## I$T V2.9
 Sistema de apariencia: Automático/Claro/Oscuro y cinco temas visuales (Graphite, Navy, Forest, Burgundy, Slate), persistentes y optimizados para iPhone.
+
+
+## I$T V2.9.1
+Controles de apariencia funcionales, modos claro/oscuro/automático con persistencia y iconos iOS/PWA rediseñados con el logotipo ampliado.

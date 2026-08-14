@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.5</title>
+<title>I$T V2.9.1</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -212,6 +212,47 @@ button.primary:hover,.btn.primary:hover{background:var(--v29-accent-strong)!impo
 .v29-mode-btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:10px;cursor:pointer}
 .v29-mode-btn.selected{border-color:var(--v29-accent);box-shadow:0 0 0 1px var(--v29-accent)}
 @media(max-width:700px){.v29-theme-option{min-width:calc(50% - 5px)}}
+</style>
+
+<style id="v291-theme-overrides">
+html[data-v29-theme="light"]{
+ --bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;
+ --accent:var(--v29-accent);--accent-soft:var(--v29-accent-soft);
+ --green:#167c52;--red:#c2413b;--blue:#3267b1;
+}
+html[data-v29-theme="dark"]{
+ --bg:#090a0f;--card:#11131a;--text:#f4f4f7;--muted:#969baa;--line:#242733;
+ --accent:var(--v29-accent);--accent-soft:#201b36;--green:#4ade80;--red:#fb7185;--blue:#7aa2ff;
+ --shadow:0 12px 32px rgba(0,0,0,.28);
+}
+html[data-v29-theme="light"] body{background:var(--bg);color:var(--text)}
+html[data-v29-theme="light"] .topbar{background:rgba(255,255,255,.94);border-color:var(--line)}
+html[data-v29-theme="dark"] body{background:var(--bg);color:var(--text)}
+html[data-v29-theme="dark"] .topbar{background:rgba(10,11,16,.92);border-color:var(--line)}
+html[data-v29-theme="dark"] .menu-btn{background:#171922;color:#ddd}
+html[data-v29-theme="dark"] .brand{color:#f4f4f7}
+html[data-v29-theme="dark"] .drawer{background:#101218;border-color:var(--line)}
+html[data-v29-theme="dark"] .nav button{color:#d3d5dc}
+html[data-v29-theme="dark"] .nav button:hover,html[data-v29-theme="dark"] .nav button.active{background:#1c1a2a;color:#c4b5fd}
+html[data-v29-theme="dark"] .card,html[data-v29-theme="dark"] .report-builder{background:var(--card);border-color:var(--line)}
+html[data-v29-theme="dark"] .field input,html[data-v29-theme="dark"] .field select,html[data-v29-theme="dark"] .field textarea{background:#0f1117;color:var(--text);border-color:#2a2e39}
+html[data-v29-theme="dark"] .field label{color:#b9bdc8}
+html[data-v29-theme="dark"] .btn{background:#151720;color:var(--text);border-color:#2a2e39}
+html[data-v29-theme="dark"] .btn.primary{background:var(--accent)!important;color:#fff;border-color:var(--accent)!important}
+html[data-v29-theme="dark"] .table th{background:#171922;color:#aeb2bf}
+html[data-v29-theme="dark"] .table td{border-color:var(--line)}
+html[data-v29-theme="dark"] .kpi{background:#151720;border-color:#262a35}
+html[data-v29-theme="dark"] .notice,html[data-v29-theme="dark"] .report-mobile-empty,html[data-v29-theme="dark"] .insight{background:#151720;border-color:#282c37;color:#c9ccd5}
+html[data-v29-theme="dark"] .tab{background:#11131a;color:#d3d5dc;border-color:#292d38}
+html[data-v29-theme="dark"] .tab.active{background:#211b3b;color:#c4b5fd;border-color:#433878}
+html[data-v29-theme="dark"] .subcat,html[data-v29-theme="dark"] .badge{background:#1b1e27;color:#d3d5dc}
+html[data-v29-theme="dark"] .mobile-nav{background:rgba(14,15,21,.96);border-color:#252832}
+html[data-v29-theme="dark"] .mobile-nav button.active{background:#211b3b;color:#c4b5fd}
+html[data-v29-theme="dark"] .modal-card{background:var(--card);color:var(--text)}
+html[data-v29-theme="dark"] .close{background:#1b1e27;color:var(--text)}
+html[data-v29-theme="dark"] .progress{background:#252833}
+html[data-v29-theme="dark"] .v25-budget-card,html[data-v29-theme="dark"] .v25-budget-hero{background:var(--card)!important;color:var(--text)!important}
+html[data-v29-theme="dark"] .v29-theme-option,html[data-v29-theme="dark"] .v29-mode-btn{background:#151720;color:var(--text);border-color:#2a2e39}
 </style>
 </head>
 <body>
@@ -1178,11 +1219,6 @@ function renderSettings(){
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
  if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
 }
- const app=v29ThemeState(); applyV29Theme();
- document.querySelectorAll("[data-v29-mode]").forEach(b=>b.onclick=()=>{app.mode=b.dataset.v29Mode;applyV29Theme();save();renderSettings();});
- document.querySelectorAll("[data-v29-accent-choice]").forEach(b=>b.onclick=()=>{app.accent=b.dataset.v29AccentChoice;applyV29Theme();save();renderSettings();});
- document.querySelectorAll("[data-v29-mode]").forEach(b=>b.classList.toggle("selected",b.dataset.v29Mode===app.mode));
- document.querySelectorAll("[data-v29-accent-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v29AccentChoice===app.accent));
 
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
@@ -1261,5 +1297,19 @@ document.addEventListener("click",function(e){
  renderMobileNav();
  render();
 });
-</script></body>
+</script>
+<script id="v291-theme-handlers">
+document.addEventListener("click",function(e){
+ const mode=e.target.closest && e.target.closest("[data-v29-mode]");
+ const accent=e.target.closest && e.target.closest("[data-v29-accent-choice]");
+ if(!mode && !accent)return;
+ const a=v29ThemeState();
+ if(mode)a.mode=mode.dataset.v29Mode;
+ if(accent)a.accent=accent.dataset.v29AccentChoice;
+ applyV29Theme();
+ save();
+ renderSettings();
+});
+</script>
+</body>
 </html>
