@@ -122,6 +122,12 @@ body{background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:opti
  body{background:var(--bg)}.topbar{background:rgba(10,11,16,.88);border-color:#242733}.menu-btn{background:#171922;color:#ddd}.brand{color:#f4b942}.drawer{background:#101218;border-color:#252832}.nav button{color:#d3d5dc}.nav button:hover,.nav button.active{background:#1c1a2a;color:#c4b5fd}.card,.report-builder{background:var(--card);border-color:#252832}.field input,.field select,.field textarea{background:#0f1117;color:var(--text);border-color:#2a2e39}.table th{background:#171922;color:#aeb2bf}.table td{border-color:#242733}.kpi{background:#151720;border-color:#262a35}.notice,.report-mobile-empty,.insight{background:#151720;border-color:#282c37}.tab{background:#11131a;color:#d3d5dc;border-color:#292d38}.tab.active{background:#211b3b;color:#c4b5fd;border-color:#433878}.subcat,.badge{background:#1b1e27}.mobile-nav{background:rgba(14,15,21,.95);border-color:#252832}.mobile-nav button.active{background:#211b3b;color:#c4b5fd}.progress{background:#252833}.donut:before{background:#11131a}.donut small{color:#9ca1ad}
 }
 </style>
+
+<style id="v24-mobile-overflow-fix">
+html, body { max-width:100%; overflow-x:hidden; }
+*, *::before, *::after { box-sizing:border-box; }
+img, svg, canvas, iframe { max-width:100%; }
+</style>
 </head>
 <body>
 <div class="app">
@@ -933,9 +939,6 @@ render();
 window.addEventListener("online",()=>toast("Conexión recuperada."));
 window.addEventListener("load",()=>{if("serviceWorker" in navigator)navigator.serviceWorker.register("./service-worker.js").catch(()=>{});});
 })();
-</script>
-</body>
-</html>
 
 function renderTransferSummary(){
  const c=document.getElementById("transferCount"),t=document.getElementById("transferTotal");
@@ -944,3 +947,7 @@ function renderTransferSummary(){
  c.textContent=String(tx.length);
  t.textContent=euro(tx.reduce((s,m)=>s+movementAmount(m),0));
 }
+
+</script>
+</body>
+</html>
