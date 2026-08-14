@@ -46,3 +46,7 @@ Correcciones: pestaña Presupuestos real, navegación móvil, CTA del Resumen y 
 
 ## I$T V2.6
 Presupuestos integrados con Resumen, navegación real y acceso directo a creación.
+
+
+## I$T V2.6.1
+Corrección de navegación desde Resumen hacia Presupuestos; elimina el handler V2.6 defectuoso y fuerza nueva caché.

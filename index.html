@@ -1167,18 +1167,20 @@ function renderTransferSummary(){
 
 </script>
 
-<script id="v26-global-budget-nav">
+<script id="v261-global-budget-nav">
 document.addEventListener("click",function(e){
  const btn=e.target.closest && e.target.closest("#goBudgets");
  if(!btn)return;
  e.preventDefault();
  e.stopPropagation();
- const navBtn=document.querySelector('[data-route="budgets"]');
- if(navBtn){navBtn.click();return;}
- const mobileBtn=document.querySelector('[data-mroute="budgets"]');
- if(mobileBtn){mobileBtn.click();return;}
+ currentRoute="budgets";
+ try{localStorage.setItem("ist_route","budgets")}catch(err){}
+ if(typeof renderNav==="function")renderNav();
+ if(typeof renderMobileNav==="function")renderMobileNav();
+ if(typeof closeMenu==="function")closeMenu();
+ if(typeof render==="function")render();
+ window.scrollTo(0,0);
 });
-if(e.target.closest && e.target.closest("#summaryCreateBudget")){e.preventDefault(); if(typeof budgetModalV25==="function")budgetModalV25(); return;}
 </script>
 </body>
 </html>
