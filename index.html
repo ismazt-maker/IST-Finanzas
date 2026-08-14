@@ -182,7 +182,7 @@ body.v25-modal-open{position:relative}
  .v25-two-col{grid-template-columns:1fr}
  .v25-budget-sheet{padding-left:16px;padding-right:16px}
 }
-</style></head>
+</style><style id="v254-budget-css">body.v254-lock{overflow:hidden!important}.v254-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:99998}.v254-sheet{position:fixed;z-index:99999;left:0;right:0;bottom:0;background:var(--surface,#fff);color:var(--text,#111);border-radius:24px 24px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.25);animation:v254in .2s ease-out}.v254-handle{width:42px;height:5px;background:var(--line,#ddd);border-radius:999px;margin:0 auto 14px}.v254-form{display:grid;gap:14px;margin-top:14px}.v254-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.v254-actions{display:grid;gap:9px;margin-top:18px}.v254-actions .btn{width:100%;min-height:48px}@keyframes v254in{from{transform:translateY(100%)}to{transform:translateY(0)}}@media(min-width:701px){.v254-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100% - 40px));border-radius:24px}}@media(max-width:700px){.v254-cols{grid-template-columns:1fr}}</style></head>
 <body>
 <div class="app">
 <header class="topbar">
@@ -602,85 +602,38 @@ function renderBudgets(){
  content.querySelectorAll("[data-edit-budget]").forEach(b=>b.onclick=()=>budgetModalV25(b.dataset.editBudget));
 }
 function budgetModalV25(cid=""){
- const existing=cid?getBudgetV25(cid):null;
- const cats=state.categories||[];
- const monthList=monthsBack(36);
- const catOptions=cats.map(c=>`<option value="${c.id}" ${c.id===cid?"selected":""}>${esc(c.name)}</option>`).join("");
- const overlay=document.createElement("div");
- overlay.id="budgetOverlayV25";
- overlay.className="v25-budget-overlay";
- overlay.innerHTML=`<div class="v25-budget-backdrop"></div>
-   <section class="v25-budget-sheet" role="dialog" aria-modal="true" aria-labelledby="budgetSheetTitle">
-    <div class="v25-sheet-handle"></div>
-    <header class="v25-sheet-header">
-      <div><div class="v25-eyebrow">PRESUPUESTO</div><h2 id="budgetSheetTitle">${cid?"Editar presupuesto":"Nuevo presupuesto"}</h2></div>
-      <button type="button" class="btn small" id="closeBudgetModal">Cerrar</button>
-    </header>
-    <div class="v25-sheet-body">
-      <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${catOptions}</select></div>
-      <div class="field"><label>Importe mensual</label><input id="budgetAmtV25" inputmode="decimal" type="number" step="0.01" min="0" value="${existing?.amount||""}" placeholder="0,00"></div>
-      <div class="v25-two-col">
-        <div class="field"><label>Desde</label><select id="budgetStartV25">${monthList.map(m=>`<option value="${m}" ${m===(existing?.startMonth||monthList[monthList.length-1])?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
-        <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${monthList.map(m=>`<option value="${m}" ${m===(existing?.endMonth||"")?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
-      </div>
-      <div class="v25-two-col">
-        <div class="field"><label>Acumular sobrante</label><select id="budgetRollV25"><option value="no">No</option><option value="yes">Sí, rollover</option></select></div>
-        <div class="field"><label>Máximo acumulable</label><input id="budgetCapV25" inputmode="decimal" type="number" step="0.01" min="0" value="${existing?.rolloverCap||""}" placeholder="Sin límite"></div>
-      </div>
-    </div>
-    <footer class="v25-sheet-footer">
-      <button type="button" class="btn primary v25-full-btn" id="saveBudgetV25">Guardar presupuesto</button>
-      ${cid?`<button type="button" class="btn danger v25-full-btn" id="deleteBudgetV25">Eliminar presupuesto</button>`:""}
-    </footer>
-   </section>`;
- document.body.appendChild(overlay);
- document.body.classList.add("v25-modal-open");
-
- const close=()=>{
-   document.body.classList.remove("v25-modal-open");
-   overlay.remove();
+ const existing=cid?getBudgetV25(cid):null, cats=state.categories||[], ms=monthsBack(36);
+ const opts=cats.map(c=>`<option value="${c.id}" ${c.id===cid?"selected":""}>${esc(c.name)}</option>`).join("");
+ const el=document.createElement("div");
+ el.id="budgetOverlayV25";
+ el.innerHTML=`<div class="v254-backdrop"></div><section class="v254-sheet" role="dialog" aria-modal="true">
+ <div class="v254-handle"></div>
+ <div class="section-head"><div><div class="v25-eyebrow">PRESUPUESTO</div><h2>${cid?"Editar presupuesto":"Nuevo presupuesto"}</h2></div><button type="button" class="btn small" id="v254Close">Cerrar</button></div>
+ <div class="v254-form">
+  <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${opts}</select></div>
+  <div class="field"><label>Importe mensual</label><input id="budgetAmtV25" type="number" inputmode="decimal" step="0.01" min="0" value="${existing?.amount||""}" placeholder="0,00"></div>
+  <div class="v254-cols"><div class="field"><label>Desde</label><select id="budgetStartV25">${ms.map(m=>`<option value="${m}" ${m===(existing?.startMonth||ms[ms.length-1])?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
+  <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${ms.map(m=>`<option value="${m}" ${m===(existing?.endMonth||"")?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div></div>
+  <div class="v254-cols"><div class="field"><label>Acumular sobrante</label><select id="budgetRollV25"><option value="no">No</option><option value="yes">Sí, rollover</option></select></div>
+  <div class="field"><label>Máximo acumulable</label><input id="budgetCapV25" type="number" inputmode="decimal" step="0.01" min="0" value="${existing?.rolloverCap||""}" placeholder="Sin límite"></div></div>
+ </div>
+ <div class="v254-actions"><button type="button" class="btn primary" id="v254Save">Guardar presupuesto</button>${cid?`<button type="button" class="btn danger" id="v254Delete">Eliminar presupuesto</button>`:""}</div>
+ </section>`;
+ document.body.appendChild(el);
+ document.body.classList.add("v254-lock");
+ const close=()=>{document.body.classList.remove("v254-lock");el.remove()};
+ el.querySelector(".v254-backdrop").onclick=close;
+ document.getElementById("v254Close").onclick=close;
+ if(existing)document.getElementById("budgetRollV25").value=existing.rollover?"yes":"no";
+ document.getElementById("v254Save").onclick=()=>{
+  const id=document.getElementById("budgetCatV25").value, amount=Number(document.getElementById("budgetAmtV25").value), start=document.getElementById("budgetStartV25").value, endm=document.getElementById("budgetEndV25").value;
+  if(!id||amount<=0){toast("Introduce categoría e importe.");return}
+  if(endm&&endm<start){toast("La fecha final no puede ser anterior a la inicial.");return}
+  state.settings ||= {}; state.settings.budgetsV25 ||= {};
+  state.settings.budgetsV25[id]={amount,startMonth:start,endMonth:endm,rollover:document.getElementById("budgetRollV25").value==="yes",rolloverCap:Number(document.getElementById("budgetCapV25").value)||null};
+  save();close();renderBudgets();toast("Presupuesto guardado.");
  };
- overlay.querySelector(".v25-budget-backdrop").onclick=close;
- document.getElementById("closeBudgetModal").onclick=close;
-
- if(existing){
-   document.getElementById("budgetRollV25").value=existing.rollover?"yes":"no";
- }
-
- document.getElementById("saveBudgetV25").onclick=()=>{
-   const id=document.getElementById("budgetCatV25").value;
-   const amount=Number(document.getElementById("budgetAmtV25").value);
-   const start=document.getElementById("budgetStartV25").value;
-   const endMonth=document.getElementById("budgetEndV25").value;
-   if(!id||amount<=0){toast("Introduce categoría e importe.");return}
-   if(endMonth&&endMonth<start){toast("La fecha final no puede ser anterior a la inicial.");return}
-   state.settings ||= {};
-   state.settings.budgetsV25 ||= {};
-   state.settings.budgetsV25[id]={
-     amount,
-     startMonth:start,
-     endMonth:endMonth,
-     rollover:document.getElementById("budgetRollV25").value==="yes",
-     rolloverCap:Number(document.getElementById("budgetCapV25").value)||null
-   };
-   save();
-   close();
-   renderBudgets();
-   toast("Presupuesto guardado.");
- };
-
- if(cid){
-   document.getElementById("deleteBudgetV25").onclick=()=>{
-     delete state.settings.budgetsV25[cid];
-     save();
-     close();
-     renderBudgets();
-     toast("Presupuesto eliminado.");
-   };
- }
-
- const first=document.getElementById("budgetCatV25");
- if(first) setTimeout(()=>first.focus(),80);
+ if(cid)document.getElementById("v254Delete").onclick=()=>{delete state.settings.budgetsV25[cid];save();close();renderBudgets();toast("Presupuesto eliminado.")};
 }
 
 function renderSummary(){
@@ -728,17 +681,6 @@ function renderSummary(){
  document.getElementById("prevSummary").onclick=()=>{const i=months.indexOf(selected);if(i<months.length-1){state.ui.summaryMonth=months[i+1];save();renderSummary()}};
  document.getElementById("nextSummary").onclick=()=>{const i=months.indexOf(selected);if(i>0){state.ui.summaryMonth=months[i-1];save();renderSummary()}};
 }
-
- if(document.getElementById("goBudgets")){
-   document.getElementById("goBudgets").addEventListener("click",()=>{
-     currentRoute="budgets";
-     localStorage.setItem("ist_route",currentRoute);
-     renderNav();
-     renderMobileNav();
-     render();
-     window.scrollTo({top:0,behavior:"smooth"});
-   });
- }
 
 function renderMonthlyChart(ms){
  const vals=ms.map(k=>{const inc=state.movements.filter(m=>m.type==="income"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);const exp=state.movements.filter(m=>m.type==="expense"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);return {k,inc,exp}});
@@ -1191,6 +1133,21 @@ function renderTransferSummary(){
  t.textContent=euro(tx.reduce((s,m)=>s+movementAmount(m),0));
 }
 
+</script>
+
+<script id="v254-global-budget-nav">
+document.addEventListener("click",function(e){
+ const btn=e.target.closest && e.target.closest("#goBudgets");
+ if(!btn)return;
+ e.preventDefault();
+ e.stopPropagation();
+ currentRoute="budgets";
+ try{localStorage.setItem("ist_route","budgets")}catch(err){}
+ if(typeof renderNav==="function")renderNav();
+ if(typeof renderMobileNav==="function")renderMobileNav();
+ if(typeof render==="function")render();
+ window.scrollTo(0,0);
+});
 </script>
 </body>
 </html>
