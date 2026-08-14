@@ -58,3 +58,7 @@ Navegación Resumen → Presupuestos mediante el sistema de navegación real; fo
 
 ## I$T V2.8
 Scroll corregido al entrar en Presupuestos desde Resumen y botón Eliminar presupuesto con confirmación, sin eliminar movimientos.
+
+
+## I$T V2.9
+Sistema de apariencia: Automático/Claro/Oscuro y cinco temas visuales (Graphite, Navy, Forest, Burgundy, Slate), persistentes y optimizados para iPhone.

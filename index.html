@@ -183,7 +183,37 @@ main,.main,.app-main,#app{min-width:0}
 .v25-budget-hero{background:var(--card,#fff)!important;color:var(--text,#111)!important;border-color:var(--line,#ddd)!important}
 .v25-budget-hero .v25-budget-number{color:var(--text,#111)}
 .v25-pill{background:var(--card,#fff);color:var(--text,#111)}
-</style></head>
+</style>
+<style id="v29-theme-system">
+:root{
+ --v29-accent:#1f2937;--v29-accent-soft:#eef1f4;--v29-accent-strong:#111827;
+ --v29-radius:16px;
+}
+html[data-v29-theme="dark"]{color-scheme:dark}
+html[data-v29-theme="light"]{color-scheme:light}
+html[data-v29-accent="graphite"]{--v29-accent:#263238;--v29-accent-soft:#eceff1;--v29-accent-strong:#111827}
+html[data-v29-accent="navy"]{--v29-accent:#18324a;--v29-accent-soft:#e7eef4;--v29-accent-strong:#102538}
+html[data-v29-accent="forest"]{--v29-accent:#245846;--v29-accent-soft:#e7f1ed;--v29-accent-strong:#163d31}
+html[data-v29-accent="burgundy"]{--v29-accent:#6d2932;--v29-accent-soft:#f4e9eb;--v29-accent-strong:#4d1c23}
+html[data-v29-accent="slate"]{--v29-accent:#4b5563;--v29-accent-soft:#eef0f3;--v29-accent-strong:#374151}
+
+body{accent-color:var(--v29-accent)}
+button.primary,.btn.primary{background:var(--v29-accent)!important;border-color:var(--v29-accent)!important}
+button.primary:hover,.btn.primary:hover{background:var(--v29-accent-strong)!important}
+.nav-item.active,.nav-item[aria-current="page"]{color:var(--v29-accent)!important}
+.nav-item.active:before,.nav-item[aria-current="page"]:before{background:var(--v29-accent)!important}
+.kpi .value,.positive{color:var(--green)!important}
+.v29-theme-preview{display:flex;gap:10px;flex-wrap:wrap}
+.v29-theme-option{position:relative;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:14px;padding:11px;min-width:135px;cursor:pointer;text-align:left}
+.v29-theme-option.selected{outline:2px solid var(--v29-accent);outline-offset:1px}
+.v29-swatch{width:100%;height:34px;border-radius:9px;margin-bottom:8px}
+.v29-theme-option strong{display:block;font-size:13px}.v29-theme-option span{font-size:11px;color:var(--muted)}
+.v29-mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.v29-mode-btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:10px;cursor:pointer}
+.v29-mode-btn.selected{border-color:var(--v29-accent);box-shadow:0 0 0 1px var(--v29-accent)}
+@media(max-width:700px){.v29-theme-option{min-width:calc(50% - 5px)}}
+</style>
+</head>
 <body>
 <div class="app">
 <header class="topbar">
@@ -255,6 +285,7 @@ function emptyState(){
  };
 }
 let state = loadState();
+applyV29Theme();
 
 function uid(){ return Math.random().toString(36).slice(2,10)+"-"+Date.now().toString(36); }
 function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));}
@@ -290,6 +321,24 @@ function greetingForName(name){
   const h=new Date().getHours();
   const g=h<12?"Buenos días":h<19?"Buenas tardes":"Buenas noches";
   return name ? `${g}, ${name} 👋` : `${g} 👋`;
+}
+
+
+function v29ThemeState(){
+ state.settings ||= {};
+ state.settings.appearance ||= {};
+ state.settings.appearance.mode ||= "auto";
+ state.settings.appearance.accent ||= "graphite";
+ return state.settings.appearance;
+}
+function applyV29Theme(){
+ const a=v29ThemeState();
+ const root=document.documentElement;
+ root.dataset.v29Theme=a.mode;
+ root.dataset.v29Accent=a.accent;
+ if(a.mode==="dark") root.style.colorScheme="dark";
+ else if(a.mode==="light") root.style.colorScheme="light";
+ else root.style.colorScheme="light dark";
 }
 
 function loadState(){
@@ -1087,7 +1136,27 @@ async function refreshPrices(){
 
 /* ---------- Settings ---------- */
 function renderSettings(){
- content.innerHTML=`<section class="card span-12" id="v25Profile"><h2>👤 Tu perfil</h2><div class="form-grid"><div class="field"><label>Nombre en I$T</label><input id="v25Name" maxlength="40" placeholder="¿Cómo quieres que te llamemos?" value="${esc(state.settings?.profile?.name||"")}"></div></div><div class="muted" style="margin-top:8px">Se utilizará para personalizar el mensaje de bienvenida.</div><div class="actions" style="margin-top:10px"><button class="btn primary" id="saveV25Profile">Guardar nombre</button></div></section>
+ content.innerHTML=`<section class="card span-12" id="v29Appearance">
+ <h2>🎨 Apariencia</h2>
+ <div class="muted" style="margin-bottom:12px">Elige cómo quieres ver I$T. La preferencia se guarda en tu dispositivo.</div>
+ <div class="field"><label>Modo</label>
+  <div class="v29-mode-row">
+   <button type="button" class="v29-mode-btn" data-v29-mode="auto">📱 Automático</button>
+   <button type="button" class="v29-mode-btn" data-v29-mode="light">☀️ Claro</button>
+   <button type="button" class="v29-mode-btn" data-v29-mode="dark">🌙 Oscuro</button>
+  </div>
+ </div>
+ <div class="field" style="margin-top:14px"><label>Tema visual</label>
+  <div class="v29-theme-preview">
+   <button type="button" class="v29-theme-option" data-v29-accent-choice="graphite"><div class="v29-swatch" style="background:#263238"></div><strong>Graphite</strong><span>Clásico y sobrio</span></button>
+   <button type="button" class="v29-theme-option" data-v29-accent-choice="navy"><div class="v29-swatch" style="background:#18324a"></div><strong>Navy</strong><span>Financiero y elegante</span></button>
+   <button type="button" class="v29-theme-option" data-v29-accent-choice="forest"><div class="v29-swatch" style="background:#245846"></div><strong>Forest</strong><span>Natural y premium</span></button>
+   <button type="button" class="v29-theme-option" data-v29-accent-choice="burgundy"><div class="v29-swatch" style="background:#6d2932"></div><strong>Burgundy</strong><span>Clásico y distintivo</span></button>
+   <button type="button" class="v29-theme-option" data-v29-accent-choice="slate"><div class="v29-swatch" style="background:#4b5563"></div><strong>Slate</strong><span>Minimalista moderno</span></button>
+  </div>
+ </div>
+</section>
+<section class="card span-12" id="v25Profile"><h2>👤 Tu perfil</h2><div class="form-grid"><div class="field"><label>Nombre en I$T</label><input id="v25Name" maxlength="40" placeholder="¿Cómo quieres que te llamemos?" value="${esc(state.settings?.profile?.name||"")}"></div></div><div class="muted" style="margin-top:8px">Se utilizará para personalizar el mensaje de bienvenida.</div><div class="actions" style="margin-top:10px"><button class="btn primary" id="saveV25Profile">Guardar nombre</button></div></section>
 <h1>Configuración</h1><div class="subtitle">Categorías, subcategorías, datos y parámetros generales.</div>
  <div class="grid">
  <section class="card span-6"><h2>Parámetros</h2><div class="form-grid"><div class="field"><label>TAE por defecto para nuevas cuentas remuneradas</label><input id="defaultRate" type="number" step="0.001" min="0" value="${esc(state.settings.defaultInterestRate)}"></div><div class="field"><label>Moneda</label><select id="currency"><option selected>EUR</option></select></div></div><div class="actions" style="margin-top:12px"><button class="btn primary" id="saveSettings">Guardar configuración</button><button class="btn" id="runInterest">Calcular intereses ahora</button></div></section>
@@ -1109,6 +1178,12 @@ function renderSettings(){
  document.getElementById("manageCategories").onclick=()=>{currentRoute="categories";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
  if(document.getElementById("saveV25Profile")) document.getElementById("saveV25Profile").onclick=()=>{state.settings ||= {};state.settings.profile ||= {};state.settings.profile.name=document.getElementById("v25Name").value.trim();save();toast("Nombre guardado.");renderSettings();};
 }
+ const app=v29ThemeState(); applyV29Theme();
+ document.querySelectorAll("[data-v29-mode]").forEach(b=>b.onclick=()=>{app.mode=b.dataset.v29Mode;applyV29Theme();save();renderSettings();});
+ document.querySelectorAll("[data-v29-accent-choice]").forEach(b=>b.onclick=()=>{app.accent=b.dataset.v29AccentChoice;applyV29Theme();save();renderSettings();});
+ document.querySelectorAll("[data-v29-mode]").forEach(b=>b.classList.toggle("selected",b.dataset.v29Mode===app.mode));
+ document.querySelectorAll("[data-v29-accent-choice]").forEach(b=>b.classList.toggle("selected",b.dataset.v29AccentChoice===app.accent));
+
 function renderCategories(){
  state.ui ||= {}; state.ui.openCategories ||= {};
  content.innerHTML=`<div class="page-head-back"><button class="btn" id="backSettings">← Configuración</button></div><h1>🏷️ Categorías</h1><div class="subtitle">Gestiona categorías y subcategorías sin saturar la pantalla.</div>
