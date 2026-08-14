@@ -159,7 +159,7 @@ main,.main,.app-main,#app{min-width:0}
   .v25-budget-number{font-size:31px}
 }
 </style>
-<style id="v251-nav-fix">@media(max-width:700px){#mobileNav button span:last-child{font-size:10px;line-height:1.1}#mobileNav .add{font-size:26px}}</style></head>
+<style id="v251-nav-fix">@media(max-width:700px){#mobileNav button span:last-child{font-size:10px;line-height:1.1}#mobileNav .add{font-size:26px}}</style><style id="v252-budget-sheet">.v25-budget-sheet{align-items:flex-end!important;padding:0!important}.v25-budget-sheet .movement-sheet-card{width:min(620px,100%);max-height:92vh;overflow:auto;border-radius:24px 24px 0 0;padding:18px 18px calc(22px + env(safe-area-inset-bottom))}.sheet-handle{width:42px;height:5px;border-radius:99px;background:var(--line);margin:0 auto 12px}.sheet-actions{display:flex;flex-direction:column;gap:9px;margin-top:18px}.wide{width:100%}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--muted)}@media(min-width:701px){.v25-budget-sheet{align-items:center!important;padding:18px!important}.v25-budget-sheet .movement-sheet-card{border-radius:24px}}</style></head>
 <body>
 <div class="app">
 <header class="topbar">
@@ -580,32 +580,34 @@ function renderBudgets(){
  content.querySelectorAll("[data-edit-budget]").forEach(b=>b.onclick=()=>budgetModalV25(b.dataset.editBudget));
 }
 function budgetModalV25(cid=""){
- const existing=cid?getBudgetV25(cid):null;
+ const existing=cid?getBudgetV25(cid):null, holder=document.getElementById("budgetModalV25");
+ if(!holder)return;
  const cats=state.categories||[];
- const htmlModal=`<div class="modal-backdrop" id="budgetBackdropV25"><div class="modal-card">
-  <div class="section-head"><div><h2>${cid?"Editar":"Nuevo"} presupuesto</h2><div class="muted">Se aplicará automáticamente a los meses activos.</div></div><button class="btn small" id="closeBudgetModal">Cerrar</button></div>
-  <div class="form-grid" style="margin-top:14px">
-   <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${categoryOptions(cid)}</select></div>
-   <div class="field"><label>Importe mensual (€)</label><input id="budgetAmtV25" type="number" step="0.01" min="0" value="${existing?.amount||""}"></div>
-   <div class="field"><label>Desde</label><select id="budgetStartV25">${monthOptions(existing?.startMonth||monthsBack(36)[0])}</select></div>
-   <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${monthOptions(existing?.endMonth||"")}</select></div>
-   <div class="field"><label>Rollover</label><select id="budgetRollV25"><option value="no">No acumular sobrante</option><option value="yes">Acumular sobrante</option></select></div>
-   <div class="field"><label>Máximo acumulable (€)</label><input id="budgetCapV25" type="number" step="0.01" min="0" placeholder="Sin límite" value="${existing?.rolloverCap||""}"></div>
-  </div>
-  <div class="actions" style="margin-top:14px"><button class="btn primary" id="saveBudgetV25">Guardar presupuesto</button>${cid?`<button class="btn danger" id="deleteBudgetV25">Eliminar</button>`:""}</div>
+ const opts=cats.map(c=>`<option value="${c.id}" ${c.id===cid?"selected":""}>${esc(c.name)}</option>`).join("");
+ const ms=monthsBack(36);
+ holder.innerHTML=`<div class="modal-backdrop v25-budget-sheet"><div class="modal-card movement-sheet-card">
+ <div class="sheet-handle"></div><div class="section-head"><div><div class="eyebrow">PRESUPUESTO</div><h2>${cid?"Editar presupuesto":"Nuevo presupuesto"}</h2></div><button type="button" class="btn small" id="closeBudgetModal">Cerrar</button></div>
+ <div class="form-grid" style="margin-top:14px">
+ <div class="field"><label>Categoría</label><select id="budgetCatV25" ${cid?"disabled":""}>${opts}</select></div>
+ <div class="field"><label>Importe mensual</label><input id="budgetAmtV25" inputmode="decimal" type="number" step="0.01" min="0" value="${existing?.amount||""}" placeholder="0,00"></div>
+ <div class="field"><label>Desde</label><select id="budgetStartV25">${ms.map(m=>`<option value="${m}" ${m===(existing?.startMonth||ms[ms.length-1])?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
+ <div class="field"><label>Hasta</label><select id="budgetEndV25"><option value="">Sin fecha final</option>${ms.map(m=>`<option value="${m}" ${m===(existing?.endMonth||"")?"selected":""}>${esc(monthLabel(m))}</option>`).join("")}</select></div>
+ <div class="field"><label>Acumular sobrante</label><select id="budgetRollV25"><option value="no">No</option><option value="yes">Sí, rollover</option></select></div>
+ <div class="field"><label>Máximo acumulable</label><input id="budgetCapV25" inputmode="decimal" type="number" step="0.01" min="0" value="${existing?.rolloverCap||""}" placeholder="Sin límite"></div>
+ </div>
+ <div class="sheet-actions"><button type="button" class="btn primary wide" id="saveBudgetV25">Guardar presupuesto</button>${cid?`<button type="button" class="btn danger wide" id="deleteBudgetV25">Eliminar presupuesto</button>`:""}</div>
  </div></div>`;
- const holder=document.getElementById("budgetModalV25"); holder.innerHTML=htmlModal;
- document.getElementById("budgetRollV25").value=existing?.rollover?"yes":"no";
+ if(existing)document.getElementById("budgetRollV25").value=existing.rollover?"yes":"no";
  document.getElementById("closeBudgetModal").onclick=()=>holder.innerHTML="";
  document.getElementById("saveBudgetV25").onclick=()=>{
-   const id=document.getElementById("budgetCatV25").value, amount=Number(document.getElementById("budgetAmtV25").value);
-   const start=document.getElementById("budgetStartV25").value,end=document.getElementById("budgetEndV25").value;
-   if(!id||amount<=0){toast("Introduce categoría e importe.");return}
-   state.settings.budgetsV25 ||= {};
-   state.settings.budgetsV25[id]={amount,startMonth:start,endMonth:end,rollover:document.getElementById("budgetRollV25").value==="yes",rolloverCap:Number(document.getElementById("budgetCapV25").value)||null};
-   save(); holder.innerHTML=""; renderBudgets(); toast("Presupuesto guardado.");
+  const id=document.getElementById("budgetCatV25").value, amount=Number(document.getElementById("budgetAmtV25").value), start=document.getElementById("budgetStartV25").value, end=document.getElementById("budgetEndV25").value;
+  if(!id||amount<=0){toast("Introduce categoría e importe.");return}
+  if(end&&end<start){toast("La fecha final no puede ser anterior a la inicial.");return}
+  state.settings ||= {}; state.settings.budgetsV25 ||= {};
+  state.settings.budgetsV25[id]={amount,startMonth:start,endMonth:end,rollover:document.getElementById("budgetRollV25").value==="yes",rolloverCap:Number(document.getElementById("budgetCapV25").value)||null};
+  save();holder.innerHTML="";renderBudgets();toast("Presupuesto guardado.");
  };
- if(cid) document.getElementById("deleteBudgetV25").onclick=()=>{delete state.settings.budgetsV25[cid];save();holder.innerHTML="";renderBudgets();toast("Presupuesto eliminado.")};
+ if(cid)document.getElementById("deleteBudgetV25").onclick=()=>{delete state.settings.budgetsV25[cid];save();holder.innerHTML="";renderBudgets();toast("Presupuesto eliminado.")};
 }
 
 function renderSummary(){
@@ -653,7 +655,9 @@ function renderSummary(){
  document.getElementById("prevSummary").onclick=()=>{const i=months.indexOf(selected);if(i<months.length-1){state.ui.summaryMonth=months[i+1];save();renderSummary()}};
  document.getElementById("nextSummary").onclick=()=>{const i=months.indexOf(selected);if(i>0){state.ui.summaryMonth=months[i-1];save();renderSummary()}};
 }
-if(document.getElementById("goBudgets")) document.getElementById("goBudgets").onclick=()=>{currentRoute="budgets";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
+
+ if(document.getElementById("goBudgets")) document.getElementById("goBudgets").onclick=()=>{currentRoute="budgets";localStorage.setItem("ist_route",currentRoute);renderNav();renderMobileNav();render();};
+
 function renderMonthlyChart(ms){
  const vals=ms.map(k=>{const inc=state.movements.filter(m=>m.type==="income"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);const exp=state.movements.filter(m=>m.type==="expense"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);return {k,inc,exp}});
  const max=Math.max(1,...vals.flatMap(v=>[v.inc,v.exp]));
