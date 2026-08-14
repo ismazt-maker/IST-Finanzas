@@ -1,5 +1,5 @@
-const CACHE="ist-v2110-quality";
-const ASSETS=["./","./index.html","./v211.js","./manifest.webmanifest","./icon-120.png","./icon-152.png","./icon-167.png","./icon-180.png","./icon-192.png","./icon-512.png"];
+const CACHE="ist-v211-clean";
+const ASSETS=["./","./index.html","./manifest.webmanifest","./icon-120.png","./icon-152.png","./icon-167.png","./icon-180.png","./icon-192.png","./icon-512.png"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",e=>{

@@ -82,3 +82,12 @@ Corrección del handler de apariencia y del diseño de subcategorías en Dark Mo
 
 ## I$T V2.10.4
 Apariencia corregida por alcance JavaScript y ajuste Dark Mode de categorías/subcategorías.
+
+
+## I$T V2.11 — Quality & Polish
+- Apariencia unificada y Dark Mode sin reglas heredadas.
+- Movimientos con tarjetas optimizadas para iPhone.
+- Informes con tipo de informe y tipo de movimiento separados.
+- Importación segura con backup automático.
+- Protección de integridad al eliminar cuentas/categorías.
+- PWA y theme-color actualizados.

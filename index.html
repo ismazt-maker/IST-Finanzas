@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f3f4f6">
+<meta name="theme-color" content="#243b53">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="I$T">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>I$T V2.11</title>
+<title>I$T V2.10</title>
 <style>
 :root{--bg:#f3f4f6;--card:#fff;--text:#1d2430;--muted:#6b7280;--line:#e5e7eb;--accent:#243b53;--green:#167c52;--red:#c2413b;--blue:#3267b1;--shadow:0 8px 24px rgba(15,23,42,.07);--radius:18px}
 *{box-sizing:border-box}html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
@@ -90,7 +90,7 @@ body{background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:opti
  /* Movement rows become compact financial cards */
  .movement-row{padding:12px 0}.merchant-icon{width:34px;height:34px;border-radius:10px}.category-tree .cat{padding:11px}.category-tree .cat-head{gap:8px;align-items:flex-start}.category-tree .cat-head .actions{justify-content:flex-end}.category-tree .subcats{gap:5px}.category-tree .subcat{padding:7px 9px}
 }
-@media(max-width:390px){.page{padding-left:11px;padding-right:11px}.card{padding:13px}.kpi-grid{gap:7px}.kpi{padding:11px}.kpi strong{font-size:16px}.report-tabs{grid-template-columns:1fr!important}.mobile-nav button{font-size:9px}.mobile-nav button.add{width:47px;height:47px;min-height:47px}}
+@media(max-width:390px){.page{padding-left:11px;padding-right:11px}.card{padding:13px}.kpi-grid{gap:7px}.kpi{padding:11px}.kpi strong{font-size:16px}.report-tabs{grid-template-columns:1fr!important}.mobile-nav button{font-size:10px}.mobile-nav button.add{width:47px;height:47px;min-height:47px}}
 @media(max-width:850px){
  .page{width:100%;max-width:100%;overflow-x:hidden}
  .grid>.span-3,.grid>.span-4,.grid>.span-6,.grid>.span-7,.grid>.span-8,.grid>.span-12{grid-column:1/-1!important}
@@ -117,10 +117,6 @@ body{background:var(--bg);-webkit-font-smoothing:antialiased;text-rendering:opti
 }
 
 /* Dark mode: premium, not inverted */
-@media(prefers-color-scheme:dark){
- :root{--bg:#090a0f;--card:#11131a;--text:#f4f4f7;--muted:#969baa;--line:#242733;--accent:#a78bfa;--accent-2:#c084fc;--accent-soft:#201b36;--green:#4ade80;--red:#fb7185;--blue:#7aa2ff;--gold:#f4b942;--shadow:0 12px 32px rgba(0,0,0,.28)}
- body{background:var(--bg)}.topbar{background:rgba(10,11,16,.88);border-color:#242733}.menu-btn{background:#171922;color:#ddd}.brand{color:#f4b942}.drawer{background:#101218;border-color:#252832}.nav button{color:#d3d5dc}.nav button:hover,.nav button.active{background:#1c1a2a;color:#c4b5fd}.card,.report-builder{background:var(--card);border-color:#252832}.field input,.field select,.field textarea{background:#0f1117;color:var(--text);border-color:#2a2e39}.table th{background:#171922;color:#aeb2bf}.table td{border-color:#242733}.kpi{background:#151720;border-color:#262a35}.notice,.report-mobile-empty,.insight{background:#151720;border-color:#282c37}.tab{background:#11131a;color:#d3d5dc;border-color:#292d38}.tab.active{background:#211b3b;color:#c4b5fd;border-color:#433878}.subcat,.badge{background:#1b1e27}.mobile-nav{background:rgba(14,15,21,.95);border-color:#252832}.mobile-nav button.active{background:#211b3b;color:#c4b5fd}.progress{background:#252833}.donut:before{background:#11131a}.donut small{color:#9ca1ad}
-}
 </style>
 
 <style id="v24-mobile-overflow-fix">
@@ -298,6 +294,69 @@ html[data-v210-mode="dark"] .cat-toggle{
  background:var(--v210-accent-soft)!important;color:var(--text)!important;border-color:var(--line)!important;
 }
 </style>
+
+<style id="v211-quality-polish">
+/* I$T V2.11 — one visual system, mobile-first */
+html,body{max-width:100%;overflow-x:hidden}
+button,input,select,textarea{font:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--v210-accent) 35%,transparent);outline-offset:2px}
+
+/* Mobile movements: cards replace the desktop table on iPhone */
+.v211-mobile-movements{display:none}
+.v211-movement-card{display:flex;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--line);background:var(--card);border-radius:16px;margin-bottom:9px;box-shadow:0 3px 14px rgba(15,23,42,.04)}
+.v211-movement-main{display:flex;gap:10px;min-width:0;align-items:flex-start}
+.v211-movement-copy{min-width:0;display:flex;flex-direction:column;gap:2px}
+.v211-movement-copy strong{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v211-movement-copy span,.v211-movement-copy small{color:var(--muted);font-size:11px;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v211-movement-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:8px;flex:0 0 auto}
+.v211-movement-side>strong{font-size:14px;white-space:nowrap}
+.v211-movement-actions{display:flex;gap:5px}.v211-movement-actions .btn{padding:6px 8px;font-size:11px}
+.v211-transfer{color:var(--blue)!important}
+
+/* Reports: clearer separation between report type and movement type */
+.v211-report-type{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.v211-report-choice{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:13px;padding:11px;text-align:left;cursor:pointer}
+.v211-report-choice.active{border-color:var(--v210-accent);background:var(--v210-accent-soft);box-shadow:0 0 0 1px var(--v210-accent)}
+.v211-report-choice strong{display:block;font-size:13px}.v211-report-choice span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+
+/* Toast respects the iPhone bottom navigation / safe area */
+.toast-v211{bottom:calc(82px + env(safe-area-inset-bottom))!important}
+
+/* Cleaner settings / appearance */
+.v211-settings-note{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px;color:var(--muted);font-size:12px}
+.v211-danger-zone{border-color:color-mix(in srgb,var(--red) 35%,var(--line))!important}
+
+/* Dark-mode hardening */
+html[data-v210-mode="dark"] .v211-movement-card,
+html[data-v210-mode="dark"] .v211-report-choice,
+html[data-v210-mode="dark"] .v211-settings-note{background:#12151b;border-color:#282d36}
+html[data-v210-mode="dark"] .v211-report-choice.active{background:var(--v210-accent-soft)}
+html[data-v210-mode="dark"] .subcat-row{background:#171a21!important;color:var(--text)!important;border-color:var(--line)!important}
+html[data-v210-mode="dark"] .subcat-panel{background:#0f1218!important;border-color:var(--line)!important}
+html[data-v210-mode="dark"] .category-list-row{background:transparent!important;color:var(--text)!important}
+
+/* Better iPhone typography and controls */
+@media(max-width:700px){
+  .table-wrap{overflow-x:auto}
+  .movement-filters .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .movement-filters .actions #clearMovFilters{grid-column:1/-1}
+  #appContent .movement-list-desktop{display:none}
+  #appContent .v211-mobile-movements{display:block}
+  .v211-report-type{grid-template-columns:1fr}
+  .report-builder{padding:14px!important}
+  .report-builder-head{position:sticky;top:60px;z-index:4;background:var(--card);padding-bottom:10px}
+  .mobile-nav button{font-size:10px;min-height:50px}
+  .mobile-nav button .micon{font-size:20px}
+  .page{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media(max-width:390px){
+  .page{padding-left:10px;padding-right:10px}
+  .v211-movement-card{padding:12px}
+  .v211-movement-copy strong{font-size:13px}
+  .v211-movement-copy span,.v211-movement-copy small{font-size:10px}
+  .v211-movement-side>strong{font-size:13px}
+}
+</style>
 </head>
 <body data-ist-version="2.10.4">
 <div class="app">
@@ -324,7 +383,7 @@ html[data-v210-mode="dark"] .cat-toggle{
 const STORAGE_KEY = "ist_finanzas_v22";
 const LEGACY_STORAGE_KEYS = ["ist_finanzas_v21","ist_finanzas_v20"];
 const DATA_VERSION = 22;
-const VERSION = 20;
+const VERSION = 21;
 
 const defaultCategories = [
 ["Vivienda",["Alquiler","Hipoteca","Luz","Agua","Gas","Internet","Móvil","Comunidad","Seguro hogar","Mantenimiento","Muebles","Electrodomésticos","Otros vivienda"]],
@@ -425,6 +484,8 @@ function v210ApplyAppearance(){
   root.dataset.v210Accent=a.accent;
   const effective=a.mode==="auto" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light") : a.mode;
   root.dataset.v210Mode=effective;
+  const meta=document.querySelector('meta[name="theme-color"]');
+  if(meta)meta.content=effective==="dark"?"#0a0c10":getComputedStyle(root).getPropertyValue("--v210-accent").trim()||"#243b53";
 }
 function v210SetAppearance(mode,accent){
   const a=v210Appearance();
@@ -591,7 +652,7 @@ function modalOpen(title,body){
 }
 function modalClose(){document.getElementById("modal").classList.remove("open");document.getElementById("modalCard").innerHTML="";}
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")modalClose();});
-function toast(msg){const t=document.createElement("div");t.textContent=msg;t.style.cssText="position:fixed;right:16px;bottom:18px;z-index:100;background:#243b53;color:#fff;padding:12px 15px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.2);font-size:13px";document.body.appendChild(t);setTimeout(()=>t.remove(),2400);}
+function toast(msg){const t=document.createElement("div");t.textContent=msg;t.setAttribute("role","status");t.style.cssText="position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:100;background:var(--v210-accent,#243b53);color:#fff;padding:12px 15px;border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.2);font-size:13px;max-width:min(92vw,420px)";document.body.appendChild(t);setTimeout(()=>t.remove(),2400);}
 
 /* ---------- Recurring ---------- */
 function applyRecurrings(){
@@ -879,20 +940,29 @@ function movementRow(m){
 function renderMovements(){
  state.ui ||= {}; const months=monthsBack(36); const selected=state.ui.movMonth||months[0]; const selectedCat=state.ui.movCat||""; const concept=(state.ui.movConcept||"").trim().toLowerCase();
  const mov=state.movements.filter(m=>(!selected||monthKey(m.date)===selected)&&(!selectedCat||m.categoryId===selectedCat)&&(!concept||String(m.merchant||"").toLowerCase().includes(concept)||String(m.note||"").toLowerCase().includes(concept))).sort((a,b)=>b.date.localeCompare(a.date));
+ const mobileCards=mov.map(m=>movementMobileCardV211(m)).join("")||`<div class="empty">No hay movimientos para el filtro seleccionado.</div>`;
  content.innerHTML=`<h1>Movimientos</h1><div class="subtitle">Registra, busca y clasifica cada movimiento.</div>
  <div class="card movement-filters"><div class="toolbar"><div class="field"><label>Mes</label><select id="movMonth">${monthOptions(selected)}</select></div><div class="field"><label>Categoría</label><select id="movCat">${categoryOptions(selectedCat)}</select></div><div class="field concept-search"><label>Buscar por concepto</label><input id="movConcept" type="search" value="${esc(state.ui.movConcept||"")}" placeholder="Ej. Netflix, Mercadona…" autocomplete="off"></div></div>
  <div class="actions"><button class="btn primary" id="newMovement">+ Nuevo movimiento</button><button class="btn" id="newTransfer">⇄ Traspaso</button><button class="btn" id="clearMovFilters">Limpiar filtros</button></div></div>
  <div class="notice" style="margin:10px 0 12px">${mov.length} movimiento${mov.length===1?"":"s"} encontrado${mov.length===1?"":"s"}${concept?` para «${esc(state.ui.movConcept)}»`:""}.</div>
- <div class="card"><div class="table-wrap"><table class="table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Tipo</th><th>Categoría</th><th>Subcategoría</th><th>Cuenta</th><th>Importe</th><th></th></tr></thead><tbody>${mov.map(m=>movementTableRow(m)).join("")||`<tr><td colspan="8" class="empty">No hay movimientos para el filtro seleccionado.</td></tr>`}</tbody></table></div></div>`;
+ <div class="card movement-list-desktop"><div class="table-wrap"><table class="table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Tipo</th><th>Categoría</th><th>Subcategoría</th><th>Cuenta</th><th>Importe</th><th></th></tr></thead><tbody>${mov.map(m=>movementTableRow(m)).join("")||`<tr><td colspan="8" class="empty">No hay movimientos para el filtro seleccionado.</td></tr>`}</tbody></table></div></div>
+ <div class="v211-mobile-movements" aria-label="Movimientos en formato móvil">${mobileCards}</div>`;
  document.getElementById("movMonth").onchange=e=>{state.ui.movMonth=e.target.value;save();renderMovements()};
  document.getElementById("movCat").onchange=e=>{state.ui.movCat=e.target.value;save();renderMovements()};
- document.getElementById("movConcept").oninput=e=>{state.ui.movConcept=e.target.value;renderMovements();setTimeout(()=>{const el=document.getElementById("movConcept");if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length)}},0)};
+ document.getElementById("movConcept").oninput=e=>{state.ui.movConcept=e.target.value;save();clearTimeout(renderMovements._timer);renderMovements._timer=setTimeout(()=>renderMovements(),120)};
  document.getElementById("clearMovFilters").onclick=()=>{state.ui.movMonth=months[0];state.ui.movCat="";state.ui.movConcept="";save();renderMovements()};
- document.getElementById("newMovement").onclick=()=>movementModal();
- document.getElementById("newTransfer").onclick=()=>transferModal();
- content.querySelectorAll("[data-edit-m]").forEach(b=>b.onclick=()=>movementModal(b.dataset.editM));
- content.querySelectorAll("[data-del-m]").forEach(b=>b.onclick=()=>deleteMovement(b.dataset.delM));
+ document.getElementById("newMovement").onclick=()=>movementModal(); document.getElementById("newTransfer").onclick=()=>transferModal();
+ content.querySelectorAll("[data-edit-m]").forEach(b=>b.onclick=()=>movementModal(b.dataset.editM)); content.querySelectorAll("[data-del-m]").forEach(b=>b.onclick=()=>deleteMovement(b.dataset.delM));
 }
+function movementMobileCardV211(m){
+ const cat=categoryById(m.categoryId),sub=subcategoryById(m.categoryId,m.subcategoryId),acc=byId(state.accounts,m.accountId);
+ const transfer=m.type==="transfer"; const label=m.merchant|| (transfer?"Traspaso":cat?.name||"Movimiento");
+ const sign=m.type==="income"?"+":transfer?"⇄":"-"; const cls=m.type==="income"?"positive":transfer?"v211-transfer":"negative";
+ const account=transfer&&m.toAccountId?`${acc?.name||"—"} → ${byId(state.accounts,m.toAccountId)?.name||"—"}`:(acc?.name||"—");
+ const details=transfer?"Traspaso interno":`${cat?.name||"Sin categoría"} · ${sub?.name||"Sin subcategoría"}`;
+ return `<article class="v211-movement-card"><div class="v211-movement-main"><span class="merchant-icon">${merchantVisual(label)}</span><div class="v211-movement-copy"><strong>${esc(label)}</strong><span>${esc(details)}</span><small>${esc(m.date)} · ${esc(account)}</small></div></div><div class="v211-movement-side"><strong class="${cls}">${sign}${euro(m.amount)}</strong>${transfer?"":`<div class="v211-movement-actions"><button class="btn small" data-edit-m="${m.id}" aria-label="Editar ${esc(label)}">Editar</button><button class="btn small danger" data-del-m="${m.id}" aria-label="Eliminar ${esc(label)}">Eliminar</button></div>`}</div></article>`;
+}
+
 function movementTableRow(m){
  const cat=categoryById(m.categoryId),sub=subcategoryById(m.categoryId,m.subcategoryId),acc=byId(state.accounts,m.accountId);
  return `<tr><td>${esc(m.date)}</td><td><span class="merchant-icon">${merchantVisual(m.merchant)}</span>${esc(m.merchant||"—")}</td><td>${m.type==="income"?"Ingreso":m.type==="transfer"?"Traspaso":"Gasto"}</td><td>${m.type==="transfer"?"—":esc(cat?.name||"Sin categoría")}</td><td>${m.type==="transfer"?"—":esc(sub?.name||"Sin subcategoría")}</td><td>${esc(acc?.name||"—")}${m.type==="transfer"&&m.toAccountId?` → ${esc(byId(state.accounts,m.toAccountId)?.name||"—")}`:""}</td><td class="${m.type==="income"?"positive":m.type==="transfer"?"":"negative"}">${m.type==="income"?"+":m.type==="transfer"?"⇄":"-"}${euro(m.amount)}</td><td>${m.type==="transfer"?"":`<button class="btn small" data-edit-m="${m.id}">Editar</button> <button class="btn small danger" data-del-m="${m.id}">Eliminar</button>`}</td></tr>`;
@@ -986,7 +1056,9 @@ function accountModal(id){
  };
 }
 function deleteAccount(id){
- if(state.movements.some(m=>m.accountId===id||m.toAccountId===id)){toast("No puedes eliminar una cuenta con movimientos.");return;}
+ const movementCount=state.movements.filter(m=>m.accountId===id||m.toAccountId===id).length;
+ const recurringCount=state.recurrings.filter(r=>r.accountId===id).length;
+ if(movementCount||recurringCount){const bits=[];if(movementCount)bits.push(`${movementCount} movimiento${movementCount===1?"":"s"}`);if(recurringCount)bits.push(`${recurringCount} recurrente${recurringCount===1?"":"s"}`);toast(`No puedes eliminarla: ${bits.join(" y ")}.`);return;}
  if(!confirm("¿Eliminar esta cuenta?"))return;state.accounts=state.accounts.filter(a=>a.id!==id);delete state.settings.lastInterestRun[id];save();renderAccounts();toast("Cuenta eliminada.");
 }
 function capitalModal(){
@@ -1024,16 +1096,18 @@ function deleteRecurring(id){if(!confirm("¿Eliminar este recurrente?"))return;s
 function renderReports(){
  state.ui ||= {};
  state.ui.report ||= {
-  mode:"analysis", dateMode:"all", startMonth:monthsBack(36)[11], endMonth:monthsBack(36)[0],
+  mode:"analysis", reportType:"operations", movementType:"expense", dateMode:"all", startMonth:monthsBack(36)[11], endMonth:monthsBack(36)[0],
   startDate:"", endDate:"", type:"expense", account:"", category:"", subcategory:"", concept:"",
   groupBy:"concept", sortBy:"amount", limit:"25", compareA:monthsBack(36)[0], compareB:monthsBack(36)[1], compareBy:"category"
  };
  const r=state.ui.report;
+ if(!r.movementType) r.movementType=r.type||"expense";
+ if(!r.reportType) r.reportType=r.mode==="net"?"net":"operations";
  const months=monthsBack(36);
  const accountOpts=accountOptions(r.account);
  const catOpts=categoryOptions(r.category);
  const subOpts=subcatOptions(r.category,r.subcategory);
- const typeOpts=selectOptions([{value:"expense",label:"Solo gastos"},{value:"income",label:"Solo ingresos"},{value:"both",label:"Ingresos y gastos"}],r.type,"Tipo de movimiento");
+ const typeOpts=selectOptions([{value:"expense",label:"Solo gastos"},{value:"income",label:"Solo ingresos"},{value:"both",label:"Ingresos y gastos"}],r.movementType,"Tipo de movimiento");
  const groupOpts=selectOptions([{value:"concept",label:"Concepto / comercio"},{value:"category",label:"Categoría"},{value:"subcategory",label:"Subcategoría"},{value:"account",label:"Cuenta"},{value:"month",label:"Mes"}],r.groupBy,"Agrupar por");
  const sortOpts=selectOptions([{value:"amount",label:"Importe total"},{value:"count",label:"Número de operaciones"},{value:"average",label:"Importe medio"},{value:"recent",label:"Más reciente"}],r.sortBy,"Ordenar por");
  const limitOpts=selectOptions([{value:"10",label:"Top 10"},{value:"25",label:"Top 25"},{value:"50",label:"Top 50"},{value:"all",label:"Todos"}],r.limit,"Mostrar");
@@ -1062,14 +1136,14 @@ function renderReports(){
     <div class="field"><label>Mes A</label><select id="compareA">${monthOptions(r.compareA)}</select></div>
     <div class="field"><label>Mes B</label><select id="compareB">${monthOptions(r.compareB)}</select></div>
     <div class="field"><label>Comparar por</label><select id="compareBy">${compareOpts}</select></div>
-    <div class="field"><label>Tipo</label><select id="compareType">${typeOpts}</select></div>
+    <div class="field"><label>Tipo de movimiento</label><select id="compareType">${typeOpts}</select></div>
     <div class="field"><label>Cuenta</label><select id="compareAccount">${accountOpts}</select></div>
     <div class="field"><label>Categoría</label><select id="compareCategory">${catOpts}</select></div>
     <div class="field"><label>Subcategoría</label><select id="compareSubcategory">${subOpts}</select></div>
     <div class="field"><label>Concepto contiene</label><input id="compareConcept" value="${esc(r.concept||"")}" placeholder="Ej. gasolina, Netflix…"></div>
    </div>`:`
    <div class="form-grid" style="margin-top:15px">
-    <div class="field"><label>Tipo de informe</label><select id="reportType"><option value="expense" ${r.mode!=="net"?"selected":""}>Gastos / operaciones</option><option value="both" ${r.mode==="net"?"selected":""}>Ingresos + gastos</option></select></div>
+    <div class="field"><label>Tipo de informe</label><div class="v211-report-type"><button type="button" class="v211-report-choice ${r.reportType==="operations"?"active":""}" data-report-type="operations"><strong>🔎 Análisis</strong><span>Agrupa y analiza operaciones</span></button><button type="button" class="v211-report-choice ${r.reportType==="net"?"active":""}" data-report-type="net"><strong>💰 Resultado neto</strong><span>Ingresos menos gastos</span></button></div></div>
     <div class="field"><label>Tipo de movimiento</label><select id="reportMovementType">${typeOpts}</select></div>
     <div class="field"><label>Filtro de fecha</label><select id="dateMode"><option value="all" ${r.dateMode==="all"?"selected":""}>Todo el histórico</option><option value="months" ${r.dateMode==="months"?"selected":""}>Entre meses</option><option value="dates" ${r.dateMode==="dates"?"selected":""}>Entre fechas exactas</option></select></div>
     <div class="field"><label>Cuenta</label><select id="reportAccount">${accountOpts}</select></div>
@@ -1092,20 +1166,21 @@ function renderReports(){
  }
  function bind(id,key,rerender=false){const el=document.getElementById(id);if(!el)return;el.onchange=e=>{r[key]=e.target.value;save();if(rerender)renderReports()};el.oninput=e=>{r[key]=e.target.value;save()};}
  [
-  ["reportMovementType","type"],["reportType","type"],["dateMode","dateMode",true],["reportAccount","account"],["reportCategory","category",true],["reportSubcategory","subcategory"],["reportConcept","concept"],["groupBy","groupBy"],["sortBy","sortBy"],["limit","limit"],
-  ["compareA","compareA"],["compareB","compareB"],["compareBy","compareBy"],["compareType","type"],["compareAccount","account"],["compareCategory","category",true],["compareSubcategory","subcategory"],["compareConcept","concept"]
+  ["reportMovementType","movementType"],["dateMode","dateMode",true],["reportAccount","account"],["reportCategory","category",true],["reportSubcategory","subcategory"],["reportConcept","concept"],["groupBy","groupBy"],["sortBy","sortBy"],["limit","limit"],
+  ["compareA","compareA"],["compareB","compareB"],["compareBy","compareBy"],["compareType","movementType"],["compareAccount","account"],["compareCategory","category",true],["compareSubcategory","subcategory"],["compareConcept","concept"]
  ].forEach(x=>bind(...x));
  const startMonth=document.getElementById("startMonth");if(startMonth)startMonth.onchange=e=>{r.startMonth=e.target.value;save()};
  const endMonth=document.getElementById("endMonth");if(endMonth)endMonth.onchange=e=>{r.endMonth=e.target.value;save()};
  const startDate=document.getElementById("startDate");if(startDate)startDate.onchange=e=>{r.startDate=e.target.value;save()};
  const endDate=document.getElementById("endDate");if(endDate)endDate.onchange=e=>{r.endDate=e.target.value;save()};
- document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="frequency"){r.groupBy="concept";r.type="expense"}if(r.mode==="net"){r.type="both"}save();renderReports()});
- document.getElementById("clearReport").onclick=()=>{state.ui.report={mode:"analysis",dateMode:"all",startMonth:monthsBack(36)[11],endMonth:monthsBack(36)[0],startDate:"",endDate:"",type:"expense",account:"",category:"",subcategory:"",concept:"",groupBy:"concept",sortBy:"amount",limit:"25",compareA:monthsBack(36)[0],compareB:monthsBack(36)[1],compareBy:"category"};save();renderReports()};
+ document.querySelectorAll("[data-report-mode]").forEach(b=>b.onclick=()=>{r.mode=b.dataset.reportMode;if(r.mode==="net"){r.reportType="net";r.movementType="both"}else{r.reportType="operations";if(r.mode==="frequency")r.groupBy="concept"}save();renderReports()});
+ document.querySelectorAll("[data-report-type]").forEach(b=>b.onclick=()=>{r.reportType=b.dataset.reportType;if(r.reportType==="net"){r.mode="net";r.movementType="both"}else if(r.mode==="net")r.mode="analysis";save();renderReports()});
+ document.getElementById("clearReport").onclick=()=>{state.ui.report={mode:"analysis",reportType:"operations",movementType:"expense",dateMode:"all",startMonth:monthsBack(36)[11],endMonth:monthsBack(36)[0],startDate:"",endDate:"",type:"expense",account:"",category:"",subcategory:"",concept:"",groupBy:"concept",sortBy:"amount",limit:"25",compareA:monthsBack(36)[0],compareB:monthsBack(36)[1],compareBy:"category"};save();renderReports()};
  document.getElementById("generateReport").onclick=()=>{save();generateReport(r)};
 }
 function reportFilteredMovements(r, override={}){
  let arr=state.movements.filter(m=>m.type!=="transfer");
- const type=override.type||r.type;
+ const type=override.type||override.movementType||r.movementType||r.type||"expense";
  if(type!=="both")arr=arr.filter(m=>m.type===type);
  if((override.account||r.account))arr=arr.filter(m=>m.accountId===(override.account||r.account));
  if((override.category||r.category))arr=arr.filter(m=>m.categoryId===(override.category||r.category));
@@ -1148,7 +1223,7 @@ function generateReport(r){
  const title=r.mode==="frequency"?"Frecuencia y agrupación de conceptos":"Informe generado";
  out.innerHTML=`<div class="grid">
   <section class="card span-12"><div class="report-result-head"><div><h2>${title}</h2><div class="muted">${arr.length} operaciones encontradas · ${reportFilterSummary(r)}</div></div><button class="btn" id="exportReport">Exportar informe</button></div>
-   <div class="kpi-grid" style="margin-top:14px"><div class="kpi"><div class="muted">Operaciones</div><strong>${arr.length}</strong></div><div class="kpi"><div class="muted">Importe total</div><strong>${euro(total)}</strong></div><div class="kpi"><div class="muted">Importe medio</div><strong>${euro(avg)}</strong></div><div class="kpi"><div class="muted">${r.type==="income"?"Ingresos":"Gastos"}</div><strong class="${r.type==="income"?"positive":"negative"}">${r.type==="both"?`${euro(income)} / ${euro(expense)}`:euro(r.type==="income"?income:expense)}</strong></div></div>
+   <div class="kpi-grid" style="margin-top:14px"><div class="kpi"><div class="muted">Operaciones</div><strong>${arr.length}</strong></div><div class="kpi"><div class="muted">Importe total</div><strong>${euro(total)}</strong></div><div class="kpi"><div class="muted">Importe medio</div><strong>${euro(avg)}</strong></div><div class="kpi"><div class="muted">${(r.movementType||r.type)==="income"?"Ingresos":(r.movementType||r.type)==="both"?"Ingresos + gastos":"Gastos"}</div><strong class="${(r.movementType||r.type)==="income"?"positive":"negative"}">${(r.movementType||r.type)==="both"?`${euro(income)} / ${euro(expense)}`:euro((r.movementType||r.type)==="income"?income:expense)}</strong></div></div>
   </section>
   <section class="card span-6"><h2>Distribución</h2>${top.length?`<div class="report-bars">${top.map(g=>`<div class="report-bar-row"><div class="report-bar-label"><span>${esc(g.label)}</span><strong>${euro(g.amount)}</strong></div><div class="report-track"><div class="report-fill" style="width:${Math.max(2,g.amount/max*100)}%"></div></div></div>`).join("")}</div>`:`<div class="empty">No hay datos con los filtros seleccionados.</div>`}</section>
   <section class="card span-6"><h2>Resumen rápido</h2><div class="donut-wrap"><div class="donut" style="--p:${total?Math.round((expense/Math.max(total,income+expense))*100):0}%"><div>${arr.length}<small>operaciones</small></div></div><div class="list" style="flex:1"><div class="list-row"><span>Mayor grupo</span><strong>${esc(groups[0]?.label||"—")}</strong></div><div class="list-row"><span>Mayor importe</span><strong>${euro(groups[0]?.amount||0)}</strong></div><div class="list-row"><span>Más frecuente</span><strong>${esc([...groups].sort((a,b)=>b.count-a.count)[0]?.label||"—")}</strong></div></div></div></section>
@@ -1169,7 +1244,7 @@ function renderNetReport(out,r){
  out.querySelectorAll("[data-net-drill]").forEach(b=>b.onclick=()=>showReportDrill(arr,decodeURIComponent(b.dataset.netDrill),r.groupBy));
 }
 function reportFilterSummary(r){
- const bits=[];if(r.type!=="both")bits.push(r.type==="income"?"ingresos":"gastos");else bits.push("ingresos + gastos");
+ const bits=[];const mt=r.movementType||r.type||"expense";if(mt!=="both")bits.push(mt==="income"?"ingresos":"gastos");else bits.push("ingresos + gastos");
  if(r.dateMode==="months")bits.push(`${monthLabel(r.startMonth)} → ${monthLabel(r.endMonth)}`);else if(r.dateMode==="dates")bits.push(`${r.startDate||"inicio"} → ${r.endDate||"hoy"}`);else bits.push("todo el histórico");
  if(r.category)bits.push(categoryById(r.category)?.name||"");if(r.subcategory)bits.push(subcategoryById(r.category,r.subcategory)?.name||"");if(r.account)bits.push(byId(state.accounts,r.account)?.name||"");if(r.concept)bits.push(`concepto: ${r.concept}`);return bits.filter(Boolean).join(" · ");
 }
@@ -1179,14 +1254,14 @@ function showReportDrill(arr,key,groupBy){
  modalOpen(`Movimientos · ${title}`,`<div class="notice" style="margin-bottom:12px">${mov.length} operaciones · ${euro(mov.reduce((s,m)=>s+movementAmount(m),0))}</div><div class="table-wrap"><table class="table"><thead><tr><th>Fecha</th><th>Concepto</th><th>Categoría</th><th>Subcategoría</th><th>Cuenta</th><th>Importe</th></tr></thead><tbody>${mov.map(m=>`<tr><td>${esc(m.date)}</td><td>${esc(m.merchant||"—")}</td><td>${esc(categoryById(m.categoryId)?.name||"—")}</td><td>${esc(subcategoryById(m.categoryId,m.subcategoryId)?.name||"—")}</td><td>${esc(byId(state.accounts,m.accountId)?.name||"—")}</td><td class="${m.type==="income"?"positive":"negative"}">${m.type==="income"?"+":"-"}${euro(m.amount)}</td></tr>`).join("")}</tbody></table></div>`);
 }
 function renderReportComparison(out,r){
- const base={type:r.type,account:r.account,category:r.category,subcategory:r.subcategory,concept:r.concept,dateMode:"months",startMonth:r.compareA,endMonth:r.compareA};
+ const base={type:r.movementType||r.type,account:r.account,category:r.category,subcategory:r.subcategory,concept:r.concept,dateMode:"months",startMonth:r.compareA,endMonth:r.compareA};
  const baseB={...base,startMonth:r.compareB,endMonth:r.compareB};
  const a=reportFilteredMovements(r,base),b=reportFilteredMovements(r,baseB);
  const groupsA=groupReportMovements(a,r.compareBy),groupsB=groupReportMovements(b,r.compareBy);
  const keys=[...new Set([...groupsA.map(x=>x.key),...groupsB.map(x=>x.key)])];
  const rows=keys.map(k=>{const ga=groupsA.find(x=>x.key===k),gb=groupsB.find(x=>x.key===k);return {key:k,label:ga?.label||gb?.label||k,a:ga?.amount||0,b:gb?.amount||0,ca:ga?.count||0,cb:gb?.count||0}}).sort((x,y)=>Math.abs(y.b-y.a)-Math.abs(x.b-x.a));
- const ta=a.reduce((s,m)=>s+movementAmount(m),0),tb=b.reduce((s,m)=>s+movementAmount(m),0),delta=tb-ta,pct=ta?(delta/ta)*100:0;
- out.innerHTML=`<div class="grid"><section class="card span-12"><div class="report-result-head"><div><h2>${esc(monthLabel(r.compareA))} vs ${esc(monthLabel(r.compareB))}</h2><div class="muted">Comparación por ${esc(r.compareBy)} · ${rows.length} grupos</div></div><button class="btn" id="exportCompare">Exportar comparativa</button></div><div class="kpi-grid" style="margin-top:14px"><div class="kpi"><div class="muted">Mes A</div><strong>${euro(ta)}</strong><small>${a.length} operaciones</small></div><div class="kpi"><div class="muted">Mes B</div><strong>${euro(tb)}</strong><small>${b.length} operaciones</small></div><div class="kpi"><div class="muted">Diferencia</div><strong class="${delta>0?"negative":"positive"}">${delta>0?"+":""}${euro(delta)}</strong></div><div class="kpi"><div class="muted">Variación</div><strong class="${pct>0?"negative":"positive"}">${pct>0?"+":""}${pct.toFixed(1)}%</strong></div></div></section><section class="card span-12"><h2>Comparativa detallada</h2><div class="table-wrap"><table class="table"><thead><tr><th>${esc(r.compareBy)}</th><th>${esc(monthLabel(r.compareA))}</th><th>${esc(monthLabel(r.compareB))}</th><th>Δ</th><th>Δ %</th><th>Operaciones A/B</th><th></th></tr></thead><tbody>${rows.map(x=>{const d=x.b-x.a,p=x.a?(d/x.a)*100:(x.b?100:0);return `<tr><td>${esc(x.label)}</td><td>${euro(x.a)}</td><td>${euro(x.b)}</td><td class="${d>0?"negative":"positive"}">${d>0?"+":""}${euro(d)}</td><td class="${p>0?"negative":"positive"}">${p>0?"+":""}${p.toFixed(1)}%</td><td>${x.ca} / ${x.cb}</td><td><button class="btn small" data-compare-group="${encodeURIComponent(x.key)}">Ver A/B</button></td></tr>`}).join("")||`<tr><td colspan="7" class="empty">No hay datos para comparar.</td></tr>`}</tbody></table></div></section></div>`;
+ const ta=a.reduce((s,m)=>s+movementAmount(m),0),tb=b.reduce((s,m)=>s+movementAmount(m),0),delta=tb-ta,pct=ta?(delta/ta)*100:null;
+ out.innerHTML=`<div class="grid"><section class="card span-12"><div class="report-result-head"><div><h2>${esc(monthLabel(r.compareA))} vs ${esc(monthLabel(r.compareB))}</h2><div class="muted">Comparación por ${esc(r.compareBy)} · ${rows.length} grupos</div></div><button class="btn" id="exportCompare">Exportar comparativa</button></div><div class="kpi-grid" style="margin-top:14px"><div class="kpi"><div class="muted">Mes A</div><strong>${euro(ta)}</strong><small>${a.length} operaciones</small></div><div class="kpi"><div class="muted">Mes B</div><strong>${euro(tb)}</strong><small>${b.length} operaciones</small></div><div class="kpi"><div class="muted">Diferencia</div><strong class="${delta>0?"negative":"positive"}">${delta>0?"+":""}${euro(delta)}</strong></div><div class="kpi"><div class="muted">Variación</div><strong class="${pct!==null&&pct>0?"negative":pct!==null&&pct<0?"positive":""}">${pct===null?(tb?"Nuevo":"—"):`${pct>0?"+":""}${pct.toFixed(1)}%`}</strong></div></div></section><section class="card span-12"><h2>Comparativa detallada</h2><div class="table-wrap"><table class="table"><thead><tr><th>${esc(r.compareBy)}</th><th>${esc(monthLabel(r.compareA))}</th><th>${esc(monthLabel(r.compareB))}</th><th>Δ</th><th>Δ %</th><th>Operaciones A/B</th><th></th></tr></thead><tbody>${rows.map(x=>{const d=x.b-x.a,p=x.a?(d/x.a)*100:null;return `<tr><td>${esc(x.label)}</td><td>${euro(x.a)}</td><td>${euro(x.b)}</td><td class="${d>0?"negative":"positive"}">${d>0?"+":""}${euro(d)}</td><td class="${p>0?"negative":"positive"}">${p===null?(x.b?"Nuevo":"—"):`${p>0?"+":""}${p.toFixed(1)}%`}</td><td>${x.ca} / ${x.cb}</td><td><button class="btn small" data-compare-group="${encodeURIComponent(x.key)}">Ver A/B</button></td></tr>`}).join("")||`<tr><td colspan="7" class="empty">No hay datos para comparar.</td></tr>`}</tbody></table></div></section></div>`;
  document.getElementById("exportCompare").onclick=()=>exportComparisonCSV(rows,r);
  out.querySelectorAll("[data-compare-group]").forEach(btn=>btn.onclick=()=>showCompareDrill(a,b,decodeURIComponent(btn.dataset.compareGroup),r.compareBy));
 }
@@ -1199,14 +1274,14 @@ function showCompareDrill(a,b,key,groupBy){
 function exportReportCSV(groups,r){
  const lines=[["Grupo","Operaciones","Total","Media","Último movimiento"],...groups.map(g=>[g.label,g.count,g.amount.toFixed(2),g.avg.toFixed(2),g.last])];downloadCSV(lines,`IST-informe-${dateISO()}.csv`);
 }
-function exportComparisonCSV(rows,r){const lines=[["Grupo",monthLabel(r.compareA),monthLabel(r.compareB),"Diferencia","Variación %","Operaciones A","Operaciones B"],...rows.map(x=>{const d=x.b-x.a,p=x.a?(d/x.a)*100:(x.b?100:0);return [x.label,x.a.toFixed(2),x.b.toFixed(2),d.toFixed(2),p.toFixed(1),x.ca,x.cb]})];downloadCSV(lines,`IST-comparativa-${r.compareA}-${r.compareB}.csv`)}
+function exportComparisonCSV(rows,r){const lines=[["Grupo",monthLabel(r.compareA),monthLabel(r.compareB),"Diferencia","Variación %","Operaciones A","Operaciones B"],...rows.map(x=>{const d=x.b-x.a,p=x.a?(d/x.a)*100:null;return [x.label,x.a.toFixed(2),x.b.toFixed(2),d.toFixed(2),p===null?(x.b?"Nuevo":"—"):p.toFixed(1),x.ca,x.cb]})];downloadCSV(lines,`IST-comparativa-${r.compareA}-${r.compareB}.csv`)}
 function downloadCSV(lines,name){const csv=lines.map(row=>row.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(";")).join("\n");const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
 
 /* ---------- Investments ---------- */
 function renderInvestments(){
  content.innerHTML=`<h1>Inversiones</h1><div class="subtitle">Registra posiciones y controla su evolución. El precio puede actualizarse manualmente o mediante una consulta pública cuando el proveedor lo permita.</div>
  <div class="toolbar"><button class="btn primary" id="newInv">+ Nueva posición</button><button class="btn" id="refreshPrices">↻ Actualizar precios</button></div>
- <div class="grid">${state.investments.map(i=>{const val=Number(i.shares)*Number(i.price||0),cost=Number(i.shares)*Number(i.avgCost||0),pnl=val-cost;return `<section class="card span-4"><div class="row-left"><span class="merchant-icon">📈</span><div><h2 style="margin:0">${esc(i.ticker||i.name)}</h2><div class="muted">${esc(i.name)}</div></div></div><div class="list" style="margin-top:10px"><div class="list-row"><span>Unidades</span><strong>${i.shares}</strong></div><div class="list-row"><span>Precio</span><strong>${euro(i.price)}</strong></div><div class="list-row"><span>Valor</span><strong>${euro(val)}</strong></div><div class="list-row"><span>Plus/minus</span><strong class="${pnl>=0?"positive":"negative"}">${euro(pnl)}</strong></div></div><div class="actions" style="margin-top:12px"><button class="btn small" data-edit-i="${i.id}">Editar</button><button class="btn small danger" data-del-i="${i.id}">Eliminar</button></div></section>`}).join("")||`<section class="card span-12 empty">No hay inversiones registradas.</section>`}</div>`;
+ <div class="grid">${state.investments.map(i=>{const val=Number(i.shares)*Number(i.price||0),cost=Number(i.shares)*Number(i.avgCost||0),pnl=val-cost;return `<section class="card span-4"><div class="row-left"><span class="merchant-icon">📈</span><div><h2 style="margin:0">${esc(i.ticker||i.name)}</h2><div class="muted">${esc(i.name)}</div></div></div><div class="list" style="margin-top:10px"><div class="list-row"><span>Unidades</span><strong>${i.shares}</strong></div><div class="list-row"><span>Precio</span><strong>${euro(i.price)}</strong></div><div class="list-row"><span>Valor</span><strong>${euro(val)}</strong></div><div class="list-row"><span>Plus/minus</span><strong class="${pnl>=0?"positive":"negative"}">${euro(pnl)}</strong></div>${i.priceUpdatedAt?`<div class="list-row"><span>Actualizado</span><strong>${esc(i.priceUpdatedAt.replace("T"," "))}</strong></div>`:""}</div><div class="actions" style="margin-top:12px"><button class="btn small" data-edit-i="${i.id}">Editar</button><button class="btn small danger" data-del-i="${i.id}">Eliminar</button></div></section>`}).join("")||`<section class="card span-12 empty">No hay inversiones registradas.</section>`}</div>`;
  document.getElementById("newInv").onclick=()=>investmentModal();
  document.getElementById("refreshPrices").onclick=refreshPrices;
  content.querySelectorAll("[data-edit-i]").forEach(b=>b.onclick=()=>investmentModal(b.dataset.editI));content.querySelectorAll("[data-del-i]").forEach(b=>b.onclick=()=>deleteInvestment(b.dataset.delI));
@@ -1226,7 +1301,7 @@ async function refreshPrices(){
   try{
    const url="https://query1.finance.yahoo.com/v8/finance/chart/"+encodeURIComponent(i.ticker)+"?range=1d&interval=1m";
    const res=await fetch(url,{cache:"no-store"});const data=await res.json();const p=data?.chart?.result?.[0]?.meta?.regularMarketPrice;
-   if(typeof p==="number"){i.price=p;updated++;}
+   if(typeof p==="number"){i.price=p;i.priceUpdatedAt=new Date().toISOString().slice(0,16);updated++;}
   }catch(e){}
  }
  save();renderInvestments();toast(updated?`Precios actualizados: ${updated}.`:"El proveedor no permitió la consulta; se mantienen los precios manuales.");
@@ -1236,6 +1311,7 @@ async function refreshPrices(){
 function renderSettings(){
  content.innerHTML=`
 <section class="card span-12" id="v210Appearance">
+  <div class="v211-settings-note" style="margin-bottom:12px">I$T V2.11 · Quality &amp; Polish · Diseño optimizado para iPhone y escritorio.</div>
   <div class="section-head">
     <div><div class="v25-eyebrow">APARIENCIA</div><h2>Personaliza I$T</h2></div>
   </div>
@@ -1308,11 +1384,37 @@ function subcategoryModal(cid){
  modalOpen("Nueva subcategoría",`<form id="subForm"><div class="field"><label>Nombre</label><input id="subName" required></div><div class="actions" style="margin-top:14px"><button class="btn primary" type="submit">Guardar</button></div></form>`);
  document.getElementById("subForm").onsubmit=e=>{e.preventDefault();const n=document.getElementById("subName").value.trim();if(!n)return;categoryById(cid).subcategories.push({id:uid(),name:n});save();modalClose();renderSettings();};
 }
-function deleteCategory(id){if(state.movements.some(m=>m.categoryId===id)){toast("No puedes eliminar una categoría usada en movimientos.");return;}if(!confirm("¿Eliminar categoría y sus subcategorías?"))return;state.categories=state.categories.filter(c=>c.id!==id);save();renderSettings();}
-function deleteSubcategory(cid,sid){if(state.movements.some(m=>m.categoryId===cid&&m.subcategoryId===sid)){toast("No puedes eliminar una subcategoría usada.");return;}if(!confirm("¿Eliminar subcategoría?"))return;const c=categoryById(cid);c.subcategories=c.subcategories.filter(s=>s.id!==sid);save();renderSettings();}
+function categoryDependencies(id){
+ const movementCount=state.movements.filter(m=>m.categoryId===id).length;
+ const recurringCount=state.recurrings.filter(r=>r.categoryId===id).length;
+ const budgetCount=state.settings?.budgetsV25?.[id]?1:0;
+ return {movementCount,recurringCount,budgetCount};
+}
+function deleteCategory(id){
+ const d=categoryDependencies(id); const total=d.movementCount+d.recurringCount+d.budgetCount;
+ if(total){const bits=[];if(d.movementCount)bits.push(`${d.movementCount} movimiento${d.movementCount===1?"":"s"}`);if(d.recurringCount)bits.push(`${d.recurringCount} recurrente${d.recurringCount===1?"":"s"}`);if(d.budgetCount)bits.push("1 presupuesto");toast(`No puedes eliminarla: ${bits.join(" y ")}.`);return;}
+ if(!confirm("¿Eliminar categoría y sus subcategorías?"))return;state.categories=state.categories.filter(c=>c.id!==id);save();renderCategories();
+}
+function deleteSubcategory(cid,sid){
+ const movementCount=state.movements.filter(m=>m.categoryId===cid&&m.subcategoryId===sid).length;
+ const recurringCount=state.recurrings.filter(r=>r.categoryId===cid&&r.subcategoryId===sid).length;
+ if(movementCount||recurringCount){const bits=[];if(movementCount)bits.push(`${movementCount} movimiento${movementCount===1?"":"s"}`);if(recurringCount)bits.push(`${recurringCount} recurrente${recurringCount===1?"":"s"}`);toast(`No puedes eliminarla: ${bits.join(" y ")}.`);return;}
+ if(!confirm("¿Eliminar subcategoría?"))return;const c=categoryById(cid);c.subcategories=c.subcategories.filter(s=>s.id!==sid);save();renderCategories();
+}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`IST-backup-${dateISO()}.json`;a.click();URL.revokeObjectURL(a.href);}
 function importData(file){
- if(!file)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.accounts||!x.movements||!x.categories)throw Error();state=x;state.settings ||= {currency:"EUR",defaultInterestRate:2.02,lastInterestRun:{}};save();render();toast("Datos importados.");}catch(e){toast("Archivo no válido.");}};r.readAsText(file);
+ if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{try{
+  const raw=JSON.parse(reader.result);
+  if(!raw||typeof raw!=="object"||!Array.isArray(raw.accounts)||!Array.isArray(raw.movements)||!Array.isArray(raw.categories))throw Error("shape");
+  const normalized=normalizeV22State(JSON.parse(JSON.stringify(raw)));
+  if(!normalized||!Array.isArray(normalized.accounts)||!Array.isArray(normalized.movements)||!Array.isArray(normalized.categories))throw Error("normalize");
+  backupState(state,"preimport-v211");
+  state=normalized; ensureV25State(); save(); render();
+  toast(`Copia importada: ${state.accounts.length} cuentas · ${state.movements.length} movimientos.`);
+ }catch(e){toast("Archivo no válido o incompatible. Tus datos actuales no se han modificado.");}};
+ reader.readAsText(file);
 }
 function resetData(){if(!confirm("Esto borrará TODOS los datos de la aplicación. ¿Continuar?"))return;state=emptyState();save();render();toast("Datos borrados.");}
 
@@ -1370,20 +1472,14 @@ function renderTransferSummary(){
 document.addEventListener("click",function(e){
  const btn=e.target.closest && e.target.closest("#goBudgets");
  if(!btn)return;
- e.preventDefault();
- e.stopPropagation();
- const navBtn=document.querySelector('#nav [data-route="budgets"]');
- if(navBtn){navBtn.click();return;}
- currentRoute="budgets";
- localStorage.setItem("ist_route","budgets");
- renderNav();
- renderMobileNav();
- render();
+ e.preventDefault(); e.stopPropagation();
+ currentRoute="budgets"; localStorage.setItem("ist_route","budgets");
+ renderNav(); renderMobileNav(); render();
+ requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"instant"}));
 });
 </script>
 
 
 
-<script src="v211.js?v=2110"></script>
 </body>
 </html>
