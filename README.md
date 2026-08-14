@@ -54,3 +54,7 @@ Corrección de navegación desde Resumen hacia Presupuestos; elimina el handler 
 
 ## I$T V2.7
 Navegación Resumen → Presupuestos mediante el sistema de navegación real; formulario de presupuesto integrado en el mismo modal que Nuevo movimiento; ajustes de modo oscuro y alineación del campo fecha en iPhone.
+
+
+## I$T V2.8
+Scroll corregido al entrar en Presupuestos desde Resumen y botón Eliminar presupuesto con confirmación, sin eliminar movimientos.

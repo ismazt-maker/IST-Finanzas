@@ -590,7 +590,7 @@ function renderBudgets(){
    ${rows.length?`<div class="v25-budget-grid">${rows.map(x=>`<article class="v25-budget-card" data-budget-card="${x.cid}">
     <div class="row"><div><div class="name">${esc(x.name)}</div><div class="muted">${x.b.rollover?"↪️ Rollover activado":"Mensual"} · ${x.b.endMonth?"Hasta "+esc(monthLabel(x.b.endMonth)):"Sin fecha final"}</div></div><div class="amount ${x.pct>100?"negative":x.pct>=80?"warn":"positive"}">${euro(x.spent)} / ${euro(x.budget)}</div></div>
     <div class="smallbar"><div class="${budgetStatus(x.pct)}" style="width:${Math.min(100,x.pct)}%"></div></div>
-    <div class="v25-budget-meta" style="margin-top:8px"><span>${x.pct.toFixed(0)}%</span><button class="btn small" data-edit-budget="${x.cid}">Editar</button></div>
+    <div class="v25-budget-meta" style="margin-top:8px"><span>${x.pct.toFixed(0)}%</span><div style="display:flex;gap:7px;justify-content:flex-end"><button class="btn small" data-edit-budget="${x.cid}">Editar</button><button class="btn small danger" data-delete-budget="${x.cid}">Eliminar</button></div></div>
    </article>`).join("")}</div>`:`<div class="empty">Todavía no tienes presupuestos. Crea el primero para empezar a controlar tus gastos.</div>`}
   </section>
   <section class="card span-6"><h2>🔮 Previsión</h2><div class="muted">Estimación basada en el ritmo actual del mes.</div><div style="font-size:28px;font-weight:800;margin-top:8px">${euro(projected)}</div><div class="muted">gasto proyectado</div></section>
@@ -601,6 +601,18 @@ function renderBudgets(){
  document.getElementById("saveBudgetAlert").onclick=()=>{state.settings.budgetAlerts=Number(document.getElementById("budgetAlertV25").value);save();renderBudgets();toast("Umbral actualizado.")};
  document.getElementById("newBudgetV25").onclick=()=>budgetModalV25();
  content.querySelectorAll("[data-edit-budget]").forEach(b=>b.onclick=()=>budgetModalV25(b.dataset.editBudget));
+ content.querySelectorAll("[data-delete-budget]").forEach(b=>b.onclick=()=>{
+ const cid=b.dataset.deleteBudget;
+ const budget=getBudgetV25(cid);
+ const name=categoryById(cid)?.name||"esta categoría";
+ if(!budget)return;
+ if(!confirm(`¿Eliminar el presupuesto de ${name}?\n\nLos movimientos y gastos NO se eliminarán.`))return;
+ state.settings.budgetsV25 ||= {};
+ delete state.settings.budgetsV25[cid];
+ save();
+ renderBudgets();
+ toast("Presupuesto eliminado.");
+});
 }
 function budgetModalV25(cid=""){
  const existing=cid?getBudgetV25(cid):null;
