@@ -282,8 +282,24 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent}
  .v210-theme-grid{grid-template-columns:1fr}
 }
 </style>
+
+<style id="v2104-category-dark">
+html[data-v210-mode="dark"] .category-manager-card,
+html[data-v210-mode="dark"] .category-list-row,
+html[data-v210-mode="dark"] .subcat-panel{
+ background:var(--card)!important;color:var(--text)!important;border-color:var(--line)!important;
+}
+html[data-v210-mode="dark"] .subcat-panel{background:#0f1218!important;border-top:1px solid var(--line)!important}
+html[data-v210-mode="dark"] .subcat-row{
+ background:#171a21!important;color:var(--text)!important;border:1px solid var(--line)!important;
+}
+html[data-v210-mode="dark"] .subcat-row span{color:#e5e7eb!important}
+html[data-v210-mode="dark"] .cat-toggle{
+ background:var(--v210-accent-soft)!important;color:var(--text)!important;border-color:var(--line)!important;
+}
+</style>
 </head>
-<body data-ist-version="2.10.1">
+<body data-ist-version="2.10.4">
 <div class="app">
 <header class="topbar">
 <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
@@ -1316,6 +1332,23 @@ function render(){
  else if(currentRoute==="investments")renderInvestments();
  else if(currentRoute==="settings")renderSettings();
 }
+
+/* ---------- V2.10.4 Appearance bindings ---------- */
+if(window.matchMedia){
+ const v210mq=window.matchMedia("(prefers-color-scheme: dark)");
+ const v210ThemeChange=()=>{if(v210Appearance().mode==="auto")v210ApplyAppearance();};
+ if(v210mq.addEventListener)v210mq.addEventListener("change",v210ThemeChange);
+ else if(v210mq.addListener)v210mq.addListener(v210ThemeChange);
+}
+document.addEventListener("click",function(e){
+ const mode=e.target.closest && e.target.closest("[data-v210-mode-choice]");
+ const accent=e.target.closest && e.target.closest("[data-v210-accent-choice]");
+ if(!mode && !accent)return;
+ v210SetAppearance(mode ? mode.dataset.v210ModeChoice : null,
+                   accent ? accent.dataset.v210AccentChoice : null);
+ v210RefreshAppearanceControls();
+});
+
 state.ui ||= {};
 render();
 window.addEventListener("online",()=>toast("Conexión recuperada."));
@@ -1350,24 +1383,6 @@ document.addEventListener("click",function(e){
 </script>
 
 
-<script id="v210-auto-theme-listener">
-if(window.matchMedia){
- const v210mq=window.matchMedia("(prefers-color-scheme: dark)");
- const v210ThemeChange=()=>{if(v210Appearance().mode==="auto")v210ApplyAppearance()};
- if(v210mq.addEventListener)v210mq.addEventListener("change",v210ThemeChange);
- else if(v210mq.addListener)v210mq.addListener(v210ThemeChange);
-}
-</script>
 
-<script id="v210-appearance-handler">
-document.addEventListener("click",function(e){
-  const mode=e.target.closest && e.target.closest("[data-v210-mode-choice]");
-  const accent=e.target.closest && e.target.closest("[data-v210-accent-choice]");
-  if(!mode && !accent)return;
-  v210SetAppearance(mode ? mode.dataset.v210ModeChoice : null,
-                    accent ? accent.dataset.v210AccentChoice : null);
-  v210RefreshAppearanceControls();
-});
-</script>
 </body>
 </html>

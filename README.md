@@ -78,3 +78,7 @@ Corrección del error de inicialización que dejaba el contenido en blanco: el r
 
 ## I$T V2.10.3
 Corrección del handler de apariencia y del diseño de subcategorías en Dark Mode.
+
+
+## I$T V2.10.4
+Apariencia corregida por alcance JavaScript y ajuste Dark Mode de categorías/subcategorías.
