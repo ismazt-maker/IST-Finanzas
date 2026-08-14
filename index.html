@@ -182,7 +182,14 @@ body.v25-modal-open{position:relative}
  .v25-two-col{grid-template-columns:1fr}
  .v25-budget-sheet{padding-left:16px;padding-right:16px}
 }
-</style><style id="v254-budget-css">body.v254-lock{overflow:hidden!important}.v254-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:99998}.v254-sheet{position:fixed;z-index:99999;left:0;right:0;bottom:0;background:var(--surface,#fff);color:var(--text,#111);border-radius:24px 24px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.25);animation:v254in .2s ease-out}.v254-handle{width:42px;height:5px;background:var(--line,#ddd);border-radius:999px;margin:0 auto 14px}.v254-form{display:grid;gap:14px;margin-top:14px}.v254-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.v254-actions{display:grid;gap:9px;margin-top:18px}.v254-actions .btn{width:100%;min-height:48px}@keyframes v254in{from{transform:translateY(100%)}to{transform:translateY(0)}}@media(min-width:701px){.v254-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100% - 40px));border-radius:24px}}@media(max-width:700px){.v254-cols{grid-template-columns:1fr}}</style></head>
+</style><style id="v254-budget-css">body.v254-lock{overflow:hidden!important}.v254-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.48);z-index:99998}.v254-sheet{position:fixed;z-index:99999;left:0;right:0;bottom:0;background:var(--surface,#fff);color:var(--text,#111);border-radius:24px 24px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));max-height:92dvh;overflow:auto;box-shadow:0 -12px 40px rgba(0,0,0,.25);animation:v254in .2s ease-out}.v254-handle{width:42px;height:5px;background:var(--line,#ddd);border-radius:999px;margin:0 auto 14px}.v254-form{display:grid;gap:14px;margin-top:14px}.v254-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}.v254-actions{display:grid;gap:9px;margin-top:18px}.v254-actions .btn{width:100%;min-height:48px}@keyframes v254in{from{transform:translateY(100%)}to{transform:translateY(0)}}@media(min-width:701px){.v254-sheet{left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100% - 40px));border-radius:24px}}@media(max-width:700px){.v254-cols{grid-template-columns:1fr}}</style><style id="v26-budget-summary-css">
+.summary-budget-wrap{display:grid;gap:10px}
+.summary-budget-total{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.summary-budget-total>div{display:grid;gap:3px}
+.summary-budget-total strong{font-size:17px}
+.warn{color:#b7791f}
+@media(max-width:700px){.summary-budget-total{grid-template-columns:1fr 1fr 1fr;gap:7px}.summary-budget-total strong{font-size:15px}}
+</style></head>
 <body>
 <div class="app">
 <header class="topbar">
@@ -541,7 +548,7 @@ function activeBudgetV25(cid, monthKeyValue){
 }
 function allBudgetRowsForMonth(k){
   const rows=[];
-  Object.keys(state.settings?.budgetsV25||{}).forEach(cid=>{
+  Object.keys((state.settings&&state.settings.budgetsV25)||{}).forEach(cid=>{
     const b=activeBudgetV25(cid,k);
     if(!b) return;
     const spent=categoryMonthlyAmount(k,cid);
@@ -636,6 +643,31 @@ function budgetModalV25(cid=""){
  if(cid)document.getElementById("v254Delete").onclick=()=>{delete state.settings.budgetsV25[cid];save();close();renderBudgets();toast("Presupuesto eliminado.")};
 }
 
+
+function summaryBudgetBlock(k){
+ const rows=allBudgetRowsForMonth(k);
+ if(!rows.length) return `<div class="empty">No hay presupuestos para ${esc(monthLabel(k))}. <button type="button" class="btn primary" id="summaryCreateBudget">Crear presupuesto</button></div>`;
+ const totalB=rows.reduce((a,x)=>a+x.budget,0);
+ const totalS=rows.reduce((a,x)=>a+x.spent,0);
+ const remaining=totalB-totalS;
+ const pct=totalB?totalS/totalB*100:0;
+ const status=pct>100?"over":pct>=Number(state.settings?.budgetAlerts||80)?"warn":"ok";
+ return `<div class="summary-budget-wrap">
+   <div class="summary-budget-total">
+    <div><span class="muted">Presupuestado</span><strong>${euro(totalB)}</strong></div>
+    <div><span class="muted">Gastado</span><strong>${euro(totalS)}</strong></div>
+    <div><span class="muted">${remaining>=0?"Disponible":"Exceso"}</span><strong class="${remaining>=0?"positive":"negative"}">${euro(Math.abs(remaining))}</strong></div>
+   </div>
+   <div class="v25-budget-track"><div class="${status}" style="width:${Math.min(100,pct)}%"></div></div>
+   <div class="muted" style="margin:7px 0 10px">${pct.toFixed(0)}% utilizado · ${rows.filter(x=>x.pct>100).length} superados · ${rows.filter(x=>x.pct>=Number(state.settings?.budgetAlerts||80)&&x.pct<=100).length} cerca del límite</div>
+   <div class="list">${rows.slice().sort((a,b)=>b.pct-a.pct).slice(0,4).map(x=>`<div class="list-row">
+     <div style="min-width:0"><strong>${esc(x.name)}</strong><div class="muted">${euro(x.spent)} de ${euro(x.budget)}</div></div>
+     <strong class="${x.pct>100?"negative":x.pct>=Number(state.settings?.budgetAlerts||80)?"warn":"positive"}">${x.pct.toFixed(0)}%</strong>
+   </div>`).join("")}</div>
+   <button type="button" class="btn" id="goBudgets">Ver presupuestos →</button>
+ </div>`;
+}
+
 function renderSummary(){
  const months=monthsBack(36); const selected=state.ui?.summaryMonth||months[0]; state.ui||={}; state.ui.summaryMonth=selected;
  const st=monthlyStats(selected), patrimony=totalBalance()+investmentTotal(), available=availableBalance(), savings=savingsBalance();
@@ -673,7 +705,7 @@ function renderSummary(){
     return `<div class="recurring-summary-total"><strong>${euro(monthly)}</strong><span class="muted">estimados en ${esc(monthLabel(selected))}</span></div>
       <div class="list" style="margin-top:10px">${info.items.slice(0,4).map(x=>`<div class="list-row"><div><strong>${esc(x.r.merchant)}</strong><div class="muted">${esc(x.date)}</div></div><strong class="${x.r.type==="income"?"positive":"negative"}">${x.r.type==="income"?"+":"-"}${euro(x.r.amount)}</strong></div>`).join("")||`<div class="empty">No hay próximos cargos.</div>`}</div>`;
   })()}</section>
-  <section class="card span-6 summary-card"><div class="section-head"><div><h2>💰 Presupuestos</h2><div class="muted">Consulta el estado de tus límites y previsiones.</div></div><button class="btn primary" id="goBudgets">Ver presupuestos →</button></div></section>
+  <section class="card span-6 summary-card"><div class="section-head"><div><h2>💰 Presupuestos</h2><div class="muted">${esc(monthLabel(selected))}</div></div></div>${summaryBudgetBlock(selected)}</section>
   <section class="card span-6"><h2>Objetivos</h2>${goals.length?goals.map(g=>{const q=goalProgress(g);return `<div class="budget-row"><div class="budget-head"><span>${esc(g.name)}</span><strong>${euro(q.current)} / ${euro(q.target)}</strong></div><div class="progress"><div style="width:${q.pct}%"></div></div></div>`}).join(""):`<div class="empty">Añade objetivos desde Configuración.</div>`}</section>
   <section class="card span-12"><h2>🧠 Lo que deberías saber</h2><div class="insight-grid">${(insights.length?insights:["🟢 No hay cambios relevantes que señalar este mes."]).map(x=>`<div class="insight">${esc(x)}</div>`).join("")}</div></section>
  </div>`;
@@ -1135,19 +1167,18 @@ function renderTransferSummary(){
 
 </script>
 
-<script id="v254-global-budget-nav">
+<script id="v26-global-budget-nav">
 document.addEventListener("click",function(e){
  const btn=e.target.closest && e.target.closest("#goBudgets");
  if(!btn)return;
  e.preventDefault();
  e.stopPropagation();
- currentRoute="budgets";
- try{localStorage.setItem("ist_route","budgets")}catch(err){}
- if(typeof renderNav==="function")renderNav();
- if(typeof renderMobileNav==="function")renderMobileNav();
- if(typeof render==="function")render();
- window.scrollTo(0,0);
+ const navBtn=document.querySelector('[data-route="budgets"]');
+ if(navBtn){navBtn.click();return;}
+ const mobileBtn=document.querySelector('[data-mroute="budgets"]');
+ if(mobileBtn){mobileBtn.click();return;}
 });
+if(e.target.closest && e.target.closest("#summaryCreateBudget")){e.preventDefault(); if(typeof budgetModalV25==="function")budgetModalV25(); return;}
 </script>
 </body>
 </html>

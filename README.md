@@ -42,3 +42,7 @@ Presupuestos como pestaña propia, presupuestos permanentes con rollover/previsi
 
 ## I$T V2.5.1
 Correcciones: pestaña Presupuestos real, navegación móvil, CTA del Resumen y guardado del nombre; se elimina el bloque antiguo de presupuestos de Configuración.
+
+
+## I$T V2.6
+Presupuestos integrados con Resumen, navegación real y acceso directo a creación.
