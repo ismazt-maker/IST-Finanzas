@@ -373,6 +373,63 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
 #headerDate{white-space:nowrap}
 @media(max-width:520px){.header-settings-btn{width:40px;height:40px;font-size:18px;margin-left:6px}#headerDate{font-size:11px}}
 </style>
+
+<style id="v213-dashboard-css">
+/* ---------- I$T V2.13 Dashboard ---------- */
+.v213-dashboard{display:grid;gap:14px}
+.v213-welcome{display:flex;justify-content:space-between;align-items:flex-end;gap:14px}
+.v213-welcome h1{margin-bottom:4px}
+.v213-date{color:var(--muted);font-size:13px}
+.v213-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:12px;font-weight:800}
+.v213-dot{width:9px;height:9px;border-radius:50%;background:var(--green);display:inline-block}
+.v213-dot.warn{background:#b7791f}.v213-dot.bad{background:var(--red)}
+.v213-hero{display:grid;grid-template-columns:1.5fr .8fr .8fr;gap:10px}
+.v213-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.v213-label{font-size:12px;color:var(--muted);font-weight:700}
+.v213-value{font-size:29px;font-weight:850;letter-spacing:-.8px;margin-top:5px}
+.v213-delta{font-size:12px;font-weight:750;margin-top:5px}
+.v213-grid2{display:grid;grid-template-columns:1.25fr .75fr;gap:14px}
+.v213-section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.v213-section-title h2{margin:0}
+.v213-mini-link{border:0;background:transparent;color:var(--accent);font-weight:800;font-size:12px;padding:5px}
+.v213-month{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+.v213-month-item{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}
+.v213-month-item strong{display:block;font-size:18px;margin-top:4px}
+.v213-savings{margin-top:10px;padding:11px 12px;border-radius:12px;background:var(--accent-soft);font-size:13px}
+.v213-chart{height:210px;display:flex;align-items:flex-end;gap:8px;padding:12px 3px 0;border-bottom:1px solid var(--line)}
+.v213-bar-wrap{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
+.v213-bar{width:min(42px,75%);border-radius:8px 8px 2px 2px;background:var(--accent);min-height:2px}
+.v213-bar-label{font-size:10px;color:var(--muted)}
+.v213-cat-list{display:grid;gap:9px}
+.v213-cat{display:grid;gap:5px}
+.v213-cat-head{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.v213-track{height:8px;border-radius:99px;background:var(--line);overflow:hidden}
+.v213-fill{height:100%;border-radius:99px;background:var(--accent)}
+.v213-budget-list{display:grid;gap:9px}
+.v213-budget{display:grid;gap:5px}
+.v213-budget-head{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.v213-insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.v213-insight{padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--bg);font-size:13px;line-height:1.4}
+.v213-insight strong{display:block;margin-bottom:3px}
+.v213-empty{padding:20px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:13px}
+.v213-clickable{cursor:pointer}
+.v213-clickable:active{transform:scale(.995)}
+@media(max-width:850px){
+ .v213-hero{grid-template-columns:1fr 1fr}
+ .v213-hero .v213-card:first-child{grid-column:1/-1}
+ .v213-grid2{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+ .v213-welcome{align-items:flex-start;flex-direction:column}
+ .v213-status{align-self:flex-start}
+ .v213-hero{grid-template-columns:1fr 1fr}
+ .v213-value{font-size:25px}
+ .v213-month{grid-template-columns:1fr}
+ .v213-insights{grid-template-columns:1fr}
+ .v213-card{padding:14px}
+ .v213-chart{height:185px}
+}
+</style>
 </head>
 <body data-ist-version="2.12.1">
 <div class="app">
@@ -899,7 +956,7 @@ function summaryBudgetBlock(k){
  </div>`;
 }
 
-function renderSummary(){
+function renderSummaryBase(){
  const months=monthsBack(36); const selected=state.ui?.summaryMonth||months[0]; state.ui||={}; state.ui.summaryMonth=selected;
  const st=monthlyStats(selected), patrimony=totalBalance()+investmentTotal(), available=availableBalance(), savings=savingsBalance();
  const cats={}; st.ms.filter(m=>m.type==="expense").forEach(m=>{const c=categoryById(m.categoryId)?.name||"Sin categoría";cats[c]=(cats[c]||0)+movementAmount(m)});
@@ -1587,3 +1644,188 @@ document.addEventListener("click",function(e){
 
 </body>
 </html>
+
+<script id="v213-dashboard-script">
+
+function v213Money(n){return typeof euro==="function"?euro(n):new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(n||0)}
+function v213MonthKey(d){return String(d||"").slice(0,7)}
+function v213MonthLabel(k){
+  const [y,m]=String(k).split("-");
+  if(!y||!m)return k;
+  return new Date(Number(y),Number(m)-1,1).toLocaleDateString("es-ES",{month:"short"}).replace(".","").replace(/^./,c=>c.toUpperCase());
+}
+function v213Movements(){return Array.isArray(state.movements)?state.movements:[]}
+function v213Accounts(){return Array.isArray(state.accounts)?state.accounts:[]}
+function v213Categories(){return Array.isArray(state.categories)?state.categories:[]}
+function v213ThisMonth(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+function v213Sum(arr,fn){return arr.reduce((a,x)=>a+(Number(fn(x))||0),0)}
+function v213CategoryName(id){const c=v213Categories().find(x=>x.id===id);return c?.name||"Sin categoría"}
+function v213IsIncome(m){return m.type==="income" || m.kind==="income"}
+function v213IsTransfer(m){return m.type==="transfer" || m.kind==="transfer"}
+function v213Signed(m){
+  if(v213IsTransfer(m))return 0;
+  return v213IsIncome(m)?Math.abs(Number(m.amount)||0):-Math.abs(Number(m.amount)||0);
+}
+function v213BuildInsights(monthMov, monthIncome, monthExpense, savingsRate){
+  const out=[];
+  const months=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-i);
+    months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`);
+  }
+  const historical=months.slice(0,5);
+  const histExpenses=historical.map(k=>v213Sum(v213Movements().filter(m=>v213MonthKey(m.date)===k && !v213IsIncome(m) && !v213IsTransfer(m)),m=>Math.abs(Number(m.amount)||0)));
+  const avg=histExpenses.length?v213Sum(histExpenses,x=>x)/histExpenses.length:0;
+  if(avg>0 && monthExpense>avg*1.1){
+    out.push(["⚠️","Gasto por encima de tu media",`Este mes llevas ${Math.round((monthExpense/avg-1)*100)} % más de gasto que tu media de los últimos 5 meses.`]);
+  }else if(monthExpense>0){
+    out.push(["✅","Gasto bajo control","Tus gastos de este mes están dentro de un rango razonable respecto a tu media reciente."]);
+  }
+  if(savingsRate>=25) out.push(["💚","Buen ritmo de ahorro",`Estás ahorrando aproximadamente un ${savingsRate.toFixed(1)} % de tus ingresos este mes.`]);
+  else if(savingsRate<10 && monthIncome>0) out.push(["🟠","Ahorro bajo","Tu tasa de ahorro está por debajo del 10 % este mes."]);
+  const budgets=state.budgets||{};
+  const budgetVals=Object.values(budgets).filter(b=>b && typeof b==="object");
+  const over=budgetVals.find(b=>Number(b.limit||b.amount||0)>0 && Number(b.spent||0)>Number(b.limit||b.amount||0));
+  if(over) out.push(["🔴","Presupuesto superado","Tienes al menos un presupuesto por encima de su límite."]);
+  if(!out.length) out.push(["🧠","Todo en orden","No he detectado ninguna desviación importante con los datos disponibles."]);
+  return out.slice(0,4);
+}
+function v213Navigate(route){
+  currentRoute=route;
+  try{localStorage.setItem("ist_route",route)}catch(e){}
+  if(typeof renderNav==="function")renderNav();
+  if(typeof renderMobileNav==="function")renderMobileNav();
+  render();
+  requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"instant"}));
+}
+function v213RenderDashboard(){
+  const root=document.getElementById("appContent");
+  if(!root)return;
+  const mov=v213Movements();
+  const month=v213ThisMonth();
+  const monthMov=mov.filter(m=>v213MonthKey(m.date)===month);
+  const income=v213Sum(monthMov,m=>v213IsIncome(m)?Math.abs(Number(m.amount)||0):0);
+  const expense=v213Sum(monthMov,m=>!v213IsIncome(m)&&!v213IsTransfer(m)?Math.abs(Number(m.amount)||0):0);
+  const net=income-expense;
+  const savings=income?net/income*100:0;
+  const accounts=v213Accounts();
+  const available=v213Sum(accounts,a=>Number(a.balance)||0);
+  const investments=Array.isArray(state.investments)?v213Sum(state.investments,i=>Number(i.currentValue??i.value??0)):0;
+  const other=Math.max(0,(Number(state.settings?.cash)||0));
+  const patrimony=available+investments+other;
+  const monthKeys=[];
+  for(let i=5;i>=0;i--){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`)}
+  const patrimonyVals=monthKeys.map((k,i)=>k===month?patrimony:null);
+  const known=Number(state.settings?.initialBalance);
+  let running=Number.isFinite(known)?known:available;
+  for(let i=0;i<monthKeys.length;i++){
+    const k=monthKeys[i];
+    const mm=mov.filter(m=>v213MonthKey(m.date)===k);
+    running+=v213Sum(mm,v213Signed);
+    if(patrimonyVals[i]===null)patrimonyVals[i]=running;
+  }
+  const maxPat=Math.max(...patrimonyVals,1);
+  const cats={};
+  monthMov.forEach(m=>{if(!v213IsIncome(m)&&!v213IsTransfer(m)){const k=m.categoryId||"__none";cats[k]=(cats[k]||0)+Math.abs(Number(m.amount)||0)}});
+  const topCats=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const maxCat=Math.max(...topCats.map(x=>x[1]),1);
+  const budgets=[];
+  Object.values(state.budgets||{}).forEach(b=>{
+    if(!b||typeof b!=="object")return;
+    const limit=Number(b.limit??b.amount??0);
+    const spent=Number(b.spent??0);
+    if(limit>0)budgets.push({name:b.name||b.categoryName||"Presupuesto",limit,spent});
+  });
+  const attention=budgets.filter(b=>b.spent/b.limit>=.75).sort((a,b)=>(b.spent/b.spent||0)-(a.spent/a.limit||0)).slice(0,4);
+  const insights=v213BuildInsights(monthMov,income,expense,savings);
+  const name=String(state.settings?.userName||state.settings?.name||"").trim();
+  const greeting=new Date().getHours()<14?"Buenos días":new Date().getHours()<20?"Buenas tardes":"Buenas noches";
+  const status=savings>=20?"good":savings>=10?"warn":"bad";
+  root.innerHTML=`
+  <div class="v213-dashboard">
+    <div class="v213-welcome">
+      <div><h1>${greeting}${name?`, ${esc(name)}`:""} 👋</h1><div class="v213-date">${new Date().toLocaleDateString("es-ES",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div></div>
+      <div class="v213-status"><span class="v213-dot ${status==="warn"?"warn":status==="bad"?"bad":""}"></span>${status==="good"?"Buen ritmo":status==="warn"?"Atención":"Revisa tus gastos"}</div>
+    </div>
+
+    <div class="v213-hero">
+      <div class="v213-card v213-clickable" data-v213-route="accounts"><div class="v213-label">PATRIMONIO NETO</div><div class="v213-value">${v213Money(patrimony)}</div><div class="v213-delta positive">Cuentas + inversiones</div></div>
+      <div class="v213-card"><div class="v213-label">DISPONIBLE</div><div class="v213-value">${v213Money(available)}</div><div class="v213-delta">En tus cuentas</div></div>
+      <div class="v213-card v213-clickable" data-v213-route="investments"><div class="v213-label">INVERSIONES</div><div class="v213-value">${v213Money(investments)}</div><div class="v213-delta">Valor actual</div></div>
+    </div>
+
+    <div class="v213-grid2">
+      <section class="v213-card">
+        <div class="v213-section-title"><h2>Este mes</h2><button class="v213-mini-link" data-v213-route="reports">Ver análisis →</button></div>
+        <div class="v213-month">
+          <div class="v213-month-item"><span class="v213-label">Ingresos</span><strong class="positive">+${v213Money(income)}</strong></div>
+          <div class="v213-month-item"><span class="v213-label">Gastos</span><strong class="negative">−${v213Money(expense)}</strong></div>
+          <div class="v213-month-item"><span class="v213-label">Neto</span><strong class="${net>=0?"positive":"negative"}">${net>=0?"+":"−"}${v213Money(Math.abs(net))}</strong></div>
+        </div>
+        <div class="v213-savings"><strong>Tasa de ahorro: ${savings.toFixed(1)} %</strong>${income?` · ${net>=0?"Estás ahorrando":"Estás gastando más de lo que ingresas"} este mes.`:" · Sin ingresos registrados este mes."}</div>
+      </section>
+
+      <section class="v213-card">
+        <div class="v213-section-title"><h2>Gastos por categoría</h2><button class="v213-mini-link" data-v213-route="reports">Ver más →</button></div>
+        <div class="v213-cat-list">
+          ${topCats.length?topCats.map(([id,val])=>`<div class="v213-cat v213-clickable" data-v213-report-cat="${esc(id)}"><div class="v213-cat-head"><span>${esc(v213CategoryName(id))}</span><strong>${v213Money(val)}</strong></div><div class="v213-track"><div class="v213-fill" style="width:${Math.min(100,val/maxCat*100)}%"></div></div></div>`).join(""):`<div class="v213-empty">Todavía no hay gastos este mes.</div>`}
+        </div>
+      </section>
+    </div>
+
+    <section class="v213-card">
+      <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses</span></div>
+      <div class="v213-chart">
+        ${patrimonyVals.map((v,i)=>`<div class="v213-bar-wrap"><div class="v213-bar" title="${v213Money(v)}" style="height:${Math.max(3,(v/maxPat)*100)}%"></div><div class="v213-bar-label">${v213MonthLabel(monthKeys[i])}</div></div>`).join("")}
+      </div>
+    </section>
+
+    <div class="v213-grid2">
+      <section class="v213-card">
+        <div class="v213-section-title"><h2>Presupuestos</h2><button class="v213-mini-link" data-v213-route="budgets">Ver todos →</button></div>
+        <div class="v213-budget-list">
+          ${attention.length?attention.map(b=>{
+            const pct=Math.min(100,b.spent/b.limit*100); const cls=pct>=100?"negative":pct>=75?"warn":"positive";
+            return `<div class="v213-budget v213-clickable" data-v213-route="budgets"><div class="v213-budget-head"><span>${esc(b.name)}</span><strong class="${cls}">${Math.round(b.spent/b.limit*100)} %</strong></div><div class="v213-track"><div class="v213-fill" style="width:${pct}%;background:${pct>=100?"var(--red)":pct>=75?"#b7791f":"var(--green)"}"></div></div><span class="v213-label">${v213Money(b.spent)} de ${v213Money(b.limit)}</span></div>`;
+          }).join(""):`<div class="v213-empty">No hay presupuestos que requieran atención.</div>`}
+        </div>
+      </section>
+
+      <section class="v213-card">
+        <div class="v213-section-title"><h2>🧠 I$T Insights</h2></div>
+        <div class="v213-insights">
+          ${insights.map(([icon,title,text])=>`<div class="v213-insight"><strong>${icon} ${esc(title)}</strong><span>${esc(text)}</span></div>`).join("")}
+        </div>
+      </section>
+    </div>
+  </div>`;
+  root.querySelectorAll("[data-v213-route]").forEach(el=>el.onclick=()=>v213Navigate(el.dataset.v213Route));
+  root.querySelectorAll("[data-v213-report-cat]").forEach(el=>el.onclick=()=>{
+    state.ui ||= {};
+    state.ui.reportCategory=el.dataset.v213ReportCat;
+    v213Navigate("reports");
+  });
+}
+function renderSummary(){
+  v213RenderDashboard();
+}
+
+</script>
+
+
+<script id="v213-dashboard-boot">
+(function(){
+  function bootV213(){
+    if(typeof currentRoute==="undefined" || typeof render==="undefined") return;
+    if(typeof renderSummary==="function"){
+      document.body.dataset.istVersion="2.13.0";
+      const t=document.querySelector("title"); if(t)t.textContent="I$T V2.13";
+    }
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootV213,{once:true});
+  else bootV213();
+})();
+</script>

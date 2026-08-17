@@ -99,3 +99,7 @@ Gran actualización de producto: Movimientos 2.0 con filtros rápidos, búsqueda
 
 ## I$T V2.12.1
 Fixes del buscador de Movimientos, opción Cualquier mes y acceso directo a Configuración.
+
+
+## I$T V2.13 — Dashboard
+Rediseño del Resumen como dashboard financiero: situación patrimonial, mes actual, evolución de 6 meses, categorías, presupuestos e insights.
