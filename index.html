@@ -1589,30 +1589,35 @@ function v213Signed(m){
   if(v213IsTransfer(m))return 0;
   return v213IsIncome(m)?Math.abs(Number(m.amount)||0):-Math.abs(Number(m.amount)||0);
 }
+function v213MonthActivity(monthKey){
+  const mm=v213Movements().filter(m=>v213MonthKey(m.date)===monthKey && !v213IsTransfer(m));
+  return {hasActivity:mm.length>0,income:v213Sum(mm,m=>v213IsIncome(m)?Math.abs(Number(m.amount)||0):0),expense:v213Sum(mm,m=>!v213IsIncome(m)?Math.abs(Number(m.amount)||0):0)};
+}
+function v213ActiveMonthKeys(count=6){
+  const out=[], d=new Date(); d.setDate(1);
+  for(let i=0;i<36 && out.length<count;i++){
+    const k=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+    if(v213MonthActivity(k).hasActivity) out.push(k);
+    d.setMonth(d.getMonth()-1);
+  }
+  return out.reverse();
+}
 function v213BuildInsights(monthMov, monthIncome, monthExpense, savingsRate){
-  const out=[];
-  const months=[];
-  for(let i=5;i>=0;i--){
-    const d=new Date(); d.setDate(1); d.setMonth(d.getMonth()-i);
-    months.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`);
-  }
-  const historical=months.slice(0,5);
-  const histExpenses=historical.map(k=>v213Sum(v213Movements().filter(m=>v213MonthKey(m.date)===k && !v213IsIncome(m) && !v213IsTransfer(m)),m=>Math.abs(Number(m.amount)||0)));
+  const out=[], current=v213ThisMonth();
+  const historical=v213ActiveMonthKeys(6).filter(k=>k!==current);
+  const histExpenses=historical.map(k=>v213MonthActivity(k).expense);
   const avg=histExpenses.length?v213Sum(histExpenses,x=>x)/histExpenses.length:0;
-  if(avg>0 && monthExpense>avg*1.1){
-    out.push(["⚠️","Gasto por encima de tu media",`Este mes llevas ${Math.round((monthExpense/avg-1)*100)} % más de gasto que tu media de los últimos 5 meses.`]);
-  }else if(monthExpense>0){
-    out.push(["✅","Gasto bajo control","Tus gastos de este mes están dentro de un rango razonable respecto a tu media reciente."]);
-  }
+  if(avg>0 && monthExpense>avg*1.1) out.push(["⚠️","Gasto por encima de tu media",`Este mes llevas ${Math.round((monthExpense/avg-1)*100)} % más de gasto que tu media de los meses con actividad reciente.`]);
+  else if(monthExpense>0 && avg>0) out.push(["✅","Gasto bajo control","Tus gastos de este mes están dentro de un rango razonable respecto a tu media de los meses con actividad."]);
   if(savingsRate>=25) out.push(["💚","Buen ritmo de ahorro",`Estás ahorrando aproximadamente un ${savingsRate.toFixed(1)} % de tus ingresos este mes.`]);
   else if(savingsRate<10 && monthIncome>0) out.push(["🟠","Ahorro bajo","Tu tasa de ahorro está por debajo del 10 % este mes."]);
-  const budgets=state.budgets||{};
-  const budgetVals=Object.values(budgets).filter(b=>b && typeof b==="object");
+  const budgetVals=Object.values(state.budgets||{}).filter(b=>b&&typeof b==="object");
   const over=budgetVals.find(b=>Number(b.limit||b.amount||0)>0 && Number(b.spent||0)>Number(b.limit||b.amount||0));
   if(over) out.push(["🔴","Presupuesto superado","Tienes al menos un presupuesto por encima de su límite."]);
   if(!out.length) out.push(["🧠","Todo en orden","No he detectado ninguna desviación importante con los datos disponibles."]);
   return out.slice(0,4);
 }
+
 function v213Navigate(route){
   currentRoute=route;
   try{localStorage.setItem("ist_route",route)}catch(e){}
@@ -1636,16 +1641,16 @@ function v213RenderDashboard(){
   const investments=Array.isArray(state.investments)?v213Sum(state.investments,i=>Number(i.currentValue??i.value??0)):0;
   const other=Math.max(0,(Number(state.settings?.cash)||0));
   const patrimony=available+investments+other;
-  const monthKeys=[];
-  for(let i=5;i>=0;i--){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);monthKeys.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`)}
-  const patrimonyVals=monthKeys.map((k,i)=>k===month?patrimony:null);
+  const monthKeys=v213ActiveMonthKeys(6);
+  if(!monthKeys.includes(month) && monthKeys.length<6) monthKeys.push(month);
+  monthKeys.sort();
+  const patrimonyVals=[];
   const known=Number(state.settings?.initialBalance);
   let running=Number.isFinite(known)?known:available;
-  for(let i=0;i<monthKeys.length;i++){
-    const k=monthKeys[i];
+  for(const k of monthKeys){
     const mm=mov.filter(m=>v213MonthKey(m.date)===k);
     running+=v213Sum(mm,v213Signed);
-    if(patrimonyVals[i]===null)patrimonyVals[i]=running;
+    patrimonyVals.push(k===month?patrimony:running);
   }
   const maxPat=Math.max(...patrimonyVals,1);
   const cats={};
@@ -1691,7 +1696,7 @@ function v213RenderDashboard(){
     </div>
 
     <section class="v213-card">
-      <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses</span></div>
+      <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses con actividad</span></div>
       <div class="v213-chart">
         ${patrimonyVals.map((v,i)=>`<div class="v213-bar-wrap"><div class="v213-bar" title="${v213Money(v)}" style="height:${Math.max(3,(v/maxPat)*100)}%"></div><div class="v213-bar-label">${v213MonthLabel(monthKeys[i])}</div></div>`).join("")}
       </div>
@@ -1709,7 +1714,7 @@ function v213RenderDashboard(){
       </section>
 
       <section class="v213-card">
-        <div class="v213-section-title"><h2>🧠 I$T Insights</h2></div>
+        <div class="v213-section-title"><h2>🧠 I$T Insights</h2><span class="v213-label">Solo meses con actividad</span></div>
         <div class="v213-insights">
           ${insights.map(([icon,title,text])=>`<div class="v213-insight"><strong>${icon} ${esc(title)}</strong><span>${esc(text)}</span></div>`).join("")}
         </div>
