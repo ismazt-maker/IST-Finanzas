@@ -95,3 +95,7 @@ Apariencia corregida por alcance JavaScript y ajuste Dark Mode de categorías/su
 
 ## I$T V2.12
 Gran actualización de producto: Movimientos 2.0 con filtros rápidos, búsqueda y acciones de duplicar/repetir; Resumen 2.0 con lectura comparativa; Presupuestos 2.0 con ritmo diario, previsión y disponibilidad diaria; mejoras de UX móvil y persistencia de estado.
+
+
+## I$T V2.12.1
+Fixes del buscador de Movimientos, opción Cualquier mes y acceso directo a Configuración.
