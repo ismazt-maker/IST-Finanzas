@@ -382,7 +382,7 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
 .v213-status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;background:var(--card);font-size:12px;font-weight:800}
 .v213-dot{width:9px;height:9px;border-radius:50%;background:var(--green);display:inline-block}
 .v213-dot.warn{background:#b7791f}.v213-dot.bad{background:var(--red)}
-.v213-hero{display:grid;grid-template-columns:1.5fr .8fr .8fr;gap:10px}
+.v213-hero{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px}
 .v213-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
 .v213-label{font-size:12px;color:var(--muted);font-weight:700}
 .v213-value{font-size:29px;font-weight:850;letter-spacing:-.8px;margin-top:5px}
@@ -429,7 +429,9 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
  .v213-chart{height:185px}
 }
 </style>
-</head>
+<style id="v2133-chart-css">
+.v213-chart-shell{position:relative}.v213-chart-point{position:absolute;top:0;bottom:0;transform:translateX(-50%);width:44px;border:0;background:transparent;cursor:pointer}.v213-chart-point.active{outline:2px solid var(--accent);outline-offset:-2px;border-radius:10px}.v213-chart-tooltip{margin-top:10px;padding:12px;border:1px solid var(--line);border-radius:13px;background:var(--bg)}.v213-chart-tooltip-head,.v213-chart-tooltip-grid{display:flex;justify-content:space-between;gap:8px}.v213-chart-tooltip-grid{margin-top:9px}.v213-chart-stat{flex:1;padding:8px;border:1px solid var(--line);border-radius:10px}.v213-chart-stat span{display:block;color:var(--muted);font-size:10px}.v213-chart-stat strong{display:block;margin-top:3px;font-size:13px}@media(max-width:520px){.v213-chart-tooltip-grid{display:grid;grid-template-columns:1fr 1fr}}
+</style></head>
 <body data-ist-version="2.12.1">
 <div class="app">
 <header class="topbar">
@@ -1637,11 +1639,17 @@ function v213RenderDashboard(){
   const net=income-expense;
   const savings=income?net/income*100:0;
   const accounts=v213Accounts();
-  const currentAccounts=accounts.filter(a=>String(a.type||"").trim().toLowerCase()==="cuenta corriente");
+  const accountType=a=>String(a.type||"").trim().toLowerCase();
+  const currentAccounts=accounts.filter(a=>accountType(a)==="cuenta corriente");
+  const savingAccounts=accounts.filter(a=>["ahorro","cuenta remunerada","remunerada","cuenta ahorro"].includes(accountType(a)));
+  const investmentAccounts=accounts.filter(a=>["inversion","inversión","cuenta inversión","broker","brokerage"].includes(accountType(a)));
   const available=v213Sum(currentAccounts,a=>Number(a.balance)||0);
+  const saving=v213Sum(savingAccounts,a=>Number(a.balance)||0);
+  const accountInvestments=v213Sum(investmentAccounts,a=>Number(a.balance)||0);
   const investments=Array.isArray(state.investments)?v213Sum(state.investments,i=>Number(i.currentValue??i.value??0)):0;
   const other=Math.max(0,(Number(state.settings?.cash)||0));
-  const patrimony=available+investments+other;
+  const patrimony=v213Sum(accounts,a=>Number(a.balance)||0)+investments+other;
+  const investmentTotal=accountInvestments+investments;
   const monthKeys=v213ActiveMonthKeys(6);
   if(!monthKeys.includes(month) && monthKeys.length<6) monthKeys.push(month);
   monthKeys.sort();
@@ -1674,9 +1682,10 @@ function v213RenderDashboard(){
     </div>
 
     <div class="v213-hero">
-      <div class="v213-card v213-clickable" data-v213-route="accounts"><div class="v213-label">PATRIMONIO NETO</div><div class="v213-value">${v213Money(patrimony)}</div><div class="v213-delta positive">Cuentas + inversiones</div></div>
-      <div class="v213-card"><div class="v213-label">DISPONIBLE</div><div class="v213-value">${v213Money(available)}</div><div class="v213-delta">En tus cuentas</div></div>
-      <div class="v213-card v213-clickable" data-v213-route="investments"><div class="v213-label">INVERSIONES</div><div class="v213-value">${v213Money(investments)}</div><div class="v213-delta">Valor actual</div></div>
+      <div class="v213-card v213-clickable" data-v213-route="accounts"><div class="v213-label">PATRIMONIO NETO</div><div class="v213-value">${v213Money(patrimony)}</div><div class="v213-delta positive">Todas tus cuentas + inversiones</div></div>
+      <div class="v213-card"><div class="v213-label">DISPONIBLE</div><div class="v213-value">${v213Money(available)}</div><div class="v213-delta">Cuentas corrientes</div></div>
+      <div class="v213-card"><div class="v213-label">AHORRO</div><div class="v213-value">${v213Money(saving)}</div><div class="v213-delta">Ahorro y remuneradas</div></div>
+      <div class="v213-card v213-clickable" data-v213-route="investments"><div class="v213-label">INVERSIÓN</div><div class="v213-value">${v213Money(investmentTotal)}</div><div class="v213-delta">Cuentas + cartera</div></div>
     </div>
 
     <div class="v213-grid2">
@@ -1700,8 +1709,19 @@ function v213RenderDashboard(){
 
     <section class="v213-card">
       <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses con actividad · según movimientos</span></div>
-      <div class="v213-chart">
-        ${patrimonyVals.map((v,i)=>`<div class="v213-bar-wrap"><div class="v213-bar" title="${v213Money(v)}" style="height:${Math.max(3,(v/maxPat)*100)}%"></div><div class="v213-bar-label">${v213MonthLabel(monthKeys[i])}</div></div>`).join("")}
+      <div class="v213-chart-shell">
+        <div class="v213-chart" id="v213PatrimonyChart">
+          ${patrimonyVals.map((v,i)=>`<div class="v213-bar-wrap"><div class="v213-bar" title="${v213Money(v)}" style="height:${Math.max(3,(v/maxPat)*100)}%"></div><div class="v213-bar-label">${v213MonthLabel(monthKeys[i])}</div></div>`).join("")}
+          ${patrimonyVals.map((v,i)=>`<button type="button" class="v213-chart-point" data-v213-chart-index="${i}" aria-label="Ver ${esc(v213MonthLabel(monthKeys[i]))}"></button>`).join("")}
+        </div>
+        <div class="v213-chart-tooltip" id="v213ChartTooltip">
+          <div class="v213-chart-tooltip-head"><span id="v213TipMonth"></span><span id="v213TipPatrimony"></span></div>
+          <div class="v213-chart-tooltip-grid">
+            <div class="v213-chart-stat"><span>Ingresos</span><strong id="v213TipIncome" class="positive"></strong></div>
+            <div class="v213-chart-stat"><span>Gastos</span><strong id="v213TipExpense" class="negative"></strong></div>
+            <div class="v213-chart-stat"><span>Neto</span><strong id="v213TipNet"></strong></div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1730,6 +1750,24 @@ function v213RenderDashboard(){
     state.ui.reportCategory=el.dataset.v213ReportCat;
     v213Navigate("reports");
   });
+  const chart=root.querySelector("#v213PatrimonyChart"), tip=root.querySelector("#v213ChartTooltip");
+  if(chart&&tip){
+    const pts=[...chart.querySelectorAll("[data-v213-chart-index]")];
+    pts.forEach(pt=>pt.onclick=()=>{
+      const i=Number(pt.dataset.v213ChartIndex), k=monthKeys[i];
+      const mm=mov.filter(m=>v213MonthKey(m.date)===k&&!v213IsTransfer(m));
+      const inc=v213Sum(mm,m=>v213IsIncome(m)?Math.abs(Number(m.amount)||0):0);
+      const exp=v213Sum(mm,m=>!v213IsIncome(m)?Math.abs(Number(m.amount)||0):0);
+      const net=inc-exp;
+      pts.forEach(x=>x.classList.toggle("active",x===pt));
+      root.querySelector("#v213TipMonth").textContent=v213MonthLabel(k);
+      root.querySelector("#v213TipPatrimony").textContent=v213Money(patrimonyVals[i]);
+      root.querySelector("#v213TipIncome").textContent="+"+v213Money(inc);
+      root.querySelector("#v213TipExpense").textContent="−"+v213Money(exp);
+      const n=root.querySelector("#v213TipNet"); n.textContent=(net>=0?"+":"−")+v213Money(Math.abs(net)); n.className=net>=0?"positive":"negative";
+    });
+    if(pts.length) pts[pts.length-1].click();
+  }
 }
 
 
