@@ -368,8 +368,10 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
 </style>
 
 <style id="v2121-header-css">
-.header-settings-btn{font-size:19px;display:grid;place-items:center;flex:none}
-@media(max-width:520px){.header-settings-btn{width:40px;height:40px;font-size:18px}}
+.topbar-spacer{flex:1;min-width:0}
+.header-settings-btn{font-size:19px;display:grid;place-items:center;flex:none;margin-left:8px}
+#headerDate{white-space:nowrap}
+@media(max-width:520px){.header-settings-btn{width:40px;height:40px;font-size:18px;margin-left:6px}#headerDate{font-size:11px}}
 </style>
 </head>
 <body data-ist-version="2.12.1">
@@ -377,8 +379,9 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
 <header class="topbar">
 <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
 <div class="brand"><span class="brand-mark">I$T</span></div>
+<div class="topbar-spacer" aria-hidden="true"></div>
+<div class="muted" id="headerDate"></div>
 <button class="menu-btn header-settings-btn" id="headerSettingsBtn" aria-label="Abrir configuración" title="Configuración">⚙️</button>
-<div style="margin-left:auto" class="muted" id="headerDate"></div>
 </header>
 <aside class="drawer" id="drawer">
 <div class="nav" id="nav"></div>
