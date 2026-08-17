@@ -373,7 +373,6 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
 #headerDate{white-space:nowrap}
 @media(max-width:520px){.header-settings-btn{width:40px;height:40px;font-size:18px;margin-left:6px}#headerDate{font-size:11px}}
 </style>
-
 <style id="v213-dashboard-css">
 /* ---------- I$T V2.13 Dashboard ---------- */
 .v213-dashboard{display:grid;gap:14px}
@@ -956,51 +955,7 @@ function summaryBudgetBlock(k){
  </div>`;
 }
 
-function renderSummaryBase(){
- const months=monthsBack(36); const selected=state.ui?.summaryMonth||months[0]; state.ui||={}; state.ui.summaryMonth=selected;
- const st=monthlyStats(selected), patrimony=totalBalance()+investmentTotal(), available=availableBalance(), savings=savingsBalance();
- const cats={}; st.ms.filter(m=>m.type==="expense").forEach(m=>{const c=categoryById(m.categoryId)?.name||"Sin categoría";cats[c]=(cats[c]||0)+movementAmount(m)});
- const top=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,7), insights=insightsForMonth(selected);
- const goals=(state.goals||[]).slice(0,4);
- const persistent=Object.keys(loadBudgetConfig()).map(cid=>[`${selected}|${cid}`,budgetForMonth(cid,selected)?.amount]).filter(x=>x[1]!=null);
- const legacy=Object.entries(state.budgets||{}).filter(([key])=>key.startsWith(selected+"|"));
- const budgetEntries=[...legacy,...persistent.filter(p=>!legacy.some(l=>l[0]===p[0]))];
- const budgetRows=budgetEntries.map(([key,val])=>{const cid=key.split("|")[1],spent=categoryMonthlyAmount(selected,cid),budget=Number(val)||0;return {name:categoryById(cid)?.name||"Categoría",spent,budget,pct:budget?spent/budget*100:0}});
- const subs=state.movements.filter(m=>monthKey(m.date)===selected&&m.type==="expense"&&categoryById(m.categoryId)?.name==="Suscripciones").reduce((s,m)=>s+movementAmount(m),0);
- content.innerHTML=`
- <h1>${greetingForName(state.settings?.profile?.name)}</h1><div class="subtitle">Centro de mando financiero · ${esc(monthLabel(selected))}</div>
- <div class="toolbar summary-toolbar"><div class="field"><label>Mes del resumen</label><select id="summaryMonth">${monthOptions(selected)}</select></div><div class="summary-nav"><button class="btn small" id="prevSummary">‹</button><button class="btn small" id="nextSummary">›</button></div></div>
- <div class="kpi-grid summary-kpis">
-  <div class="kpi"><div class="muted">Patrimonio total</div><strong>${euro(patrimony)}</strong></div>
-  <div class="kpi"><div class="muted">Disponible</div><strong>${euro(available)}</strong></div>
-  <div class="kpi"><div class="muted">Ingresos</div><strong class="positive">${euro(st.income)}</strong></div>
-  <div class="kpi"><div class="muted">Gastos</div><strong class="negative">${euro(st.expense)}</strong></div>
-  <div class="kpi"><div class="muted">Neto del mes</div><strong class="${st.net>=0?"positive":"negative"}">${st.net>=0?"+":""}${euro(st.net)}</strong></div>
-  <div class="kpi"><div class="muted">Tasa de ahorro</div><strong class="${st.rate>=0?"positive":"negative"}">${st.rate.toFixed(1)}%</strong></div>
- </div>
- <div class="grid" style="margin-top:14px">
-  <section class="card span-12 summary-card summary-chart-card"><div class="section-head"><div><h2>Evolución del patrimonio</h2><div class="muted">Últimos 6 meses</div></div></div>${renderMonthlyChart(months.slice(0,6).reverse(),true)}</section>
-  <section class="card span-7 summary-card"><h2>Gasto por categoría</h2>${top.length?`<div class="report-bars">${top.map(([n,v])=>`<div class="report-bar-row"><div class="report-bar-label"><span>${esc(n)}</span><strong>${euro(v)}</strong></div><div class="report-track"><div class="report-fill" style="width:${Math.max(2,v/(top[0][1]||1)*100)}%"></div></div></div>`).join("")}`:`<div class="empty">No hay gastos en este mes.</div>`}</section>
-  <section class="card span-5 summary-card"><h2>Situación</h2><div class="list">
-   <div class="list-row"><span>En cuentas</span><strong>${euro(totalBalance())}</strong></div>
-   <div class="list-row"><span>Ahorro</span><strong>${euro(savings)}</strong></div>
-   <div class="list-row"><span>Inversiones</span><strong>${euro(investmentTotal())}</strong></div>
-   <div class="list-row"><span>Suscripciones</span><strong>${euro(subs)}</strong></div>
-  </div></section>
-  <section class="card span-6 summary-card"><h2>🔄 Comprometido en recurrentes</h2>${(()=>{
-    const info=recurringMonthInfo(selected);
-    const monthly=state.recurrings.filter(r=>r.active!==false).filter(r=>monthKey(r.startDate)<=selected).reduce((s,r)=>s+Number(r.amount||0),0);
-    return `<div class="recurring-summary-total"><strong>${euro(monthly)}</strong><span class="muted">estimados en ${esc(monthLabel(selected))}</span></div>
-      <div class="list" style="margin-top:10px">${info.items.slice(0,4).map(x=>`<div class="list-row"><div><strong>${esc(x.r.merchant)}</strong><div class="muted">${esc(x.date)}</div></div><strong class="${x.r.type==="income"?"positive":"negative"}">${x.r.type==="income"?"+":"-"}${euro(x.r.amount)}</strong></div>`).join("")||`<div class="empty">No hay próximos cargos.</div>`}</div>`;
-  })()}</section>
-  <section class="card span-6 summary-card"><div class="section-head"><div><h2>💰 Presupuestos</h2><div class="muted">${esc(monthLabel(selected))}</div></div></div>${summaryBudgetBlock(selected)}</section>
-  <section class="card span-6"><h2>Objetivos</h2>${goals.length?goals.map(g=>{const q=goalProgress(g);return `<div class="budget-row"><div class="budget-head"><span>${esc(g.name)}</span><strong>${euro(q.current)} / ${euro(q.target)}</strong></div><div class="progress"><div style="width:${q.pct}%"></div></div></div>`}).join(""):`<div class="empty">Añade objetivos desde Configuración.</div>`}</section>
-  <section class="card span-12"><h2>🧠 Lo que deberías saber</h2><div class="insight-grid">${(insights.length?insights:["🟢 No hay cambios relevantes que señalar este mes."]).map(x=>`<div class="insight">${esc(x)}</div>`).join("")}</div></section>
- </div>`;
- document.getElementById("summaryMonth").onchange=e=>{state.ui.summaryMonth=e.target.value;save();renderSummary()};
- document.getElementById("prevSummary").onclick=()=>{const i=months.indexOf(selected);if(i<months.length-1){state.ui.summaryMonth=months[i+1];save();renderSummary()}};
- document.getElementById("nextSummary").onclick=()=>{const i=months.indexOf(selected);if(i>0){state.ui.summaryMonth=months[i-1];save();renderSummary()}};
-}
+function renderSummary(){ v213RenderDashboard(); }
 
 function renderMonthlyChart(ms){
  const vals=ms.map(k=>{const inc=state.movements.filter(m=>m.type==="income"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);const exp=state.movements.filter(m=>m.type==="expense"&&monthKey(m.date)===k).reduce((s,m)=>s+movementAmount(m),0);return {k,inc,exp}});
@@ -1612,41 +1567,6 @@ document.addEventListener("click",function(e){
  };
 }
 
-state.ui ||= {};
-render();
-window.addEventListener("online",()=>toast("Conexión recuperada."));
-window.addEventListener("load",()=>{if("serviceWorker" in navigator)navigator.serviceWorker.register("./service-worker.js").catch(()=>{});});
-})();
-
-function renderTransferSummary(){
- const c=document.getElementById("transferCount"),t=document.getElementById("transferTotal");
- if(!c||!t)return;
- const tx=state.movements.filter(isTransfer);
- c.textContent=String(tx.length);
- t.textContent=euro(tx.reduce((s,m)=>s+movementAmount(m),0));
-}
-
-</script>
-
-
-<script id="v27-budget-nav">
-document.addEventListener("click",function(e){
- const btn=e.target.closest && e.target.closest("#goBudgets");
- if(!btn)return;
- e.preventDefault(); e.stopPropagation();
- currentRoute="budgets"; localStorage.setItem("ist_route","budgets");
- renderNav(); renderMobileNav(); render();
- requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"instant"}));
-});
-</script>
-
-
-
-</body>
-</html>
-
-<script id="v213-dashboard-script">
-
 function v213Money(n){return typeof euro==="function"?euro(n):new Intl.NumberFormat("es-ES",{style:"currency",currency:"EUR"}).format(n||0)}
 function v213MonthKey(d){return String(d||"").slice(0,7)}
 function v213MonthLabel(k){
@@ -1732,16 +1652,10 @@ function v213RenderDashboard(){
   monthMov.forEach(m=>{if(!v213IsIncome(m)&&!v213IsTransfer(m)){const k=m.categoryId||"__none";cats[k]=(cats[k]||0)+Math.abs(Number(m.amount)||0)}});
   const topCats=Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const maxCat=Math.max(...topCats.map(x=>x[1]),1);
-  const budgets=[];
-  Object.values(state.budgets||{}).forEach(b=>{
-    if(!b||typeof b!=="object")return;
-    const limit=Number(b.limit??b.amount??0);
-    const spent=Number(b.spent??0);
-    if(limit>0)budgets.push({name:b.name||b.categoryName||"Presupuesto",limit,spent});
-  });
-  const attention=budgets.filter(b=>b.spent/b.limit>=.75).sort((a,b)=>(b.spent/b.spent||0)-(a.spent/a.limit||0)).slice(0,4);
+  const budgets = typeof allBudgetRowsForMonth === "function" ? allBudgetRowsForMonth(month) : [];
+  const attention = budgets.filter(b => Number(b.pct||0) >= 75).sort((a,b) => Number(b.pct||0)-Number(a.pct||0)).slice(0,4);
   const insights=v213BuildInsights(monthMov,income,expense,savings);
-  const name=String(state.settings?.userName||state.settings?.name||"").trim();
+  const name=String(state.settings?.profile?.name||state.settings?.userName||state.settings?.name||"").trim();
   const greeting=new Date().getHours()<14?"Buenos días":new Date().getHours()<20?"Buenas tardes":"Buenas noches";
   const status=savings>=20?"good":savings>=10?"warn":"bad";
   root.innerHTML=`
@@ -1788,8 +1702,8 @@ function v213RenderDashboard(){
         <div class="v213-section-title"><h2>Presupuestos</h2><button class="v213-mini-link" data-v213-route="budgets">Ver todos →</button></div>
         <div class="v213-budget-list">
           ${attention.length?attention.map(b=>{
-            const pct=Math.min(100,b.spent/b.limit*100); const cls=pct>=100?"negative":pct>=75?"warn":"positive";
-            return `<div class="v213-budget v213-clickable" data-v213-route="budgets"><div class="v213-budget-head"><span>${esc(b.name)}</span><strong class="${cls}">${Math.round(b.spent/b.limit*100)} %</strong></div><div class="v213-track"><div class="v213-fill" style="width:${pct}%;background:${pct>=100?"var(--red)":pct>=75?"#b7791f":"var(--green)"}"></div></div><span class="v213-label">${v213Money(b.spent)} de ${v213Money(b.limit)}</span></div>`;
+            const pct=Math.min(100,Number(b.pct||0)); const cls=pct>=100?"negative":pct>=75?"warn":"positive";
+            return `<div class="v213-budget v213-clickable" data-v213-route="budgets"><div class="v213-budget-head"><span>${esc(b.name)}</span><strong class="${cls}">${Math.round(b.spent/b.limit*100)} %</strong></div><div class="v213-track"><div class="v213-fill" style="width:${pct}%;background:${pct>=100?"var(--red)":pct>=75?"#b7791f":"var(--green)"}"></div></div><span class="v213-label">${v213Money(b.spent)} de ${v213Money(b.budget)}</span></div>`;
           }).join(""):`<div class="v213-empty">No hay presupuestos que requieran atención.</div>`}
         </div>
       </section>
@@ -1809,23 +1723,37 @@ function v213RenderDashboard(){
     v213Navigate("reports");
   });
 }
-function renderSummary(){
-  v213RenderDashboard();
+
+
+state.ui ||= {};
+render();
+window.addEventListener("online",()=>toast("Conexión recuperada."));
+window.addEventListener("load",()=>{if("serviceWorker" in navigator)navigator.serviceWorker.register("./service-worker.js").catch(()=>{});});
+})();
+
+function renderTransferSummary(){
+ const c=document.getElementById("transferCount"),t=document.getElementById("transferTotal");
+ if(!c||!t)return;
+ const tx=state.movements.filter(isTransfer);
+ c.textContent=String(tx.length);
+ t.textContent=euro(tx.reduce((s,m)=>s+movementAmount(m),0));
 }
 
 </script>
 
 
-<script id="v213-dashboard-boot">
-(function(){
-  function bootV213(){
-    if(typeof currentRoute==="undefined" || typeof render==="undefined") return;
-    if(typeof renderSummary==="function"){
-      document.body.dataset.istVersion="2.13.0";
-      const t=document.querySelector("title"); if(t)t.textContent="I$T V2.13";
-    }
-  }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootV213,{once:true});
-  else bootV213();
-})();
+<script id="v27-budget-nav">
+document.addEventListener("click",function(e){
+ const btn=e.target.closest && e.target.closest("#goBudgets");
+ if(!btn)return;
+ e.preventDefault(); e.stopPropagation();
+ currentRoute="budgets"; localStorage.setItem("ist_route","budgets");
+ renderNav(); renderMobileNav(); render();
+ requestAnimationFrame(()=>window.scrollTo({top:0,left:0,behavior:"instant"}));
+});
 </script>
+
+
+
+</body>
+</html>
