@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
+<!-- I$T V2.12.0 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#243b53">
@@ -296,7 +297,7 @@ html[data-v210-mode="dark"] .cat-toggle{
 </style>
 
 <style id="v211-quality-polish">
-/* I$T V2.11 — one visual system, mobile-first */
+/* I$T V2.12 — one visual system, mobile-first */
 html,body{max-width:100%;overflow-x:hidden}
 button,input,select,textarea{font:inherit}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid color-mix(in srgb,var(--v210-accent) 35%,transparent);outline-offset:2px}
@@ -357,8 +358,16 @@ html[data-v210-mode="dark"] .category-list-row{background:transparent!important;
   .v211-movement-side>strong{font-size:13px}
 }
 </style>
+
+<style id="v212-product-css">
+.v212-quickbar{display:flex;gap:7px;overflow:auto;padding:2px 0 4px;scrollbar-width:none}.v212-quickbar::-webkit-scrollbar{display:none}
+.v212-chip{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:8px 12px;font-size:12px;cursor:pointer}.v212-chip.active{background:var(--v210-accent-soft);border-color:var(--v210-accent);font-weight:700}
+.v212-extra-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.v212-health{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.v212-health .k{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px}.v212-health strong{display:block;font-size:18px;margin-top:3px}.v212-health small{color:var(--muted)}
+.v212-budget-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.v212-budget-insight{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px}.v212-budget-insight .big{font-size:22px;font-weight:800;margin:3px 0}.v212-budget-insight .warn{color:#d97706}.v212-budget-insight .danger{color:var(--red)}
+@media(max-width:700px){.v212-health,.v212-budget-grid{grid-template-columns:1fr}.v212-chip{padding:9px 12px}.v212-extra-actions .btn{flex:1;min-width:90px}}
+</style>
 </head>
-<body data-ist-version="2.10.4">
+<body data-ist-version="2.12.0">
 <div class="app">
 <header class="topbar">
 <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">☰</button>
@@ -1311,7 +1320,7 @@ async function refreshPrices(){
 function renderSettings(){
  content.innerHTML=`
 <section class="card span-12" id="v210Appearance">
-  <div class="v211-settings-note" style="margin-bottom:12px">I$T V2.11 · Quality &amp; Polish · Diseño optimizado para iPhone y escritorio.</div>
+  <div class="v211-settings-note" style="margin-bottom:12px">I$T V2.12 · Quality &amp; Polish · Diseño optimizado para iPhone y escritorio.</div>
   <div class="section-head">
     <div><div class="v25-eyebrow">APARIENCIA</div><h2>Personaliza I$T</h2></div>
   </div>
@@ -1450,6 +1459,71 @@ document.addEventListener("click",function(e){
                    accent ? accent.dataset.v210AccentChoice : null);
  v210RefreshAppearanceControls();
 });
+
+
+/* ---------- I$T V2.12 — Movements + Dashboard + Budgets ---------- */
+{
+ const v212OldMov=renderMovements;
+ function v212DateOnly(x){return new Date(x+"T12:00:00")}
+ function v212ApplyQuickFilter(){
+   const q=state.ui?.movQuick||"month"; const now=new Date(); now.setHours(23,59,59,999);
+   let from=null,to=null;
+   if(q==="today"){from=new Date();from.setHours(0,0,0,0);to=now}
+   else if(q==="7d"){from=new Date();from.setDate(from.getDate()-6);from.setHours(0,0,0,0);to=now}
+   else if(q==="year"){from=new Date(now.getFullYear(),0,1);to=now}
+   else if(q==="custom"){from=state.ui.movFrom?v212DateOnly(state.ui.movFrom):null;to=state.ui.movTo?v212DateOnly(state.ui.movTo):null;if(to)to.setHours(23,59,59,999)}
+   if(!from&&!to)return;
+   document.querySelectorAll('.movement-list-desktop tbody tr').forEach(tr=>{
+     const date=v212DateOnly((tr.cells[0]?.textContent||"").trim()); tr.style.display=(!from||date>=from)&&(!to||date<=to)?"":"none";
+   });
+   document.querySelectorAll('.v211-mobile-movements .v211-movement-card').forEach(card=>{
+     const text=card.querySelector('small')?.textContent||""; const date=v212DateOnly(text.slice(0,10)); card.style.display=(!from||date>=from)&&(!to||date<=to)?"":"none";
+   });
+ }
+ renderMovements=function(){
+   v212OldMov();
+   const box=document.querySelector('.movement-filters'); if(!box)return;
+   const quick=document.createElement('div'); quick.className='v212-quickbar';
+   const qs=[['month','Este mes'],['today','Hoy'],['7d','7 días'],['year','Este año'],['custom','Personalizado']];
+   quick.innerHTML=qs.map(([v,l])=>`<button type="button" class="v212-chip ${((state.ui?.movQuick||'month')===v)?'active':''}" data-v212-q="${v}">${l}</button>`).join('');
+   box.insertBefore(quick,box.querySelector('.actions'));
+   const extra=document.createElement('div');extra.className='v212-extra-actions';
+   extra.innerHTML=`<button type="button" class="btn small" data-v212-repeat="">↻ Repetir último</button>`;
+   box.appendChild(extra);
+   quick.querySelectorAll('[data-v212-q]').forEach(b=>b.onclick=()=>{state.ui.movQuick=b.dataset.v212Q;save();renderMovements()});
+   if(state.ui?.movQuick==='custom'){
+     const custom=document.createElement('div');custom.className='toolbar';custom.innerHTML=`<div class="field"><label>Desde</label><input id="v212From" type="date" value="${esc(state.ui.movFrom||'')}"></div><div class="field"><label>Hasta</label><input id="v212To" type="date" value="${esc(state.ui.movTo||'')}"></div>`;
+     box.insertBefore(custom,quick.nextSibling);custom.querySelector('#v212From').onchange=e=>{state.ui.movFrom=e.target.value;save();renderMovements()};custom.querySelector('#v212To').onchange=e=>{state.ui.movTo=e.target.value;save();renderMovements()};
+   }
+   document.querySelectorAll('[data-edit-m]').forEach(b=>{if(b.dataset.v212Bound)return;b.dataset.v212Bound='1';const id=b.dataset.editM;const wrap=b.parentElement;if(wrap&&!wrap.querySelector(`[data-v212-dup="${id}"]`)){const d=document.createElement('button');d.className='btn small';d.textContent='Duplicar';d.dataset.v212Dup=id;d.onclick=()=>v212Duplicate(id);wrap.appendChild(d)}});
+   document.querySelector('[data-v212-repeat]')?.addEventListener('click',()=>{const m=state.movements.slice().sort((a,b)=>b.date.localeCompare(a.date))[0];if(m)v212Duplicate(m.id,true);else toast('No hay movimientos para repetir.')});
+   v212ApplyQuickFilter();
+ };
+ function v212Duplicate(id,repeat=false){
+   const m=byId(state.movements,id);if(!m)return;
+   const obj=JSON.parse(JSON.stringify(m));obj.id=uid();obj.date=dateISO();obj.note=repeat?((obj.note||'')+" · Repetido").trim():obj.note;
+   state.movements.push(obj);const acc=byId(state.accounts,obj.accountId);if(acc)acc.balance+=obj.type==='income'?obj.amount:-obj.amount;save();render();toast(repeat?'Movimiento repetido.':'Movimiento duplicado.');
+ }
+ const v212OldSummary=renderSummary;
+ renderSummary=function(){
+   v212OldSummary();
+   const k=state.ui.summaryMonth||monthsBack(36)[0], st=monthlyStats(k), months=monthsBack(36);
+   const prev=months[months.indexOf(k)+1]; const pst=prev?monthlyStats(prev):null;
+   const delta=pst?st.expense-pst.expense:0; const deltaPct=pst&&pst.expense?delta/pst.expense*100:null;
+   const anchor=document.querySelector('.summary-kpis'); if(!anchor)return;
+   const health=document.createElement('section');health.className='card span-12';health.innerHTML=`<div class="section-head"><div><h2>📊 Lectura rápida</h2><div class="muted">Comparación automática con el mes anterior</div></div></div><div class="v212-health"><div class="k"><small>Gasto vs. mes anterior</small><strong class="${delta>0?'negative':'positive'}">${delta>0?'+':''}${euro(delta)}</strong><small>${deltaPct==null?'Sin base comparable':`${deltaPct>0?'+':''}${deltaPct.toFixed(1)}%`}</small></div><div class="k"><small>Neto del mes</small><strong class="${st.net>=0?'positive':'negative'}">${st.net>=0?'+':''}${euro(st.net)}</strong><small>${st.rate.toFixed(1)}% de ahorro</small></div><div class="k"><small>Movimientos</small><strong>${st.ms.length}</strong><small>registrados este mes</small></div></div>`;
+   anchor.parentNode.insertBefore(health,anchor.nextSibling);
+ };
+ const v212OldBudgets=renderBudgets;
+ renderBudgets=function(){
+   v212OldBudgets();
+   const k=state.ui.budgetMonth||monthsBack(36)[0], rows=allBudgetRowsForMonth(k); const now=new Date(); const current=monthKey(now); const day=now.getDate(),days=new Date(now.getFullYear(),now.getMonth()+1,0).getDate();
+   const active=k===current; const total=rows.reduce((s,x)=>s+x.budget,0),spent=rows.reduce((s,x)=>s+x.spent,0); const projected=active&&day?spent/days*days:spent; const dailyAllowed=active&&days-day>0?(total-spent)/(days-day):0;
+   const forecast=document.querySelector('.v25-budget-hero'); if(!forecast)return;
+   const sec=document.createElement('section');sec.className='card span-12';sec.innerHTML=`<div class="section-head"><div><h2>🧠 Ritmo y previsión</h2><div class="muted">Basado en el gasto registrado hasta hoy</div></div></div><div class="v212-budget-grid"><div class="v212-budget-insight"><small>Ritmo medio diario</small><div class="big">${euro(active&&day?spent/day:0)}</div><small>${active?'por día':'mes cerrado'}</small></div><div class="v212-budget-insight"><small>Gasto previsto</small><div class="big ${projected>total?'danger':'positive'}">${euro(projected)}</div><small>${total?`${projected>total?'Superaría':'Dentro de'} ${euro(total)}`:'Sin presupuesto total'}</small></div><div class="v212-budget-insight"><small>Disponible diario</small><div class="big ${dailyAllowed<0?'danger':'positive'}">${euro(Math.max(0,dailyAllowed))}</div><small>${active?`para los ${Math.max(0,days-day)} días restantes`:'No aplica'}</small></div></div>`;
+   forecast.parentNode.insertBefore(sec,forecast.nextSibling);
+ };
+}
 
 state.ui ||= {};
 render();
