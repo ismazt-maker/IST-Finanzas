@@ -1637,20 +1637,23 @@ function v213RenderDashboard(){
   const net=income-expense;
   const savings=income?net/income*100:0;
   const accounts=v213Accounts();
-  const available=v213Sum(accounts,a=>Number(a.balance)||0);
+  const currentAccounts=accounts.filter(a=>String(a.type||"").trim().toLowerCase()==="cuenta corriente");
+  const available=v213Sum(currentAccounts,a=>Number(a.balance)||0);
   const investments=Array.isArray(state.investments)?v213Sum(state.investments,i=>Number(i.currentValue??i.value??0)):0;
   const other=Math.max(0,(Number(state.settings?.cash)||0));
   const patrimony=available+investments+other;
   const monthKeys=v213ActiveMonthKeys(6);
   if(!monthKeys.includes(month) && monthKeys.length<6) monthKeys.push(month);
   monthKeys.sort();
-  const patrimonyVals=[];
-  const known=Number(state.settings?.initialBalance);
-  let running=Number.isFinite(known)?known:available;
-  for(const k of monthKeys){
-    const mm=mov.filter(m=>v213MonthKey(m.date)===k);
-    running+=v213Sum(mm,v213Signed);
-    patrimonyVals.push(k===month?patrimony:running);
+  const monthNets=Object.fromEntries(monthKeys.map(k=>{
+    const mm=mov.filter(m=>v213MonthKey(m.date)===k && !v213IsTransfer(m));
+    return [k,v213Sum(mm,v213Signed)];
+  }));
+  const patrimonyVals=new Array(monthKeys.length);
+  let running=patrimony;
+  for(let i=monthKeys.length-1;i>=0;i--){
+    patrimonyVals[i]=running;
+    running-=Number(monthNets[monthKeys[i]]||0);
   }
   const maxPat=Math.max(...patrimonyVals,1);
   const cats={};
@@ -1696,7 +1699,7 @@ function v213RenderDashboard(){
     </div>
 
     <section class="v213-card">
-      <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses con actividad</span></div>
+      <div class="v213-section-title"><h2>Evolución de patrimonio</h2><span class="v213-label">Últimos 6 meses con actividad · según movimientos</span></div>
       <div class="v213-chart">
         ${patrimonyVals.map((v,i)=>`<div class="v213-bar-wrap"><div class="v213-bar" title="${v213Money(v)}" style="height:${Math.max(3,(v/maxPat)*100)}%"></div><div class="v213-bar-label">${v213MonthLabel(monthKeys[i])}</div></div>`).join("")}
       </div>
